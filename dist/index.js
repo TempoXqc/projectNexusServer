@@ -4,42 +4,54 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
-import { registerSocketHandlers } from './sockets/socketHandlers.js';
 import { setupAuthRoutes } from './routes/authRoutes.js';
 import * as path from 'node:path';
 import { fileURLToPath } from 'url';
+import { serverConfig } from './config/serverConfig.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// Charger le fichier .env depuis server/src/.env
+// Charger le fichier .env
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 // Valider les variables d'environnement
-const FRONTEND_URL = process.env.FRONTEND_URL;
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {
     console.error('Erreur : La variable d\'environnement MONGODB_URI est manquante');
     process.exit(1);
 }
-if (!FRONTEND_URL) {
-    console.error('Erreur : La variable d\'environnement FRONTEND_URL est manquante');
-    process.exit(1);
-}
 console.log('[DEBUG] Mongo URI utilisée :', MONGODB_URI.replace(/:([^@]+)@/, ':****@'));
-console.log('[DEBUG] FRONTEND_URL utilisée :', FRONTEND_URL);
+console.log('[DEBUG] Origines CORS autorisées :', serverConfig.corsOrigins);
 const app = express();
 const server = createServer(app);
+// Configurer CORS pour HTTP
+app.use((req, res, next) => {
+    console.log(`[CORS] Requête reçue: ${req.method} ${req.url} Origine: ${req.headers.origin}`);
+    next();
+});
+app.use(cors({
+    origin: (origin, callback) => {
+        const allowedOrigins = serverConfig.corsOrigins;
+        console.log(`[CORS] Vérification de l'origine: ${origin}, Allowed: ${allowedOrigins}`);
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, origin || '*');
+        }
+        else {
+            console.error(`[CORS] Origine non autorisée: ${origin}`);
+            callback(new Error('Origine non autorisée'));
+        }
+    },
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+// Configurer CORS pour WebSocket
 const io = new Server(server, {
     cors: {
-        origin: [FRONTEND_URL, 'http://localhost:5173'],
+        origin: serverConfig.corsOrigins,
         methods: ['GET', 'POST'],
-        credentials: true,
+        credentials: true
     },
     transports: ['websocket', 'polling'],
 });
-app.use(cors({
-    origin: [FRONTEND_URL, 'http://localhost:5173'],
-    methods: ['GET', 'POST'],
-    credentials: true,
-}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/addons', express.static('addons'));
@@ -67,8 +79,6 @@ async function startServer() {
     });
     // Configurer les routes d'authentification
     app.use('/api', setupAuthRoutes(db));
-    // Configurer les gestionnaires de sockets
-    registerSocketHandlers(io, db);
     // Endpoint pour les parties actives
     app.get('/api/games', async (req, res) => {
         try {
@@ -99,7 +109,7 @@ async function startServer() {
             console.log('[WebSocket] Déconnexion:', socket.id);
         });
     });
-    const PORT = process.env.PORT || 3000;
+    const PORT = serverConfig.port;
     server.listen(PORT, () => {
         console.log(`Serveur démarré sur le port ${PORT}`);
     });
