@@ -135,6 +135,7 @@ export async function registerSocketHandlers(io, db) {
         socket.emit('activeGamesUpdate', activeGames);
     };
     io.on('connection', (socket) => {
+        console.log('[WebSocket] Nouvelle connexion:', socket.id, 'depuis:', socket.handshake.headers.origin);
         if (connectedSockets.has(socket.id)) {
             socket.disconnect(true);
             return;
@@ -170,7 +171,8 @@ export async function registerSocketHandlers(io, db) {
             games.forEach((game) => gameCache.deleteGame(game.gameId));
             await sendActiveGamesToSocket(socket);
         });
-        socket.once('disconnect', () => {
+        socket.on('disconnect', () => {
+            console.log('[WebSocket] Déconnexion:', socket.id);
             connectedSockets.delete(socket.id);
             playerManager.removePlayer(socket.id);
             if (socket.rooms.has('lobby')) {
@@ -179,6 +181,7 @@ export async function registerSocketHandlers(io, db) {
             }
         });
         socket.on('createGame', async (data, ack) => {
+            console.log('[WebSocket] Événement createGame reçu:', data, 'socket.id:', socket.id, 'timestamp:', new Date().toISOString());
             try {
                 const { isRanked, gameFormat } = z
                     .object({
@@ -188,6 +191,7 @@ export async function registerSocketHandlers(io, db) {
                     .parse(data);
                 const playerInfo = playerManager.getPlayer(socket.id);
                 if (playerInfo && playerInfo.gameId) {
+                    console.log('[WebSocket] Erreur: Joueur déjà dans une partie:', playerInfo.gameId);
                     ack({ error: 'Vous avez déjà une partie en cours' });
                     return;
                 }
@@ -200,6 +204,7 @@ export async function registerSocketHandlers(io, db) {
                     if (existingGame) {
                         attempts++;
                         if (attempts >= maxAttempts) {
+                            console.log('[WebSocket] Erreur: Impossible de générer un ID de partie unique');
                             ack({ error: 'Impossible de générer un ID de partie unique' });
                             return;
                         }
@@ -260,41 +265,43 @@ export async function registerSocketHandlers(io, db) {
                     socket.leave('lobby');
                 }
                 scheduleActiveGamesUpdate();
-                console.log('Envoi de ACK pour createGame:', {
+                const ackResponse = {
                     gameId,
                     playerId: 1,
                     chatHistory: newGame.chatHistory,
                     availableDecks: newGame.availableDecks,
-                }, 'timestamp:', new Date().toISOString());
-                ack({
-                    gameId,
-                    playerId: 1,
-                    chatHistory: newGame.chatHistory,
-                    availableDecks: newGame.availableDecks,
-                });
+                };
+                console.log('[WebSocket] Envoi de ACK pour createGame:', ackResponse, 'timestamp:', new Date().toISOString());
+                ack(ackResponse);
             }
             catch (error) {
+                console.error('[WebSocket] Erreur lors de la création de la partie:', error);
                 ack({ error: 'Erreur lors de la création de la partie' });
             }
         });
         socket.on('joinGame', async (data) => {
+            console.log('[WebSocket] Événement joinGame reçu:', data, 'socket.id:', socket.id);
             try {
                 const gameId = JoinGameSchema.parse(data);
                 const game = await gameRepository.findGameById(gameId);
                 if (!game) {
+                    console.log('[WebSocket] Partie non trouvée:', gameId);
                     socket.emit('gameNotFound');
                     return;
                 }
                 if (game.players.length >= 2) {
+                    console.log('[WebSocket] Erreur: La partie est pleine:', gameId);
                     socket.emit('error', 'La partie est pleine');
                     return;
                 }
                 const playerInfo = playerManager.getPlayer(socket.id);
                 if (playerInfo && playerInfo.gameId) {
+                    console.log('[WebSocket] Erreur: Joueur déjà dans une partie:', playerInfo.gameId);
                     socket.emit('error', 'Vous êtes déjà dans une partie');
                     return;
                 }
                 if (game.players.includes(socket.id)) {
+                    console.log('[WebSocket] Erreur: Joueur déjà dans cette partie:', gameId);
                     socket.emit('error', 'Vous êtes déjà dans cette partie');
                     return;
                 }
@@ -312,10 +319,10 @@ export async function registerSocketHandlers(io, db) {
                             status: 'started',
                         });
                         gameCache.setGame(gameId, game);
-                        console.log(`Partie ${gameId} mise à jour, statut: started, joueurs: ${game.players}, timestamp: ${new Date().toISOString()}`);
+                        console.log(`[WebSocket] Partie ${gameId} mise à jour, statut: started, joueurs: ${game.players}, timestamp: ${new Date().toISOString()}`);
                     }
                     catch (error) {
-                        console.error(`Erreur lors de la mise à jour de la partie ${gameId}:`, error);
+                        console.error(`[WebSocket] Erreur lors de la mise à jour de la partie ${gameId}:`, error);
                         socket.emit('error', 'Erreur lors de la mise à jour de la partie');
                         return;
                     }
@@ -337,14 +344,14 @@ export async function registerSocketHandlers(io, db) {
                     io.to(gameId).emit('initialDeckList', game.availableDecks);
                     io.to(gameId).emit('deckSelectionUpdate', game.deckChoices);
                     if (!game.deckChoices['1'].length) {
-                        console.log(`Émission de waitingForPlayer1Choice à player2 (${player2SocketId}):`, { waiting: true }, 'timestamp:', new Date().toISOString());
+                        console.log(`[WebSocket] Émission de waitingForPlayer1Choice à player2 (${player2SocketId}):`, { waiting: true }, 'timestamp:', new Date().toISOString());
                         io.to(player2SocketId).emit('waitingForPlayer1Choice', { waiting: true });
                     }
                 }
                 else {
                     playerManager.addPlayer(socket.id, { gameId, playerId: null });
                     socket.emit('waiting', { gameId, message: 'En attente d\'un autre joueur...' });
-                    console.log(`Socket ${socket.id} en attente d'un autre joueur pour ${gameId}, timestamp: ${new Date().toISOString()}`);
+                    console.log(`[WebSocket] Socket ${socket.id} en attente d'un autre joueur pour ${gameId}, timestamp: ${new Date().toISOString()}`);
                 }
                 if (socket.rooms.has('lobby')) {
                     socket.leave('lobby');
@@ -352,11 +359,12 @@ export async function registerSocketHandlers(io, db) {
                 scheduleActiveGamesUpdate();
             }
             catch (error) {
-                console.error('Erreur lors de la jointure de la partie:', error);
+                console.error('[WebSocket] Erreur lors de la jointure de la partie:', error);
                 socket.emit('error', 'Erreur lors de la jointure de la partie');
             }
         });
         socket.on('checkPlayerGame', async (data, callback) => {
+            console.log('[WebSocket] Événement checkPlayerGame reçu:', data, 'socket.id:', socket.id);
             try {
                 const { playerId } = z.object({ playerId: z.string().transform((val) => parseInt(val, 10)) }).parse(data);
                 const games = await gameRepository.findActiveGames();
@@ -375,21 +383,23 @@ export async function registerSocketHandlers(io, db) {
                 }
             }
             catch (error) {
-                console.error('Erreur lors de checkPlayerGame:', error);
+                console.error('[WebSocket] Erreur lors de checkPlayerGame:', error);
                 callback({ exists: false });
             }
         });
         socket.on('checkGameExists', async (gameId, callback) => {
+            console.log('[WebSocket] Événement checkGameExists reçu:', gameId, 'socket.id:', socket.id);
             try {
                 const game = await gameRepository.findGameById(gameId);
                 callback(!!game);
             }
             catch (error) {
-                console.error('Erreur lors de checkGameExists:', error);
+                console.error('[WebSocket] Erreur lors de checkGameExists:', error);
                 callback(false);
             }
         });
         socket.on('leaveGame', async (data) => {
+            console.log('[WebSocket] Événement leaveGame reçu:', data, 'socket.id:', socket.id);
             try {
                 const { gameId, playerId } = z.object({ gameId: z.string(), playerId: z.number() }).parse(data);
                 const game = await gameRepository.findGameById(gameId);
@@ -399,20 +409,23 @@ export async function registerSocketHandlers(io, db) {
                     io.to(gameId).emit('gameNotFound');
                 }
                 else {
+                    console.log('[WebSocket] Erreur: Joueur non autorisé à quitter la partie:', gameId);
                     socket.emit('error', 'Vous n\'êtes pas autorisé à quitter cette partie.');
                 }
             }
             catch (error) {
-                console.error('Erreur lors de leaveGame:', error);
+                console.error('[WebSocket] Erreur lors de leaveGame:', error);
                 socket.emit('error', 'Erreur lors de la suppression de la partie.');
             }
         });
         socket.on('playCard', async (data) => {
+            console.log('[WebSocket] Événement playCard reçu:', data, 'socket.id:', socket.id);
             try {
                 const { gameId, card, fieldIndex } = PlayCardSchema.parse(data);
                 const game = await gameRepository.findGameById(gameId);
                 const playerInfo = playerManager.getPlayer(socket.id);
                 if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.activePlayer !== socket.id) {
+                    console.log('[WebSocket] Erreur: Non autorisé pour playCard, gameId:', gameId, 'playerInfo:', playerInfo);
                     socket.emit('error', 'Non autorisé');
                     return;
                 }
@@ -432,90 +445,90 @@ export async function registerSocketHandlers(io, db) {
                 });
             }
             catch (error) {
-                console.error('Erreur lors de l\'action playCard:', error);
+                console.error('[WebSocket] Erreur lors de l\'action playCard:', error);
                 socket.emit('error', 'Erreur lors de l\'action playCard');
             }
         });
         socket.on('chooseDeck', async (data) => {
+            console.log('[WebSocket] Événement chooseDeck reçu:', data, 'socket.id:', socket.id);
             try {
-                console.log('Reçu chooseDeck:', data, 'timestamp:', new Date().toISOString());
                 const game = await gameRepository.findGameById(data.gameId);
                 if (!game) {
-                    console.log(`Erreur : Partie non trouvée pour gameId: ${data.gameId}`);
+                    console.log(`[WebSocket] Erreur : Partie non trouvée pour gameId: ${data.gameId}`);
                     socket.emit('error', 'Partie non trouvée');
                     return;
                 }
                 const playerInfo = playerManager.getPlayer(socket.id);
                 if (!playerInfo || playerInfo.playerId !== data.playerId) {
-                    console.log(`Erreur : Joueur non autorisé pour socketId: ${socket.id}, playerId: ${data.playerId}`);
+                    console.log(`[WebSocket] Erreur : Joueur non autorisé pour socketId: ${socket.id}, playerId: ${data.playerId}`);
                     socket.emit('error', 'Joueur non autorisé');
                     return;
                 }
                 if (data.playerId === 1) {
                     if (game.deckChoices['1'].length >= 1) {
-                        console.log(`Erreur : Joueur 1 a déjà choisi un deck pour gameId: ${data.gameId}`);
+                        console.log(`[WebSocket] Erreur : Joueur 1 a déjà choisi un deck pour gameId: ${data.gameId}`);
                         socket.emit('error', 'Le joueur 1 a déjà choisi un deck');
                         return;
                     }
                     if (!game.availableDecks.some((deck) => deck.id === data.deckId)) {
-                        console.log(`Erreur : Deck invalide ${data.deckId} pour gameId: ${data.gameId}`);
+                        console.log(`[WebSocket] Erreur : Deck invalide ${data.deckId} pour gameId: ${data.gameId}`);
                         socket.emit('error', 'Deck invalide');
                         return;
                     }
                     game.deckChoices['1'] = [data.deckId];
                     await gameRepository.updateGame(data.gameId, { deckChoices: game.deckChoices });
                     gameCache.setGame(data.gameId, game);
-                    console.log(`Joueur 1 a choisi le deck: ${data.deckId}, gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
-                    console.log('Émission de player1ChoseDeck:', { player1DeckId: data.deckId }, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
+                    console.log(`[WebSocket] Joueur 1 a choisi le deck: ${data.deckId}, gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
+                    console.log('[WebSocket] Émission de player1ChoseDeck:', { player1DeckId: data.deckId }, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
                     io.to(data.gameId).emit('player1ChoseDeck', { player1DeckId: data.deckId });
-                    console.log('Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
+                    console.log('[WebSocket] Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
                     io.to(data.gameId).emit('deckSelectionUpdate', game.deckChoices);
                     if (game.players[1]) {
-                        console.log('Émission de waitingForPlayer1Choice:', { waiting: false }, 'to player2:', game.players[1], 'timestamp:', new Date().toISOString());
+                        console.log('[WebSocket] Émission de waitingForPlayer1Choice:', { waiting: false }, 'to player2:', game.players[1], 'timestamp:', new Date().toISOString());
                         io.to(game.players[1]).emit('waitingForPlayer1Choice', { waiting: false });
                     }
                     else {
-                        console.log('Joueur 2 non connecté, waitingForPlayer1Choice non émis, timestamp:', new Date().toISOString());
+                        console.log('[WebSocket] Joueur 2 non connecté, waitingForPlayer1Choice non émis, timestamp:', new Date().toISOString());
                     }
                 }
                 else if (data.playerId === 2) {
                     if (!game.deckChoices['1'].length) {
-                        console.log(`Erreur : Joueur 1 doit choisir un deck en premier pour gameId: ${data.gameId}`);
+                        console.log(`[WebSocket] Erreur : Joueur 1 doit choisir un deck en premier pour gameId: ${data.gameId}`);
                         socket.emit('error', 'Le joueur 1 doit choisir un deck en premier');
                         return;
                     }
                     if (game.deckChoices['2'].length >= 2) {
-                        console.log(`Erreur : Joueur 2 a déjà choisi deux decks pour gameId: ${data.gameId}`);
+                        console.log(`[WebSocket] Erreur : Joueur 2 a déjà choisi deux decks pour gameId: ${data.gameId}`);
                         socket.emit('error', 'Le joueur 2 a déjà choisi deux decks');
                         return;
                     }
                     if (game.deckChoices['2'].includes(data.deckId) || game.deckChoices['1'].includes(data.deckId)) {
-                        console.log(`Erreur : Deck déjà choisi ${data.deckId} pour gameId: ${data.gameId}`);
+                        console.log(`[WebSocket] Erreur : Deck déjà choisi ${data.deckId} pour gameId: ${data.gameId}`);
                         socket.emit('error', 'Deck déjà choisi');
                         return;
                     }
                     if (!game.availableDecks.some((deck) => deck.id === data.deckId)) {
-                        console.log(`Erreur : Deck invalide ${data.deckId} pour gameId: ${data.gameId}`);
+                        console.log(`[WebSocket] Erreur : Deck invalide ${data.deckId} pour gameId: ${data.gameId}`);
                         socket.emit('error', 'Deck invalide');
                         return;
                     }
                     game.deckChoices['2'].push(data.deckId);
                     await gameRepository.updateGame(data.gameId, { deckChoices: game.deckChoices });
                     gameCache.setGame(data.gameId, game);
-                    console.log(`Joueur 2 a choisi le deck: ${data.deckId}, gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
-                    console.log('Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
+                    console.log(`[WebSocket] Joueur 2 a choisi le deck: ${data.deckId}, gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
+                    console.log('[WebSocket] Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
                     io.to(data.gameId).emit('deckSelectionUpdate', game.deckChoices);
                     if (game.deckChoices['2'].length === 2) {
                         const remainingDeck = game.availableDecks.find((deck) => !game.deckChoices['1'].includes(deck.id) && !game.deckChoices['2'].includes(deck.id));
                         if (remainingDeck) {
-                            game.deckChoices['1'].push(remainingDeck.id); // Fix: Use remainingDeck.id
+                            game.deckChoices['1'].push(remainingDeck.id);
                             await gameRepository.updateGame(data.gameId, { deckChoices: game.deckChoices });
                             gameCache.setGame(data.gameId, game);
-                            console.log(`Deck restant ${remainingDeck.id} attribué au joueur 1 pour gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
-                            console.log('Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
+                            console.log(`[WebSocket] Deck restant ${remainingDeck.id} attribué au joueur 1 pour gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
+                            console.log('[WebSocket] Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
                             io.to(data.gameId).emit('deckSelectionUpdate', game.deckChoices);
                         }
-                        console.log('Émission de deckSelectionDone:', {
+                        console.log('[WebSocket] Émission de deckSelectionDone:', {
                             player1DeckId: game.deckChoices['1'],
                             player2DeckIds: game.deckChoices['2'],
                             selectedDecks: [...game.deckChoices['1'], ...game.deckChoices['2']],
@@ -529,44 +542,44 @@ export async function registerSocketHandlers(io, db) {
                 }
             }
             catch (error) {
-                console.error('Erreur lors du choix du deck:', error);
+                console.error('[WebSocket] Erreur lors du choix du deck:', error);
                 socket.emit('error', 'Erreur lors du choix du deck');
             }
         });
         socket.on('playerReady', async (data) => {
+            console.log('[WebSocket] Événement playerReady reçu:', data, 'socket.id:', socket.id);
             try {
-                console.log('Reçu playerReady:', data, 'timestamp:', new Date().toISOString());
                 const game = await gameRepository.findGameById(data.gameId);
                 if (!game) {
-                    console.log(`Erreur : Partie non trouvée pour gameId: ${data.gameId}`);
+                    console.log(`[WebSocket] Erreur : Partie non trouvée pour gameId: ${data.gameId}`);
                     socket.emit('error', 'Partie non trouvée');
                     return;
                 }
                 const playerInfo = playerManager.getPlayer(socket.id);
                 if (!playerInfo || playerInfo.playerId !== data.playerId) {
-                    console.log(`Erreur : Joueur non autorisé pour socketId: ${socket.id}, playerId: ${data.playerId}`);
+                    console.log(`[WebSocket] Erreur : Joueur non autorisé pour socketId: ${socket.id}, playerId: ${data.playerId}`);
                     socket.emit('error', 'Joueur non autorisé');
                     return;
                 }
                 game.playersReady = game.playersReady || new Set();
                 game.playersReady.add(data.playerId);
                 await gameRepository.updateGame(data.gameId, { playersReady: Array.from(game.playersReady) });
-                console.log(`Joueur ${data.playerId} est prêt, gameId: ${data.gameId}, playersReady: ${Array.from(game.playersReady)}`, 'timestamp:', new Date().toISOString());
+                console.log(`[WebSocket] Joueur ${data.playerId} est prêt, gameId: ${data.gameId}, playersReady: ${Array.from(game.playersReady)}`, 'timestamp:', new Date().toISOString());
                 io.to(data.gameId).emit('playerReady', { playerId: data.playerId });
                 if (game.playersReady.size === 2 && game.deckChoices['1'].length >= 2 && game.deckChoices['2'].length >= 2) {
-                    console.log(`Conditions remplies pour initializeDeck, gameId: ${data.gameId}, deckChoices:`, game.deckChoices, 'timestamp:', new Date().toISOString());
+                    console.log(`[WebSocket] Conditions remplies pour initializeDeck, gameId: ${data.gameId}, deckChoices:`, game.deckChoices, 'timestamp:', new Date().toISOString());
                     io.to(data.gameId).emit('bothPlayersReady', { bothReady: true });
                     const deckLists = cardManager.getDeckLists();
                     const allCards = cardManager.getAllCards();
-                    console.log('decklists chargé depuis cardManager, decks disponibles:', Object.keys(deckLists), 'timestamp:', new Date().toISOString());
-                    console.log('Contenu de decklists:', JSON.stringify(deckLists, null, 2), 'timestamp:', new Date().toISOString());
-                    console.log('cards chargé depuis cardManager, nombre de cartes:', allCards.length, 'timestamp:', new Date().toISOString());
-                    console.log('Contenu de allCards:', JSON.stringify(allCards, null, 2), 'timestamp:', new Date().toISOString());
+                    console.log('[WebSocket] decklists chargé depuis cardManager, decks disponibles:', Object.keys(deckLists), 'timestamp:', new Date().toISOString());
+                    console.log('[WebSocket] Contenu de decklists:', JSON.stringify(deckLists, null, 2), 'timestamp:', new Date().toISOString());
+                    console.log('[WebSocket] cards chargé depuis cardManager, nombre de cartes:', allCards.length, 'timestamp:', new Date().toISOString());
+                    console.log('[WebSocket] Contenu de allCards:', JSON.stringify(allCards, null, 2), 'timestamp:', new Date().toISOString());
                     const allDeckIds = [...game.deckChoices['1'], ...game.deckChoices['2']];
-                    console.log(`Vérification des decks sélectionnés:`, allDeckIds, 'timestamp:', new Date().toISOString());
+                    console.log(`[WebSocket] Vérification des decks sélectionnés:`, allDeckIds, 'timestamp:', new Date().toISOString());
                     for (const deckId of allDeckIds) {
                         if (!deckLists[deckId]) {
-                            console.error(`Erreur : Deck ${deckId} non trouvé dans decklists`, 'decklists keys:', Object.keys(deckLists), 'timestamp:', new Date().toISOString());
+                            console.error(`[WebSocket] Erreur : Deck ${deckId} non trouvé dans decklists`, 'decklists keys:', Object.keys(deckLists), 'timestamp:', new Date().toISOString());
                             socket.emit('error', `Deck ${deckId} non trouvé dans decklists`);
                             return;
                         }
@@ -575,23 +588,23 @@ export async function registerSocketHandlers(io, db) {
                     for (const playerId of ['1', '2']) {
                         const playerSocketId = game.players.find(p => playerManager.getPlayer(p)?.playerId === Number(playerId));
                         if (!playerSocketId) {
-                            console.error(`Erreur : Socket non trouvé pour playerId: ${playerId}`, 'timestamp:', new Date().toISOString());
+                            console.error(`[WebSocket] Erreur : Socket non trouvé pour playerId: ${playerId}`, 'timestamp:', new Date().toISOString());
                             continue;
                         }
                         const selectedDeckIds = game.deckChoices[playerId];
                         const deck = [];
                         selectedDeckIds.forEach((deckId) => {
                             const cardIds = deckLists[deckId];
-                            console.log(`Traitement du deck ${deckId}, cardIds:`, cardIds, 'timestamp:', new Date().toISOString());
+                            console.log(`[WebSocket] Traitement du deck ${deckId}, cardIds:`, cardIds, 'timestamp:', new Date().toISOString());
                             const deckCards = cardIds.map((cardId) => {
                                 const card = allCards.find(c => c.id === cardId);
                                 if (!card) {
-                                    console.error(`Erreur : Carte ${cardId} non trouvée dans allCards`, 'timestamp:', new Date().toISOString());
+                                    console.error(`[WebSocket] Erreur : Carte ${cardId} non trouvée dans allCards`, 'timestamp:', new Date().toISOString());
                                     return null;
                                 }
                                 return { ...card, exhausted: false };
                             }).filter((card) => card !== null);
-                            console.log(`Cartes ajoutées pour deck ${deckId}:`, deckCards, 'timestamp:', new Date().toISOString());
+                            console.log(`[WebSocket] Cartes ajoutées pour deck ${deckId}:`, deckCards, 'timestamp:', new Date().toISOString());
                             deck.push(...deckCards);
                         });
                         // Mélanger le deck
@@ -604,7 +617,7 @@ export async function registerSocketHandlers(io, db) {
                         const deckList = await db.collection('decklists').findOne({ id: primaryDeckId });
                         const tokenType = deckList?.id || null; // ex: "assassin"
                         const tokenCount = tokenType === 'assassin' ? 8 : tokenType === 'viking' ? 1 : 0;
-                        console.log(`Émission de initializeDeck pour playerId: ${playerId}, deckLength: ${remainingDeck.length}, initialDrawLength: ${initialDraw.length}, tokenType: ${tokenType}, tokenCount: ${tokenCount}`, 'timestamp:', new Date().toISOString());
+                        console.log(`[WebSocket] Émission de initializeDeck pour playerId: ${playerId}, deckLength: ${remainingDeck.length}, initialDrawLength: ${initialDraw.length}, tokenType: ${tokenType}, tokenCount: ${tokenCount}`, 'timestamp:', new Date().toISOString());
                         io.to(playerSocketId).emit('initializeDeck', {
                             deck: remainingDeck,
                             initialDraw,
@@ -614,7 +627,7 @@ export async function registerSocketHandlers(io, db) {
                     }
                 }
                 else {
-                    console.log(`En attente d'autres joueurs prêts ou de sélection de decks, gameId: ${data.gameId}`, {
+                    console.log(`[WebSocket] En attente d'autres joueurs prêts ou de sélection de decks, gameId: ${data.gameId}`, {
                         playersReady: Array.from(game.playersReady),
                         deckChoices1: game.deckChoices['1'],
                         deckChoices2: game.deckChoices['2'],
@@ -622,7 +635,7 @@ export async function registerSocketHandlers(io, db) {
                 }
             }
             catch (error) {
-                console.error('Erreur lors de la confirmation de préparation:', error, 'timestamp:', new Date().toISOString());
+                console.error('[WebSocket] Erreur lors de la confirmation de préparation:', error, 'timestamp:', new Date().toISOString());
                 socket.emit('error', 'Erreur lors de la confirmation de préparation');
             }
         });
