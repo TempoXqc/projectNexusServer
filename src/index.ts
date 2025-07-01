@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Charger le fichier .env depuis server/src/.env
+// Charger le fichier .env
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 // Valider les variables d'environnement
@@ -33,20 +33,32 @@ console.log('[DEBUG] FRONTEND_URL utilisée :', FRONTEND_URL);
 
 const app = express();
 const server = createServer(app);
+
+// Configurer CORS pour HTTP
+app.use(cors({
+  origin: (origin, callback) => {
+    const allowedOrigins = [FRONTEND_URL, 'http://localhost:5173'];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, origin || '*');
+    } else {
+      callback(new Error('Origine non autorisée'));
+    }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Configurer CORS pour WebSocket
 const io = new Server(server, {
   cors: {
     origin: [FRONTEND_URL, 'http://localhost:5173'],
     methods: ['GET', 'POST'],
-    credentials: true,
+    credentials: true
   },
   transports: ['websocket', 'polling'],
 });
 
-app.use(cors({
-  origin: [FRONTEND_URL, 'http://localhost:5173'],
-  methods: ['GET', 'POST'],
-  credentials: true,
-}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/addons', express.static('addons'));
@@ -78,9 +90,6 @@ async function startServer() {
 
   // Configurer les routes d'authentification
   app.use('/api', setupAuthRoutes(db));
-
-  // Configurer les gestionnaires de sockets
-  registerSocketHandlers(io, db);
 
   // Endpoint pour les parties actives
   app.get('/api/games', async (req: Request, res: Response) => {
