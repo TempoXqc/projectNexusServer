@@ -12,31 +12,38 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // Charger le fichier .env depuis server/src/.env
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+// Valider les variables d'environnement
+const FRONTEND_URL = process.env.FRONTEND_URL;
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+    console.error('Erreur : La variable d\'environnement MONGODB_URI est manquante');
+    process.exit(1);
+}
+if (!FRONTEND_URL) {
+    console.error('Erreur : La variable d\'environnement FRONTEND_URL est manquante');
+    process.exit(1);
+}
+console.log('[DEBUG] Mongo URI utilisée :', MONGODB_URI.replace(/:([^@]+)@/, ':****@'));
+console.log('[DEBUG] FRONTEND_URL utilisée :', FRONTEND_URL);
 const app = express();
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: [
-            'http://localhost:5173',
-            'https://projectnexus-nynw.onrender.com',
-            'https://projectnexus-staging.up.railway.app',
-        ],
+        origin: [FRONTEND_URL, 'http://localhost:5173'],
         methods: ['GET', 'POST'],
         credentials: true,
     },
     transports: ['websocket', 'polling'],
 });
-app.use(cors());
+app.use(cors({
+    origin: [FRONTEND_URL, 'http://localhost:5173'],
+    methods: ['GET', 'POST'],
+    credentials: true,
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/addons', express.static('addons'));
-const uri = process.env.MONGODB_URI;
-if (!uri) {
-    console.error('Erreur : MONGODB_URI non défini dans le fichier .env');
-    process.exit(1);
-}
-console.log('[DEBUG] Mongo URI utilisée :', uri.replace(/:([^@]+)@/, ':****@'));
-const client = new MongoClient(uri);
+const client = new MongoClient(MONGODB_URI);
 async function connectToMongoDB() {
     try {
         await client.connect();
@@ -84,6 +91,13 @@ async function startServer() {
             console.error('Erreur lors de la récupération des parties:', error);
             res.status(500).json({ error: 'Erreur serveur' });
         }
+    });
+    // Gestion des connexions WebSocket
+    io.on('connection', (socket) => {
+        console.log('[WebSocket] Nouvelle connexion:', socket.id, 'depuis:', socket.handshake.headers.origin);
+        socket.on('disconnect', () => {
+            console.log('[WebSocket] Déconnexion:', socket.id);
+        });
     });
     const PORT = process.env.PORT || 3000;
     server.listen(PORT, () => {
