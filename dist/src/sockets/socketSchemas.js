@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CardSchema } from "@tempoxqc/project-nexus-types/dist";
+import { CardSchema } from "@tempoxqc/project-nexus-types";
 export const PlayCardSchema = z.object({
     gameId: z.string(),
     card: CardSchema,
