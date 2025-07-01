@@ -1,4 +1,3 @@
-// server/src/config/serverConfig.ts
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
@@ -11,8 +10,8 @@ dotenv.config({ path: resolve(__dirname, '../../../.env') });
 export const serverConfig = {
   port: Number(process.env.PORT) || 3000,
   corsOrigins: [
-    'https://projectnexus-nynw.onrender.com',
-    'https://projectnexus-staging.up.railway.app',
+    process.env.FRONTEND_URL || 'https://projectnexus-staging.up.railway.app',
+    'http://localhost:5173'
   ],
   mongodbUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/projectNexus',
 };
