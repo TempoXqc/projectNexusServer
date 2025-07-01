@@ -37,9 +37,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = serverConfig.corsOrigins;
-    console.log(`[CORS] Vérification de l'origine: ${origin}, Allowed: ${allowedOrigins}`);
-    if (!origin || allowedOrigins.includes(origin)) {
+    const allowedOrigins = serverConfig.corsOrigins.map(o => o.replace(/^https?:\/\//, '')); // Supprimer le protocole
+    const normalizedOrigin = origin ? origin.replace(/^https?:\/\//, '') : '';
+    console.log(`[CORS] Vérification de l'origine: ${origin} (normalisée: ${normalizedOrigin}), Allowed: ${allowedOrigins}`);
+    if (!origin || allowedOrigins.includes(normalizedOrigin)) {
       callback(null, origin || '*');
     } else {
       console.error(`[CORS] Origine non autorisée: ${origin}`);
