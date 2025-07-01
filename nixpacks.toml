@@ -1,8 +1,8 @@
-[phases.setup]
-nixPkgs = ['nodejs_18', 'npm-9_x']
-
-[phases.install]
-cmds = ['npm ci']
-
-[phases.build]
-cmds = ['npm ci --omit=dev', 'npm run build']
+echo "[phases.setup]" > nixpacks.toml
+echo "nixPkgs = ['nodejs_18', 'npm-9_x']" >> nixpacks.toml
+echo "" >> nixpacks.toml
+echo "[phases.install]" >> nixpacks.toml
+echo "cmds = ['npm ci']" >> nixpacks.toml
+echo "" >> nixpacks.toml
+echo "[phases.build]" >> nixpacks.toml
+echo "cmds = ['npm ci --omit=dev', 'npm run build']" >> nixpacks.toml
