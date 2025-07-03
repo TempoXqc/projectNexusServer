@@ -84,6 +84,7 @@ async function startServer() {
     app.get('/api/games', async (req, res) => {
         try {
             const gamesCollection = db.collection('games');
+            console.log('[API] Requête /api/games reçue', new Date().toISOString());
             const activeGames = await gamesCollection
                 .find({
                 status: { $in: ['waiting', 'started'] },
@@ -96,10 +97,11 @@ async function startServer() {
                 _id: 0,
             })
                 .toArray();
+            console.log('[API] Parties trouvées:', activeGames, new Date().toISOString());
             res.json(activeGames);
         }
         catch (error) {
-            console.error('Erreur lors de la récupération des parties:', error);
+            console.error('[API] Erreur lors de la récupération des parties:', error, new Date().toISOString());
             res.status(500).json({ error: 'Erreur serveur' });
         }
     });
