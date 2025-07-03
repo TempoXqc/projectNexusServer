@@ -175,6 +175,8 @@ export async function registerSocketHandlers(io, db) {
             }
             const games = await gameRepository.findActiveGames();
             games.forEach((game) => gameCache.deleteGame(game.gameId));
+            console.log('[DEBUG] refreshLobby appelé');
+            io.emit('activeGamesUpdate', games);
             await sendActiveGamesToSocket(socket);
         });
         socket.on('disconnect', () => {

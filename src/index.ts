@@ -8,6 +8,7 @@ import { setupAuthRoutes } from './routes/authRoutes.js';
 import * as path from 'node:path';
 import { fileURLToPath } from 'url';
 import { serverConfig } from './config/serverConfig.js';
+import { registerSocketHandlers } from './sockets/socketHandlers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -86,6 +87,7 @@ async function startServer() {
   });
 
   app.use('/api', setupAuthRoutes(db));
+  await registerSocketHandlers(io, db);
 
   app.get('/api/games', async (_req: Request, res: Response) => {
     try {

@@ -188,12 +188,16 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     });
 
     socket.on('refreshLobby', async () => {
+
       if (!socket.rooms.has('lobby')) {
         socket.join('lobby');
         console.log(`Socket ${socket.id} a rejoint le lobby, timestamp: ${new Date().toISOString()}`);
       }
       const games = await gameRepository.findActiveGames();
       games.forEach((game) => gameCache.deleteGame(game.gameId));
+      console.log('[DEBUG] refreshLobby appelé');
+      io.emit('activeGamesUpdate', games);
+
       await sendActiveGamesToSocket(socket);
     });
 
