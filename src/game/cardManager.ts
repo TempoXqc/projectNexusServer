@@ -20,14 +20,9 @@ export class CardManager {
     this.allCards = [];
   }
 
-  // async initialize() {
-  //   await this.loadData();
-  // }
-
   async initialize() {
     await this.loadData();
   }
-
 
   private async loadData() {
     try {
@@ -44,7 +39,7 @@ export class CardManager {
       }
     } catch (error) {
       console.error('Erreur lors du chargement de decklists depuis MongoDB Atlas:', error, 'timestamp:', new Date().toISOString());
-      this.deckLists = {}; // Initialiser avec un objet vide en cas d'erreur
+      this.deckLists = {};
     }
 
     try {
@@ -60,7 +55,7 @@ export class CardManager {
       }
     } catch (error) {
       console.error('Erreur lors du chargement de cards depuis MongoDB Atlas:', error, 'timestamp:', new Date().toISOString());
-      this.allCards = []; // Initialiser avec un tableau vide en cas d'erreur
+      this.allCards = [];
     }
   }
 
