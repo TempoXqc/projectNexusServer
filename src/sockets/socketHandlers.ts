@@ -205,6 +205,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('createGame', async (data, ack) => {
       console.log('[WebSocket] Événement createGame reçu:', data, 'socket.id:', socket.id, 'timestamp:', new Date().toISOString());
       try {
+        console.log('[WebSocket] Validation des données:', data);
         const { isRanked, gameFormat } = z
             .object({
               isRanked: z.boolean(),
@@ -212,6 +213,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             })
             .parse(data);
 
+        console.log('[WebSocket] Vérification du joueur:', socket.id);
         const playerInfo = playerManager.getPlayer(socket.id);
         if (playerInfo && playerInfo.gameId) {
           console.log('[WebSocket] Erreur: Joueur déjà dans une partie:', playerInfo.gameId);
@@ -219,12 +221,14 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           return;
         }
 
+        console.log('[WebSocket] Génération de l\'ID de partie');
         let gameId: string;
         let attempts = 0;
         const maxAttempts = 5;
 
         do {
           gameId = generateGameId();
+          console.log('[WebSocket] Vérification de l\'ID de partie:', gameId);
           const existingGame = await gameRepository.findGameById(gameId);
           if (existingGame) {
             attempts++;
@@ -238,8 +242,11 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           }
         } while (true);
 
+        console.log('[WebSocket] Récupération des decks disponibles');
         const availableDecks = await cardManager.getRandomDecks();
+        console.log('[WebSocket] Decks récupérés:', availableDecks);
 
+        console.log('[WebSocket] Création de la nouvelle partie');
         const newGame: ServerGameState = {
           gameId,
           players: [socket.id],
@@ -284,14 +291,20 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           playersReady: new Set<number>(),
         };
 
+        console.log('[WebSocket] Insertion de la partie dans MongoDB');
         await gameRepository.insertGame(newGame);
+        console.log('[WebSocket] Mise en cache de la partie');
         gameCache.setGame(gameId, newGame);
+        console.log('[WebSocket] Ajout du joueur au gestionnaire');
         playerManager.addPlayer(socket.id, { gameId, playerId: 1 });
 
+        console.log('[WebSocket] Joindre la room Socket.IO:', gameId);
         socket.join(gameId);
         if (socket.rooms.has('lobby')) {
+          console.log('[WebSocket] Quitter le lobby');
           socket.leave('lobby');
         }
+        console.log('[WebSocket] Planification de la mise à jour des parties actives');
         scheduleActiveGamesUpdate();
 
         const ackResponse = {
