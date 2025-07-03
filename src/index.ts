@@ -120,8 +120,11 @@ async function startServer() {
   // Gestion des connexions WebSocket
   io.on('connection', (socket) => {
     console.log('[WebSocket] Nouvelle connexion:', socket.id, 'depuis:', socket.handshake.headers.origin);
-    socket.on('disconnect', () => {
-      console.log('[WebSocket] Déconnexion:', socket.id);
+    socket.on('connect_error', (error) => {
+      console.error('[WebSocket] Erreur de connexion pour socket:', socket.id, 'Erreur:', error);
+    });
+    socket.on('disconnect', (reason) => {
+      console.log('[WebSocket] Déconnexion:', socket.id, 'Raison:', reason);
     });
   });
 
