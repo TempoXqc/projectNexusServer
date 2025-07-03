@@ -10,9 +10,7 @@ import { fileURLToPath } from 'url';
 import { serverConfig } from './config/serverConfig.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// Charger le fichier .env
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
-// Valider les variables d'environnement
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {
     console.error('Erreur : La variable d\'environnement MONGODB_URI est manquante');
@@ -22,8 +20,7 @@ console.log('[DEBUG] Mongo URI utilisée :', MONGODB_URI.replace(/:([^@]+)@/, ':
 console.log('[DEBUG] Origines CORS autorisées :', serverConfig.corsOrigins);
 const app = express();
 const server = createServer(app);
-// Configurer CORS pour HTTP
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
     console.log(`[CORS] Requête reçue: ${req.method} ${req.url} Origine: ${req.headers.origin}`);
     next();
 });
@@ -44,7 +41,6 @@ app.use(cors({
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-// Configurer CORS pour WebSocket
 const io = new Server(server, {
     cors: {
         origin: serverConfig.corsOrigins,
@@ -73,15 +69,12 @@ async function connectToMongoDB() {
 }
 async function startServer() {
     const db = await connectToMongoDB();
-    // Middleware pour passer db aux routes
-    app.use((req, res, next) => {
+    app.use((req, _res, next) => {
         req.db = db;
         next();
     });
-    // Configurer les routes d'authentification
     app.use('/api', setupAuthRoutes(db));
-    // Endpoint pour les parties actives
-    app.get('/api/games', async (req, res) => {
+    app.get('/api/games', async (_req, res) => {
         try {
             const gamesCollection = db.collection('games');
             console.log('[API] Requête /api/games reçue', new Date().toISOString());
@@ -105,7 +98,6 @@ async function startServer() {
             res.status(500).json({ error: 'Erreur serveur' });
         }
     });
-    // Gestion des connexions WebSocket
     io.on('connection', (socket) => {
         console.log('[WebSocket] Nouvelle connexion:', socket.id, 'depuis:', socket.handshake.headers.origin);
         socket.on('connect_error', (error) => {
@@ -119,7 +111,6 @@ async function startServer() {
     server.listen(PORT, () => {
         console.log(`Serveur démarré sur le port ${PORT}`);
     });
-    // Nettoyage des parties inactives (toutes les heures)
     setInterval(async () => {
         const gamesCollection = db.collection('games');
         await gamesCollection.deleteMany({
@@ -141,4 +132,12 @@ async function startServer() {
         io.emit('activeGamesUpdate', activeGames);
     }, 60 * 60 * 1000);
 }
-startServer();
+(async () => {
+    try {
+        await startServer();
+    }
+    catch (error) {
+        console.error('Erreur lors du démarrage du serveur:', error);
+        process.exit(1);
+    }
+})();
