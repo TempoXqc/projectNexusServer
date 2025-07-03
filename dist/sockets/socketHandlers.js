@@ -102,11 +102,17 @@ function mapServerToClientGameState(serverGame, playerSocketId) {
     };
 }
 export async function registerSocketHandlers(io, db) {
+    console.log('[WebSocket] Début de l\'initialisation des gestionnaires de sockets', 'timestamp:', new Date().toISOString());
     const gameRepository = new GameRepository(db);
+    console.log('[WebSocket] GameRepository initialisé', 'timestamp:', new Date().toISOString());
     const cardManager = new CardManager(db);
+    console.log('[WebSocket] Début de l\'initialisation de CardManager', 'timestamp:', new Date().toISOString());
     await cardManager.initialize();
+    console.log('[WebSocket] CardManager initialisé avec succès', 'timestamp:', new Date().toISOString());
     const deckLists = cardManager.getDeckLists();
+    console.log('[WebSocket] DeckLists chargés:', Object.keys(deckLists), 'timestamp:', new Date().toISOString());
     const allCards = cardManager.getAllCards();
+    console.log('[WebSocket] AllCards chargés:', allCards.length, 'timestamp:', new Date().toISOString());
     const gameLogic = new GameLogic(gameRepository, cardManager);
     const playerManager = new PlayerManager();
     const gameCache = new GameCache();
