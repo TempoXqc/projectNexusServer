@@ -272,7 +272,6 @@ export async function registerSocketHandlers(io, db) {
                     chatHistory: newGame.chatHistory,
                     availableDecks: newGame.availableDecks,
                 };
-                console.log('[WebSocket] Envoi de ACK pour createGame:', ackResponse, 'timestamp:', new Date().toISOString());
                 ack(ackResponse);
             }
             catch (error) {

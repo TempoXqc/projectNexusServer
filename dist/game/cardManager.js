@@ -56,7 +56,6 @@ export class CardManager {
         try {
             const deckListsCollection = this.db.collection('decklists');
             const deckListsDocs = await deckListsCollection.find({}).toArray();
-            console.log('[DEBUG] Documents bruts de decklists:', JSON.stringify(deckListsDocs, null, 2));
             if (deckListsDocs.length === 0) {
                 console.error('Aucun deck trouvé dans la collection decklists', 'timestamp:', new Date().toISOString());
                 return [];
@@ -68,7 +67,6 @@ export class CardManager {
                     image: deck.image || `https://res.cloudinary.com/dsqxexeam/image/upload/v1750992816/${deck.name}_default.png`,
                     infoImage: deck.infoImage || `https://res.cloudinary.com/dsqxexeam/image/upload/v1750992816/${deck.name}_default.png`,
                 };
-                console.log('[DEBUG] Deck mappé:', JSON.stringify(mappedDeck, null, 2));
                 return mappedDeck;
             });
             const shuffled = deckData.sort(() => Math.random() - 0.5);

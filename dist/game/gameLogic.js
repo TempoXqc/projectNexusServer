@@ -15,12 +15,8 @@ export class GameLogic {
         }));
         const currentUpdate = JSON.stringify(activeGames);
         if (currentUpdate !== lastUpdate) {
-            console.log('Émission de activeGamesUpdate:', activeGames);
             io.to('lobby').emit('activeGamesUpdate', activeGames);
             updateCallback(currentUpdate);
-        }
-        else {
-            console.log('activeGamesUpdate inchangé, émission ignorée');
         }
     }
     async drawCardServer(gameId, playerKey) {

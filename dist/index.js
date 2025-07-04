@@ -16,27 +16,21 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {
-    console.error('Erreur : La variable d\'environnement MONGODB_URI est manquante');
     process.exit(1);
 }
-console.log('[DEBUG] Mongo URI utilisée :', MONGODB_URI.replace(/:([^@]+)@/, ':****@'));
-console.log('[DEBUG] Origines CORS autorisées :', serverConfig.corsOrigins);
 const app = express();
 const server = createServer(app);
 app.use((req, _res, next) => {
-    console.log(`[CORS] Requête reçue: ${req.method} ${req.url} Origine: ${req.headers.origin}`);
     next();
 });
 app.use(cors({
     origin: (origin, callback) => {
         const allowedOrigins = serverConfig.corsOrigins.map(o => o.replace(/^https?:\/\//, '')); // Supprimer le protocole
         const normalizedOrigin = origin ? origin.replace(/^https?:\/\//, '') : '';
-        console.log(`[CORS] Vérification de l'origine: ${origin} (normalisée: ${normalizedOrigin}), Allowed: ${allowedOrigins}`);
         if (!origin || allowedOrigins.includes(normalizedOrigin)) {
             callback(null, origin || '*');
         }
         else {
-            console.error(`[CORS] Origine non autorisée: ${origin}`);
             callback(new Error('Origine non autorisée'));
         }
     },
@@ -53,7 +47,6 @@ const io = new Server(server, {
     transports: ['websocket', 'polling'],
 });
 const client = new MongoClient(MONGODB_URI);
-// Schéma Zod pour valider la backcard
 const BackcardSchema = z.object({
     id: z.string(),
     name: z.string(),
@@ -62,14 +55,12 @@ const BackcardSchema = z.object({
 async function connectToMongoDB() {
     try {
         await client.connect();
-        console.log('Connecté à MongoDB');
         const db = client.db('projectNexus');
         await db.collection('games').createIndex({ gameId: 1 });
         await db.collection('users').createIndex({ username: 1 }, { unique: true });
         return db;
     }
     catch (error) {
-        console.error('Erreur de connexion à MongoDB:', error);
         process.exit(1);
     }
 }
@@ -114,15 +105,6 @@ async function startServer() {
         }
     });
     await registerSocketHandlers(io, db);
-    io.on('connection', (socket) => {
-        console.log('[WebSocket] Nouvelle connexion:', socket.id, 'depuis:', socket.handshake.headers.origin);
-        socket.on('connect_error', (error) => {
-            console.error('[WebSocket] Erreur de connexion pour socket:', socket.id, 'Erreur:', error);
-        });
-        socket.on('disconnect', (reason) => {
-            console.log('[WebSocket] Déconnexion:', socket.id, 'Raison:', reason);
-        });
-    });
     const PORT = serverConfig.port;
     server.listen(PORT, () => {
         console.log(`Serveur démarré sur le port ${PORT}`);

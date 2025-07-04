@@ -300,7 +300,6 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           chatHistory: newGame.chatHistory,
           availableDecks: newGame.availableDecks,
         };
-        console.log('[WebSocket] Envoi de ACK pour createGame:', ackResponse, 'timestamp:', new Date().toISOString());
         ack(ackResponse);
       } catch (error) {
         console.error('[WebSocket] Erreur lors de la création de la partie:', error);
