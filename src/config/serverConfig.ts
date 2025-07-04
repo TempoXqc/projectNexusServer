@@ -11,7 +11,7 @@ export const serverConfig = {
   port: Number(process.env.PORT) || 3000,
   corsOrigins: [
     process.env.FRONTEND_URL || 'https://projectnexus-staging.up.railway.app',
-    'http://localhost:5173'
+    'http://localhost:4173'
   ],
   mongodbUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/projectNexus',
 };
