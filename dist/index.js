@@ -126,9 +126,6 @@ async function startServer() {
         }
     });
     await registerSocketHandlers(io, db);
-    // Middlewares statiques après les routes API
-    // app.use(express.static(path.join(__dirname, 'public')));
-    // app.use('/addons', express.static('addons'));
     io.on('connection', (socket) => {
         console.log('[WebSocket] Nouvelle connexion:', socket.id, 'depuis:', socket.handshake.headers.origin);
         socket.on('connect_error', (error) => {
