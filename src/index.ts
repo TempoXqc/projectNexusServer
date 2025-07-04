@@ -15,7 +15,7 @@ import { z } from 'zod';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {
@@ -119,10 +119,11 @@ async function startServer() {
     }
   });
 
-  app.get('/api/backcard', async (_req: Request, res: Response) => {
+// server/src/index.ts
+  app.get('/backcard', async (_req: Request, res: Response) => {
     try {
       const backcardCollection = db.collection('backcard');
-      console.log('[API] Requête /api/backcard reçue', new Date().toISOString());
+      console.log('[API] Requête /backcard reçue', new Date().toISOString());
       const backcard = await backcardCollection.findOne({ id: 'backcard_officiel' });
       if (!backcard) {
         console.log('[API] Backcard non trouvée', new Date().toISOString());
