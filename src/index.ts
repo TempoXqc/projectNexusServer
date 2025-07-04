@@ -1,3 +1,4 @@
+// server/src/index.ts
 import express, { Request, Response, NextFunction } from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -9,6 +10,7 @@ import * as path from 'node:path';
 import { fileURLToPath } from 'url';
 import { serverConfig } from './config/serverConfig.js';
 import { registerSocketHandlers } from './sockets/socketHandlers.js';
+import { z } from 'zod';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,11 +60,14 @@ const io = new Server(server, {
   transports: ['websocket', 'polling'],
 });
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/addons', express.static('addons'));
-
 const client = new MongoClient(MONGODB_URI);
+
+// Schéma Zod pour valider la backcard
+const BackcardSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  image: z.string(),
+});
 
 async function connectToMongoDB() {
   try {
@@ -86,8 +91,9 @@ async function startServer() {
     next();
   });
 
+  // Déplacer express.json() et les routes API avant express.static
+  app.use(express.json());
   app.use('/api', setupAuthRoutes(db));
-  await registerSocketHandlers(io, db);
 
   app.get('/api/games', async (_req: Request, res: Response) => {
     try {
@@ -112,6 +118,30 @@ async function startServer() {
       res.status(500).json({ error: 'Erreur serveur' });
     }
   });
+
+  app.get('/api/backcard', async (_req: Request, res: Response) => {
+    try {
+      const backcardCollection = db.collection('backcard');
+      console.log('[API] Requête /api/backcard reçue', new Date().toISOString());
+      const backcard = await backcardCollection.findOne({ id: 'backcard_officiel' });
+      if (!backcard) {
+        console.log('[API] Backcard non trouvée', new Date().toISOString());
+        return res.status(404).json({ error: 'Backcard non trouvée' });
+      }
+      const validatedBackcard = BackcardSchema.parse(backcard);
+      console.log('[API] Backcard trouvée:', validatedBackcard, new Date().toISOString());
+      res.json(validatedBackcard);
+    } catch (error) {
+      console.error('[API] Erreur lors de la récupération de la backcard:', error, new Date().toISOString());
+      res.status(500).json({ error: 'Erreur serveur lors de la récupération de la backcard' });
+    }
+  });
+
+  await registerSocketHandlers(io, db);
+
+  // Middlewares statiques après les routes API
+  // app.use(express.static(path.join(__dirname, 'public')));
+  // app.use('/addons', express.static('addons'));
 
   io.on('connection', (socket) => {
     console.log('[WebSocket] Nouvelle connexion:', socket.id, 'depuis:', socket.handshake.headers.origin);
