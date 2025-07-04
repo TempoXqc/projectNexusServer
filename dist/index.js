@@ -79,13 +79,11 @@ async function startServer() {
         req.db = db;
         next();
     });
-    // Déplacer express.json() et les routes API avant express.static
     app.use(express.json());
     app.use('/api', setupAuthRoutes(db));
     app.get('/api/games', async (_req, res) => {
         try {
             const gamesCollection = db.collection('games');
-            console.log('[API] Requête /api/games reçue', new Date().toISOString());
             const activeGames = await gamesCollection
                 .find({
                 status: { $in: ['waiting', 'started'] },
@@ -98,31 +96,21 @@ async function startServer() {
                 _id: 0,
             })
                 .toArray();
-            console.log('[API] Parties trouvées:', activeGames, new Date().toISOString());
             res.json(activeGames);
         }
         catch (error) {
-            console.error('[API] Erreur lors de la récupération des parties:', error, new Date().toISOString());
             res.status(500).json({ error: 'Erreur serveur' });
         }
     });
-    // server/src/index.ts
     app.get('/backcard', async (_req, res) => {
         try {
             const backcardCollection = db.collection('backcard');
-            console.log('[API] Requête /backcard reçue', new Date().toISOString());
             const backcard = await backcardCollection.findOne({ id: 'backcard_officiel' });
-            if (!backcard) {
-                console.log('[API] Backcard non trouvée', new Date().toISOString());
-                return res.status(404).json({ error: 'Backcard non trouvée' });
-            }
             const validatedBackcard = BackcardSchema.parse(backcard);
-            console.log('[API] Backcard trouvée:', validatedBackcard, new Date().toISOString());
             res.json(validatedBackcard);
         }
         catch (error) {
-            console.error('[API] Erreur lors de la récupération de la backcard:', error, new Date().toISOString());
-            res.status(500).json({ error: 'Erreur serveur lors de la récupération de la backcard' });
+            res.status(500).json({ error: 'Erreur serveur' });
         }
     });
     await registerSocketHandlers(io, db);
