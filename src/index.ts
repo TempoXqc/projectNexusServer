@@ -114,7 +114,7 @@ async function startServer() {
     }
   });
 
-  app.get('/backcard', async (_req: Request, res: Response) => {
+  app.get('/api/backcard', async (_req: Request, res: Response) => {
     try {
       const backcardCollection = db.collection('backcard');
       const backcard = await backcardCollection.findOne({ id: 'backcard_officiel' });

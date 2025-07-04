@@ -102,7 +102,7 @@ async function startServer() {
             res.status(500).json({ error: 'Erreur serveur' });
         }
     });
-    app.get('/backcard', async (_req, res) => {
+    app.get('/api/backcard', async (_req, res) => {
         try {
             const backcardCollection = db.collection('backcard');
             const backcard = await backcardCollection.findOne({ id: 'backcard_officiel' });
