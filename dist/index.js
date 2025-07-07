@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 import { serverConfig } from './config/serverConfig.js';
 import { registerSocketHandlers } from './sockets/socketHandlers.js';
 import { z } from 'zod';
+import initializeRoutes from "./routes/apiRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
@@ -72,6 +73,7 @@ async function startServer() {
     });
     app.use(express.json());
     app.use('/api', setupAuthRoutes(db));
+    app.use('/api', initializeRoutes(db));
     app.get('/api/games', async (_req, res) => {
         try {
             const gamesCollection = db.collection('games');

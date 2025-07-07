@@ -45,6 +45,19 @@ export function initializeRoutes(db) {
             res.status(500).json({ error: 'Erreur serveur lors de la récupération de la backcard' });
         }
     });
+    router.get('/playmats', async (_req, res) => {
+        try {
+            const playmats = await db
+                .collection('playmats')
+                .aggregate([{ $sample: { size: 2 } }])
+                .toArray();
+            res.json(playmats);
+        }
+        catch (error) {
+            console.error('Erreur lors de la récupération des playmats:', error);
+            res.status(500).json({ error: 'Erreur serveur' });
+        }
+    });
     return router;
 }
 export default initializeRoutes;

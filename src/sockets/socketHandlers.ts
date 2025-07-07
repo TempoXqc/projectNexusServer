@@ -24,7 +24,6 @@ function generateGameId(): string {
   );
 }
 
-// Helper function to draw a card on the server
 function drawCardServer(game: ServerGameState, playerKey: 'player1' | 'player2'): Card | null {
   if (game.state[playerKey].deck.length === 0) return null;
   const [drawnCard] = game.state[playerKey].deck.slice(0, 1);
@@ -33,7 +32,6 @@ function drawCardServer(game: ServerGameState, playerKey: 'player1' | 'player2')
   return drawnCard;
 }
 
-// Helper function to check win condition
 async function checkWinCondition(gameId: string, game: ServerGameState, gameRepository: GameRepository, gameCache: GameCache, io: Server) {
   if (game.state.player1.lifePoints <= 0) {
     game.state.gameOver = true;
@@ -145,7 +143,6 @@ export async function registerSocketHandlers(io: Server, db: Db) {
   const gameRepository = new GameRepository(db);
   const cardManager = new CardManager(db);
   await cardManager.initialize();
-  console.log('[WebSocket] CardManager initialisé avec succès', 'timestamp:', new Date().toISOString());
   const deckLists = cardManager.getDeckLists();
   const allCards = cardManager.getAllCards();
   const gameLogic = new GameLogic(gameRepository, cardManager);
@@ -232,7 +229,6 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     });
 
     socket.on('createGame', async (data, ack) => {
-      console.log('[WebSocket] Événement createGame reçu:', data, 'socket.id:', socket.id, 'timestamp:', new Date().toISOString());
       try {
         const { isRanked, gameFormat } = z
             .object({
@@ -241,6 +237,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             })
             .parse(data);
 
+        const gameId = generateGameId();
         const playerInfo = playerManager.getPlayer(socket.id);
         if (playerInfo && playerInfo.gameId) {
           console.log('[WebSocket] Erreur: Joueur déjà dans une partie:', playerInfo.gameId);
@@ -248,26 +245,20 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           return;
         }
 
-        let gameId: string;
-        let attempts = 0;
-        const maxAttempts = 5;
+        const availableDecksRaw = await db.collection('decklists').find().toArray();
+        const playmatsRaw = await db.collection('playmats').aggregate([{ $sample: { size: 2 } }]).toArray();
 
-        do {
-          gameId = generateGameId();
-          const existingGame = await gameRepository.findGameById(gameId);
-          if (existingGame) {
-            attempts++;
-            if (attempts >= maxAttempts) {
-              console.log('[WebSocket] Erreur: Impossible de générer un ID de partie unique');
-              ack({ error: 'Impossible de générer un ID de partie unique' });
-              return;
-            }
-          } else {
-            break;
-          }
-        } while (true);
-
-        const availableDecks = await cardManager.getRandomDecks();
+        const availableDecks = availableDecksRaw.map((deck: any) => ({
+          id: deck.id,
+          name: deck.name,
+          image: deck.image,
+          infoImage: deck.infoImage,
+        }));
+        const playmats = playmatsRaw.map((playmat: any) => ({
+          id: playmat.id,
+          name: playmat.name,
+          image: playmat.image,
+        }));
 
         const newGame: ServerGameState = {
           gameId,
@@ -287,6 +278,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
               tokenCount: 0,
               tokenType: null,
               mulliganDone: false,
+              playmat: playmats[0] || { id: '', name: '', image: '' },
             },
             player2: {
               hand: [],
@@ -301,6 +293,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
               tokenCount: 0,
               tokenType: null,
               mulliganDone: false,
+              playmat: playmats[1] || { id: '', name: '', image: '' },
             },
             turn: 1,
             activePlayer: null,
@@ -310,6 +303,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           },
           deckChoices: { '1': [], '2': [] },
           availableDecks,
+          playmats,
           createdAt: new Date(),
           status: 'waiting',
           playersReady: new Set<number>(),
@@ -330,7 +324,9 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           playerId: 1,
           chatHistory: newGame.chatHistory,
           availableDecks: newGame.availableDecks,
+          playmats: newGame.playmats,
         };
+        console.log('[DEBUG] createGame - Ack envoyé:', ackResponse);
         ack(ackResponse);
       } catch (error) {
         console.error('[WebSocket] Erreur lors de la création de la partie:', error);
@@ -401,12 +397,14 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             gameId,
             chatHistory: game.chatHistory,
             availableDecks: game.availableDecks,
+            playmats: game.playmats,
           };
           const gameStartDataPlayer2 = {
             playerId: 2,
             gameId,
             chatHistory: game.chatHistory,
             availableDecks: game.availableDecks,
+            playmats: game.playmats,
           };
 
           io.to(player1SocketId).emit('gameStart', gameStartDataPlayer1);
@@ -849,6 +847,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         });
 
         io.to(gameId).emit('updatePhase', { gameId, phase, turn });
+        io.to(gameId).emit('phaseChangeMessage', { phase, turn, nextPlayerId: playerInfo.playerId });
       } catch (error) {
         console.error('[WebSocket] Erreur lors de l\'action updatePhase:', error);
         socket.emit('error', 'Erreur lors du changement de phase');

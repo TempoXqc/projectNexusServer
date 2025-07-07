@@ -50,6 +50,19 @@ export function initializeRoutes(db: Db) {
     }
   });
 
+  router.get('/playmats', async (_req: Request, res: Response) => {
+    try {
+      const playmats = await db
+          .collection('playmats')
+          .aggregate([{ $sample: { size: 2 } }])
+          .toArray();
+      res.json(playmats);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des playmats:', error);
+      res.status(500).json({ error: 'Erreur serveur' });
+    }
+  });
+
   return router;
 }
 
