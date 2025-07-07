@@ -16,6 +16,35 @@ function generateGameId() {
         getRandom(letters) +
         getRandom(digits));
 }
+// Helper function to draw a card on the server
+function drawCardServer(game, playerKey) {
+    if (game.state[playerKey].deck.length === 0)
+        return null;
+    const [drawnCard] = game.state[playerKey].deck.slice(0, 1);
+    game.state[playerKey].deck = game.state[playerKey].deck.slice(1);
+    game.state[playerKey].hand = [...game.state[playerKey].hand, drawnCard];
+    return drawnCard;
+}
+// Helper function to check win condition
+async function checkWinCondition(gameId, game, gameRepository, gameCache, io) {
+    if (game.state.player1.lifePoints <= 0) {
+        game.state.gameOver = true;
+        game.state.winner = 'player2';
+    }
+    else if (game.state.player2.lifePoints <= 0) {
+        game.state.gameOver = true;
+        game.state.winner = 'player1';
+    }
+    if (game.state.gameOver) {
+        await gameRepository.updateGame(gameId, { state: game.state, status: 'finished' });
+        gameCache.setGame(gameId, game);
+        game.players.forEach((playerSocketId) => {
+            const clientGameState = mapServerToClientGameState(game, playerSocketId);
+            io.to(playerSocketId).emit('updateGameState', clientGameState);
+        });
+    }
+}
+// Existing mapServerToClientGameState function (unchanged)
 function mapServerToClientGameState(serverGame, playerSocketId) {
     const playerId = serverGame.players.indexOf(playerSocketId) + 1;
     const isPlayer1 = playerId === 1;
@@ -82,7 +111,7 @@ function mapServerToClientGameState(serverGame, playerSocketId) {
             deckSelectionDone: serverGame.deckChoices['1'].length >= 2 && serverGame.deckChoices['2'].length >= 2,
             initialDraw: serverGame.state[playerKey].hand,
             selectedForMulligan: [],
-            mulliganDone: false,
+            mulliganDone: serverGame.state[playerKey].mulliganDone,
             isReady: serverGame.playersReady.has(playerId),
             bothReady: serverGame.playersReady.size === 2,
             opponentReady: serverGame.playersReady.has(playerId === 1 ? 2 : 1),
@@ -232,6 +261,7 @@ export async function registerSocketHandlers(io, db) {
                             lifePoints: 30,
                             tokenCount: 0,
                             tokenType: null,
+                            mulliganDone: false,
                         },
                         player2: {
                             hand: [],
@@ -245,6 +275,7 @@ export async function registerSocketHandlers(io, db) {
                             lifePoints: 30,
                             tokenCount: 0,
                             tokenType: null,
+                            mulliganDone: false,
                         },
                         turn: 1,
                         activePlayer: null,
@@ -443,6 +474,7 @@ export async function registerSocketHandlers(io, db) {
                 game.state[playerKey].hand = game.state[playerKey].hand.filter((c) => c.id !== card.id);
                 game.state[playerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({});
                 game.state[opponentKey].opponentHand = Array(game.state[playerKey].hand.length).fill({});
+                game.state[playerKey].mulliganDone = true;
                 await gameRepository.updateGame(gameId, { state: game.state });
                 gameCache.setGame(gameId, game);
                 game.players.forEach((playerSocketId) => {
@@ -576,7 +608,6 @@ export async function registerSocketHandlers(io, db) {
                 if (game.playersReady.size === 2 && game.deckChoices['1'].length >= 2 && game.deckChoices['2'].length >= 2) {
                     console.log('[WebSocket] bothPlayersReady, envoi de l\'état initial pour gameId:', data.gameId, 'activePlayer:', game.state.activePlayer, 'timestamp:', new Date().toISOString());
                     io.to(data.gameId).emit('bothPlayersReady', { bothReady: true });
-                    // Initialiser les decks pour chaque joueur
                     for (const playerId of ['1', '2']) {
                         const playerSocketId = game.players.find(p => playerManager.getPlayer(p)?.playerId === Number(playerId));
                         if (!playerSocketId) {
@@ -597,12 +628,9 @@ export async function registerSocketHandlers(io, db) {
                             }).filter((card) => card !== null);
                             deck.push(...deckCards);
                         });
-                        // Mélanger le deck
                         const shuffledDeck = deck.sort(() => Math.random() - 0.5);
-                        // Tirer 5 cartes pour initialDraw
                         const initialDraw = shuffledDeck.slice(0, 5);
                         const remainingDeck = shuffledDeck.slice(5);
-                        // Déterminer tokenType et tokenCount
                         const primaryDeckId = selectedDeckIds[0];
                         const deckList = await db.collection('decklists').findOne({ id: primaryDeckId });
                         const tokenType = deckList?.id || null;
@@ -614,12 +642,12 @@ export async function registerSocketHandlers(io, db) {
                             tokenType,
                             tokenCount,
                         });
-                        // Mettre à jour l'état du joueur dans game.state
                         const playerKey = playerId === '1' ? 'player1' : 'player2';
                         game.state[playerKey].deck = remainingDeck;
                         game.state[playerKey].hand = initialDraw;
                         game.state[playerKey].tokenType = tokenType;
                         game.state[playerKey].tokenCount = tokenCount;
+                        game.state[playerKey].mulliganDone = false; // Garder false jusqu'à confirmation explicite
                     }
                     // Mettre à jour l'état dans la base de données et le cache
                     await gameRepository.updateGame(data.gameId, { state: game.state });
@@ -630,11 +658,243 @@ export async function registerSocketHandlers(io, db) {
                         console.log('[WebSocket] Envoi de updateGameState après bothPlayersReady pour playerSocketId:', playerSocketId, 'isMyTurn:', clientGameState.game.isMyTurn, 'timestamp:', new Date().toISOString());
                         io.to(playerSocketId).emit('updateGameState', clientGameState);
                     });
+                    // Émettre un événement pour indiquer que la phase de mulligan commence
+                    io.to(data.gameId).emit('mulliganPhaseStart', { gameId: data.gameId });
                 }
             }
             catch (error) {
                 console.error('[WebSocket] Erreur lors de la confirmation de préparation:', error, 'timestamp:', new Date().toISOString());
                 socket.emit('error', 'Erreur lors de la confirmation de préparation');
+            }
+        });
+        socket.on('updateGameState', async (data) => {
+            console.log('[WebSocket] Événement updateGameState reçu:', data, 'socket.id:', socket.id);
+            try {
+                const { gameId, state: clientState } = z.object({
+                    gameId: z.string(),
+                    state: z.object({
+                        hand: z.array(z.any()).optional(),
+                        deck: z.array(z.any()).optional(),
+                        field: z.array(z.any()).optional(),
+                        graveyard: z.array(z.any()).optional(),
+                        deckSelection: z.object({ mulliganDone: z.boolean() }).optional(),
+                    }),
+                }).parse(data);
+                const game = await gameRepository.findGameById(gameId);
+                const playerInfo = playerManager.getPlayer(socket.id);
+                if (!game || !playerInfo || playerInfo.gameId !== gameId) {
+                    console.log('[WebSocket] Erreur: Non autorisé pour updateGameState, gameId:', gameId, 'playerInfo:', playerInfo);
+                    socket.emit('error', 'Non autorisé');
+                    return;
+                }
+                const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
+                const opponentKey = playerInfo.playerId === 1 ? 'player2' : 'player1';
+                // Autoriser la mise à jour de mulliganDone même si le joueur n'est pas actif
+                if (clientState.deckSelection?.mulliganDone && !game.state[playerKey].mulliganDone) {
+                    game.state[playerKey].mulliganDone = clientState.deckSelection.mulliganDone;
+                }
+                else if (game.state.activePlayer !== socket.id) {
+                    // Vérifier activePlayer pour les autres mises à jour
+                    console.log('[WebSocket] Erreur: Non autorisé pour updateGameState (pas le joueur actif), gameId:', gameId, 'playerInfo:', playerInfo);
+                    socket.emit('error', 'Non autorisé - pas votre tour');
+                    return;
+                }
+                // Appliquer les autres mises à jour si le joueur est autorisé
+                if (clientState.hand) {
+                    game.state[playerKey].hand = clientState.hand;
+                    game.state[opponentKey].opponentHand = Array(clientState.hand.length).fill({});
+                }
+                if (clientState.deck) {
+                    game.state[playerKey].deck = clientState.deck;
+                }
+                if (clientState.field) {
+                    game.state[playerKey].field = clientState.field;
+                    game.state[opponentKey].opponentField = clientState.field;
+                }
+                if (clientState.graveyard) {
+                    game.state[playerKey].graveyard = clientState.graveyard;
+                }
+                await gameRepository.updateGame(gameId, { state: game.state });
+                gameCache.setGame(gameId, game);
+                game.players.forEach((playerSocketId) => {
+                    const clientGameState = mapServerToClientGameState(game, playerSocketId);
+                    io.to(playerSocketId).emit('updateGameState', clientGameState);
+                });
+            }
+            catch (error) {
+                console.error('[WebSocket] Erreur lors de l\'action updateGameState:', error);
+                socket.emit('error', 'Erreur lors de la mise à jour de l\'état du jeu');
+            }
+        });
+        socket.on('exhaustCard', async (data) => {
+            console.log('[WebSocket] Événement exhaustCard reçu:', data, 'socket.id:', socket.id);
+            try {
+                const { gameId, cardId, fieldIndex } = z.object({
+                    gameId: z.string(),
+                    cardId: z.string(),
+                    fieldIndex: z.number(),
+                }).parse(data);
+                const game = await gameRepository.findGameById(gameId);
+                const playerInfo = playerManager.getPlayer(socket.id);
+                if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.activePlayer !== socket.id) {
+                    console.log('[WebSocket] Erreur: Non autorisé pour exhaustCard, gameId:', gameId, 'playerInfo:', playerInfo);
+                    socket.emit('error', 'Non autorisé');
+                    return;
+                }
+                const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
+                if (game.state.phase !== 'Main') {
+                    socket.emit('error', 'Épuisement de carte non autorisé en dehors de la phase Main');
+                    return;
+                }
+                const card = game.state[playerKey].field[fieldIndex];
+                if (!card || card.id !== cardId) {
+                    console.log('[WebSocket] Erreur: Carte non trouvée à l\'index', fieldIndex);
+                    socket.emit('error', 'Carte non trouvée');
+                    return;
+                }
+                game.state[playerKey].field[fieldIndex] = { ...card, exhausted: !card.exhausted };
+                await gameRepository.updateGame(gameId, { state: game.state });
+                gameCache.setGame(gameId, game);
+                game.players.forEach((playerSocketId) => {
+                    const clientGameState = mapServerToClientGameState(game, playerSocketId);
+                    io.to(playerSocketId).emit('updateGameState', clientGameState);
+                });
+            }
+            catch (error) {
+                console.error('[WebSocket] Erreur lors de l\'action exhaustCard:', error);
+                socket.emit('error', 'Erreur lors de l\'épuisement de la carte');
+            }
+        });
+        socket.on('updatePhase', async (data) => {
+            console.log('[WebSocket] Événement updatePhase reçu:', data, 'socket.id:', socket.id);
+            try {
+                const { gameId, phase, turn } = z.object({
+                    gameId: z.string(),
+                    phase: z.enum(['Standby', 'Main', 'Battle', 'End']),
+                    turn: z.number(),
+                }).parse(data);
+                const game = await gameRepository.findGameById(gameId);
+                const playerInfo = playerManager.getPlayer(socket.id);
+                if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.activePlayer !== socket.id) {
+                    console.log('[WebSocket] Erreur: Non autorisé pour updatePhase, gameId:', gameId, 'playerInfo:', playerInfo);
+                    socket.emit('error', 'Non autorisé');
+                    return;
+                }
+                game.state.phase = phase;
+                game.state.turn = turn;
+                await gameRepository.updateGame(gameId, { state: game.state });
+                gameCache.setGame(gameId, game);
+                game.players.forEach((playerSocketId) => {
+                    const clientGameState = mapServerToClientGameState(game, playerSocketId);
+                    io.to(playerSocketId).emit('updateGameState', clientGameState);
+                });
+                io.to(gameId).emit('updatePhase', { gameId, phase, turn });
+            }
+            catch (error) {
+                console.error('[WebSocket] Erreur lors de l\'action updatePhase:', error);
+                socket.emit('error', 'Erreur lors du changement de phase');
+            }
+        });
+        socket.on('endTurn', async (data) => {
+            console.log('[WebSocket] Événement endTurn reçu:', data, 'socket.id:', socket.id);
+            try {
+                const { gameId, nextPlayerId } = z.object({
+                    gameId: z.string(),
+                    nextPlayerId: z.number(),
+                }).parse(data);
+                const game = await gameRepository.findGameById(gameId);
+                const playerInfo = playerManager.getPlayer(socket.id);
+                if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.activePlayer !== socket.id) {
+                    console.log('[WebSocket] Erreur: Non autorisé pour endTurn, gameId:', gameId, 'playerInfo:', playerInfo);
+                    socket.emit('error', 'Non autorisé');
+                    return;
+                }
+                const currentPlayerId = playerInfo.playerId;
+                const nextPlayerSocketId = game.players.find((_, idx) => playerManager.getPlayer(game.players[idx])?.playerId === nextPlayerId);
+                if (!nextPlayerSocketId) {
+                    console.log('[WebSocket] Erreur: nextPlayerSocketId non trouvé pour playerId:', nextPlayerId);
+                    socket.emit('error', 'Joueur suivant non trouvé');
+                    return;
+                }
+                console.log('[DEBUG] endTurn - Avant changement de activePlayer:', {
+                    currentPlayerId,
+                    currentSocketId: socket.id,
+                    nextPlayerId,
+                    nextPlayerSocketId,
+                });
+                // Update game state
+                game.state.activePlayer = nextPlayerSocketId;
+                game.state.turn += 1;
+                game.state.phase = 'Standby';
+                const currentPlayerKey = currentPlayerId === 1 ? 'player1' : 'player2';
+                const nextPlayerKey = nextPlayerId === 1 ? 'player1' : 'player2';
+                const opponentKey = nextPlayerId === 1 ? 'player2' : 'player1';
+                // Reset hasPlayedCard and mustDiscard for both players
+                game.state.player1.hasPlayedCard = false;
+                game.state.player2.hasPlayedCard = false;
+                game.state.player1.mustDiscard = false;
+                game.state.player2.mustDiscard = false;
+                // Reset exhausted state for all cards on both fields
+                game.state.player1.field = game.state.player1.field.map((card) => card ? { ...card, exhausted: false } : null);
+                game.state.player2.field = game.state.player2.field.map((card) => card ? { ...card, exhausted: false } : null);
+                // Sync opponentField
+                game.state.player1.opponentField = [...game.state.player2.field];
+                game.state.player2.opponentField = [...game.state.player1.field];
+                // Automatic card draw for the next player
+                if (game.state.turn > 1 && game.state[nextPlayerKey].deck.length > 0 && game.state[nextPlayerKey].hand.length < 10) {
+                    const drawnCard = drawCardServer(game, nextPlayerKey);
+                    console.log('[DEBUG] Automatic draw in endTurn:', { nextPlayerKey, drawnCard });
+                    if (drawnCard && drawnCard.name === 'Assassin Token' && game.state[opponentKey].tokenType === 'assassin') {
+                        console.log('[DEBUG] Assassin Token drawn in endTurn, applying effects');
+                        game.state[nextPlayerKey].lifePoints = Math.max(0, game.state[nextPlayerKey].lifePoints - 2);
+                        game.state[opponentKey].tokenCount = Math.min(game.state[opponentKey].tokenCount + 1, 8);
+                        // Attempt to draw another card if deck is not empty
+                        let newDrawnCard = null;
+                        if (game.state[nextPlayerKey].deck.length > 0) {
+                            newDrawnCard = drawCardServer(game, nextPlayerKey);
+                            console.log('[DEBUG] Repioche after Assassin Token in endTurn:', { newDrawnCard });
+                        }
+                        else {
+                            console.log('[DEBUG] No cards left to repioche');
+                        }
+                        // Update opponentHand for both players
+                        game.state[nextPlayerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({});
+                        game.state[opponentKey].opponentHand = Array(game.state[nextPlayerKey].hand.length).fill({});
+                        // Emit assassin token draw event
+                        io.to(gameId).emit('handleAssassinTokenDraw', {
+                            playerLifePoints: game.state[nextPlayerKey].lifePoints,
+                            opponentTokenCount: game.state[opponentKey].tokenCount,
+                        });
+                    }
+                }
+                // Update opponentHand for both players
+                game.state.player1.opponentHand = Array(game.state.player2.hand.length).fill({});
+                game.state.player2.opponentHand = Array(game.state.player1.hand.length).fill({});
+                console.log('[DEBUG] endTurn - Avant émission:', {
+                    gameId,
+                    activePlayer: game.state.activePlayer,
+                    phase: game.state.phase,
+                    turn: game.state.turn,
+                });
+                // Persist game state
+                await gameRepository.updateGame(gameId, { state: game.state });
+                gameCache.setGame(gameId, game);
+                // Emit updated game state to all players
+                game.players.forEach((playerSocketId) => {
+                    const clientGameState = mapServerToClientGameState(game, playerSocketId);
+                    io.to(playerSocketId).emit('updateGameState', clientGameState);
+                });
+                // Emit additional events
+                io.to(gameId).emit('endTurn');
+                io.to(nextPlayerSocketId).emit('yourTurn');
+                io.to(gameId).emit('updatePhase', { gameId, phase: game.state.phase, turn: game.state.turn });
+                io.to(gameId).emit('phaseChangeMessage', { phase: 'Standby', turn: game.state.turn, nextPlayerId });
+                // Check win condition
+                await checkWinCondition(gameId, game, gameRepository, gameCache, io);
+            }
+            catch (error) {
+                console.error('[WebSocket] Erreur lors de l\'action endTurn:', error);
+                socket.emit('error', 'Erreur lors du changement de tour');
             }
         });
     });
