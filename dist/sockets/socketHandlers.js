@@ -223,18 +223,31 @@ export async function registerSocketHandlers(io, db) {
                     return;
                 }
                 const availableDecksRaw = await db.collection('decklists').find().toArray();
-                const playmatsRaw = await db.collection('playmats').aggregate([{ $sample: { size: 2 } }]).toArray();
+                const playmatBottom = await db.collection('playmats').findOne({ id: 'playmat_bottom' });
+                const playmatTop = await db.collection('playmats').findOne({ id: 'playmat_top' });
+                if (!playmatBottom || !playmatTop) {
+                    console.error('[WebSocket] Erreur: Playmats playmat_bottom ou playmat_top non trouvés');
+                    ack({ error: 'Erreur lors de la récupération des playmats' });
+                    return;
+                }
                 const availableDecks = availableDecksRaw.map((deck) => ({
                     id: deck.id,
                     name: deck.name,
                     image: deck.image,
                     infoImage: deck.infoImage,
                 }));
-                const playmats = playmatsRaw.map((playmat) => ({
-                    id: playmat.id,
-                    name: playmat.name,
-                    image: playmat.image,
-                }));
+                const playmats = [
+                    {
+                        id: playmatBottom.id,
+                        name: playmatBottom.name,
+                        image: playmatBottom.image,
+                    },
+                    {
+                        id: playmatTop.id,
+                        name: playmatTop.name,
+                        image: playmatTop.image,
+                    },
+                ];
                 const newGame = {
                     gameId,
                     players: [socket.id],
