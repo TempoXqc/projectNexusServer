@@ -245,14 +245,14 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           return;
         }
 
-        const availableDecksRaw = await db.collection('decklists').find().toArray();
+        const availableDecksRaw = await db.collection('decklists').aggregate([{ $sample: { size: 4 } }]).toArray();
         const playmatBottom = await db.collection('playmats').findOne({ id: 'playmat_bottom' });
         const playmatTop = await db.collection('playmats').findOne({ id: 'playmat_top' });
+        const lifeToken = await db.collection('addons').findOne({ id: 'token_officiel' });
 
-
-        if (!playmatBottom || !playmatTop) {
-          console.error('[WebSocket] Erreur: Playmats playmat_bottom ou playmat_top non trouvés');
-          ack({ error: 'Erreur lors de la récupération des playmats' });
+        if (!playmatBottom || !playmatTop || !lifeToken) {
+          console.error('[WebSocket] Erreur: Playmats ou token_officiel non trouvés', { playmatBottom, playmatTop, lifeToken });
+          ack({ error: 'Erreur lors de la récupération des playmats ou du token' });
           return;
         }
 
@@ -274,6 +274,12 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             image: playmatTop.image,
           },
         ];
+
+        const lifeTokenData = {
+          id: lifeToken.id,
+          name: lifeToken.name,
+          image: lifeToken.image,
+        };
 
         const newGame: ServerGameState = {
           gameId,
@@ -319,6 +325,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           deckChoices: { '1': [], '2': [] },
           availableDecks,
           playmats,
+          lifeToken: lifeTokenData,
           createdAt: new Date(),
           status: 'waiting',
           playersReady: new Set<number>(),
@@ -340,6 +347,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           chatHistory: newGame.chatHistory,
           availableDecks: newGame.availableDecks,
           playmats: newGame.playmats,
+          lifeToken: newGame.lifeToken,
         };
         console.log('[DEBUG] createGame - Ack envoyé:', ackResponse);
         ack(ackResponse);
@@ -413,6 +421,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             chatHistory: game.chatHistory,
             availableDecks: game.availableDecks,
             playmats: game.playmats,
+            lifeToken: game.lifeToken,
           };
           const gameStartDataPlayer2 = {
             playerId: 2,
@@ -420,6 +429,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             chatHistory: game.chatHistory,
             availableDecks: game.availableDecks,
             playmats: game.playmats,
+            lifeToken: game.lifeToken,
           };
 
           io.to(player1SocketId).emit('gameStart', gameStartDataPlayer1);
