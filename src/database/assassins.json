@@ -1,0 +1,1930 @@
+[
+  {
+    "id": "assassin_001",
+    "name": {
+      "fr": "Danseur des Ombres",
+      "en": "Shadow Dancer",
+      "es": "Bailarin de las Sombras"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992521/assassin_001_a1eptf.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992459/assassin_001_fftcrd.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992443/assassin_001_fhn3bx.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "stealthed",
+            "filter": {
+              "faction": "assassin"
+            },
+            "operator": ">=",
+            "value": 3
+          },
+          "action": "reduce_cost_to_zero",
+          "target": {
+            "owner": [
+              "opponent"
+            ]
+          },
+          "priority": 1,
+          "source": {
+            "id": "assassin_001",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_hit_nexus": [
+        {
+          "trigger": "on_hit_nexus",
+          "action": "move_card",
+          "from": {
+            "field": {
+              "owner": [
+                "self"
+              ],
+              "id": [
+                "assassin_001"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "assassin_001",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_reveal": [
+        {
+          "trigger": "on_reveal",
+          "condition": {
+            "type": "property_check",
+            "property": "detected",
+            "operator": "===",
+            "value": true
+          },
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "priority": 1,
+          "source": {
+            "id": "assassin_001",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_draw": [
+        {
+          "trigger": "on_draw",
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": [
+              "self"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "priority": 1,
+          "source": {
+            "id": "assassin_001",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_draw",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "priority": 2,
+          "source": {
+            "id": "assassin_001",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_draw",
+          "action": "move_card",
+          "from": {
+            "hand": {
+              "owner": [
+                "self"
+              ],
+              "id": [
+                "assassin_001"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "self"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "priority": 3,
+          "source": {
+            "id": "assassin_001",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 2,
+        "target": [
+          {
+            "owner": "opponent",
+            "type": "defence"
+          },
+          {
+            "owner": "opponent",
+            "type": "support"
+          },
+          {
+            "owner": "opponent",
+            "type": "nexus"
+          },
+          {
+            "owner": "self",
+            "type": "support"
+          },
+          {
+            "owner": "self",
+            "type": "defence"
+          },
+          {
+            "owner": "self",
+            "type": "nexus"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "assassin_002",
+    "name": {
+      "fr": "Lames Fantôme",
+      "en": "Phantom Blades",
+      "es": "Cuchillas Fantasma"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992520/assassin_002_cfjxep.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992458/assassin_002_zh86ji.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992441/assassin_002_vevyt3.jpg"
+    },
+    "faction": "assassin",
+    "label": null,
+    "cost": 0,
+    "effects": {
+      "on_hit_nexus": [
+        {
+          "trigger": "on_hit_nexus",
+          "action": "move_card",
+          "from": {
+            "field": {
+              "owner": [
+                "self"
+              ],
+              "id": [
+                "assassin_002"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "bottom"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_002",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_reveal": [
+        {
+          "trigger": "on_reveal",
+          "condition": {
+            "type": "property_check",
+            "property": "detected",
+            "operator": "===",
+            "value": true
+          },
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "source": {
+            "id": "assassin_002",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_draw": [
+        {
+          "trigger": "on_draw",
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": [
+              "self"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "source": {
+            "id": "assassin_002",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_draw",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_002",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_draw",
+          "action": "move_card",
+          "from": {
+            "hand": {
+              "owner": [
+                "self"
+              ],
+              "id": [
+                "assassin_002"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "self"
+              ],
+              "where": {
+                "to_position": "bottom"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_002",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 1,
+        "target": [
+          {
+            "owner": "opponent",
+            "type": "defence"
+          },
+          {
+            "owner": "opponent",
+            "type": "support"
+          },
+          {
+            "owner": "opponent",
+            "type": "nexus"
+          },
+          {
+            "owner": "self",
+            "type": "support"
+          },
+          {
+            "owner": "self",
+            "type": "defence"
+          },
+          {
+            "owner": "self",
+            "type": "nexus"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "assassin_003",
+    "name": {
+      "fr": "Vipère du Désert",
+      "en": "Desert Viper",
+      "es": "Vibora del Desierto"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992459/assassin_003_d3wvsw.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992452/assassin_003_hf1oqj.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992445/assassin_003_ympb4e.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 4,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_003",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "select_from_revealed",
+          "prompt": {
+            "en": "select 1 card to send to graveyard",
+            "fr": "sélectionnez 1 carte à envoyer au cimetière",
+            "es": "selecciona 1 carta para enviar al cementerio"
+          },
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "amount": 1,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "id": [
+                "id_card__selected"
+              ]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_003",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "select_from_revealed",
+          "prompt": {
+            "en": "select 1 card to place on top of opponent's deck",
+            "fr": "sélectionnez 1 carte à placer en haut du deck adverse",
+            "es": "selecciona 1 carta para colocar en la parte superior del mazo del oponente"
+          },
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "amount": 1,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "id": [
+                "id_card__selected"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_003",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "move_remaining_to_bottom",
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "id": [
+                "id_card_un_selected"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "bottom"
+              }
+            }
+          },
+          "amount": 2,
+          "order": "any",
+          "source": {
+            "id": "assassin_003",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 3,
+        "target": [
+          {
+            "owner": "opponent",
+            "type": "defence"
+          },
+          {
+            "owner": "opponent",
+            "type": "support"
+          },
+          {
+            "owner": "opponent",
+            "type": "nexus"
+          },
+          {
+            "owner": "self",
+            "type": "support"
+          },
+          {
+            "owner": "self",
+            "type": "defence"
+          },
+          {
+            "owner": "self",
+            "type": "nexus"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "assassin_004",
+    "name": {
+      "fr": "Vipère du Désert",
+      "en": "Desert Viper",
+      "es": "Vibora del Desierto"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992519/assassin_004_c6v6xt.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992460/assassin_004_u684sa.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992443/assassin_004_pvvqt4.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 4,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_004",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "select_from_revealed",
+          "prompt": {
+            "en": "select 1 card to send to graveyard",
+            "fr": "sélectionnez 1 carte à envoyer au cimetière",
+            "es": "selecciona 1 carta para enviar al cementerio"
+          },
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "amount": 1,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "id": [
+                "id_card__selected"
+              ]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_004",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "select_from_revealed",
+          "prompt": {
+            "en": "select 1 card to place on top of opponent's deck",
+            "fr": "sélectionnez 1 carte à placer en haut du deck adverse",
+            "es": "selecciona 1 carta para colocar en la parte superior del mazo del oponente"
+          },
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "amount": 1,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "id": [
+                "id_card__selected"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_004",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "move_remaining_to_bottom",
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "id": [
+                "id_card_un_selected"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "bottom"
+              }
+            }
+          },
+          "amount": 2,
+          "order": "any",
+          "source": {
+            "id": "assassin_004",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 3,
+        "target": [
+          {
+            "owner": "opponent",
+            "type": "defence"
+          },
+          {
+            "owner": "opponent",
+            "type": "support"
+          },
+          {
+            "owner": "opponent",
+            "type": "nexus"
+          },
+          {
+            "owner": "self",
+            "type": "support"
+          },
+          {
+            "owner": "self",
+            "type": "defence"
+          },
+          {
+            "owner": "self",
+            "type": "nexus"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "assassin_005",
+    "name": {
+      "fr": "Saboteur",
+      "en": "Saboteur",
+      "es": "Saboteador"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992521/assassin_005_xwztkz.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992457/assassin_005_f2j99g.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992445/assassin_005_eyy9nn.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "property_check",
+            "property": "all_assassins_stealthed",
+            "operator": "===",
+            "value": true
+          },
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "source": {
+            "id": "assassin_005",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "property_check",
+            "property": "all_assassins_stealthed",
+            "operator": "!==",
+            "value": false
+          },
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": [
+                "self"
+              ],
+              "amount": 2,
+              "type": [
+                "assassin_token"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_005",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 4,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_005",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reorder_revealed_cards",
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "source": {
+            "id": "assassin_005",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 2,
+        "target": [
+          {
+            "owner": "opponent",
+            "type": "defence"
+          },
+          {
+            "owner": "opponent",
+            "type": "support"
+          },
+          {
+            "owner": "opponent",
+            "type": "nexus"
+          },
+          {
+            "owner": "self",
+            "type": "support"
+          },
+          {
+            "owner": "self",
+            "type": "defence"
+          },
+          {
+            "owner": "self",
+            "type": "nexus"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "assassin_006",
+    "name": {
+      "fr": "Saboteur",
+      "en": "Saboteur",
+      "es": "Saboteador"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992523/assassin_006_fz6trr.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992455/assassin_006_zpvovx.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992444/assassin_006_acxq03.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "property_check",
+            "property": "all_assassins_stealthed",
+            "operator": "===",
+            "value": true
+          },
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "source": {
+            "id": "assassin_006",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "property_check",
+            "property": "all_assassins_stealthed",
+            "operator": "!==",
+            "value": false
+          },
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": [
+                "self"
+              ],
+              "amount": 2,
+              "type": [
+                "assassin_token"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_006",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 4,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_006",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reorder_revealed_cards",
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "source": {
+            "id": "assassin_006",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 2,
+        "target": [
+          {
+            "owner": "opponent",
+            "type": "defence"
+          },
+          {
+            "owner": "opponent",
+            "type": "support"
+          },
+          {
+            "owner": "opponent",
+            "type": "nexus"
+          },
+          {
+            "owner": "self",
+            "type": "support"
+          },
+          {
+            "owner": "self",
+            "type": "defence"
+          },
+          {
+            "owner": "self",
+            "type": "nexus"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "assassin_007",
+    "name": {
+      "fr": "Voleur d’Âmes",
+      "en": "Soul Thief",
+      "es": "Ladron de Almas"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992520/assassin_007_ijo7av.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992457/assassin_007_wqlbep.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992439/assassin_007_iwjwl3.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "take_control_of_unit",
+          "amount": 1,
+          "from": {
+            "field": {
+              "owner": [
+                "opponent"
+              ],
+              "type": [
+                "attack",
+                "defence",
+                "support",
+                "token"
+              ],
+              "maxValue": 3
+            }
+          },
+          "to": {
+            "field": {
+              "owner": [
+                "self"
+              ]
+            }
+          },
+          "source": {
+            "id": "assassin_007",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 1,
+        "target": [
+          {
+            "owner": "opponent",
+            "type": "defence"
+          },
+          {
+            "owner": "opponent",
+            "type": "support"
+          },
+          {
+            "owner": "opponent",
+            "type": "nexus"
+          },
+          {
+            "owner": "self",
+            "type": "support"
+          },
+          {
+            "owner": "self",
+            "type": "defence"
+          },
+          {
+            "owner": "self",
+            "type": "nexus"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "assassin_008",
+    "name": {
+      "fr": "Empoisonneur",
+      "en": "Poisoner",
+      "es": "Envenenador"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992525/assassin_008_mvu8mj.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992456/assassin_008_wxfzil.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992439/assassin_008_tezfrx.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_008",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": [
+                "self"
+              ],
+              "amount": 2,
+              "type": [
+                "assassin_token"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_008",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "source": {
+            "id": "assassin_008",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_exhaust",
+          "condition": "assassins_stealthed >= 5",
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "source": {
+            "id": "assassin_008",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "support",
+        "value": 2,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "assassin_009",
+    "name": {
+      "fr": "Ancien Prophète",
+      "en": "Ancient Prophet",
+      "es": "Profeta Ancestral"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992522/assassin_009_z629ls.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992458/assassin_009_gk2kbq.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992441/assassin_009_mrquep.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 4,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_009",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reorder_revealed_cards",
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "source": {
+            "id": "assassin_009",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_009",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_exhaust",
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": [
+                "self"
+              ],
+              "amount": 1,
+              "type": [
+                "assassin_token"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "bottom"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_009",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "support",
+        "value": 2,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "assassin_010",
+    "name": {
+      "fr": "Ancien Prophète",
+      "en": "Ancient Prophet",
+      "es": "Profeta Ancestral"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992520/assassin_010_dtuqpj.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992456/assassin_010_k7cefr.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992439/assassin_010_viqddu.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 4,
+          "from": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_010",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reorder_revealed_cards",
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "attack",
+              "defence",
+              "support",
+              "spell",
+              "token"
+            ]
+          },
+          "source": {
+            "id": "assassin_010",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_010",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_exhaust",
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": [
+                "self"
+              ],
+              "amount": 1,
+              "type": [
+                "assassin_token"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "bottom"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_010",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "support",
+        "value": 2,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "assassin_011",
+    "name": {
+      "fr": "Lanceuse d’Ombres",
+      "en": "Shadow Caster",
+      "es": "Maestra de las Sombras"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992523/assassin_011_yqoqy7.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992455/assassin_011_joehku.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992442/assassin_011_ugt6cx.jpg"
+    },
+    "faction": "assassin",
+    "cost": 0,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_011",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": [
+                "self"
+              ],
+              "amount": 1,
+              "type": [
+                "assassin_token"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_011",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "defence",
+        "value": 1,
+        "target": null
+      }
+    ]
+  },
+  {
+    "id": "assassin_012",
+    "name": {
+      "fr": "Lanceuse d’Ombres",
+      "en": "Shadow Caster",
+      "es": "Maestra de las Sombras"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992459/assassin_012_oxgdi5.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992453/assassin_012_twtrut.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992442/assassin_012_jvctvc.jpg"
+    },
+    "faction": "assassin",
+    "cost": 0,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_012",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": [
+                "self"
+              ],
+              "amount": 1,
+              "type": [
+                "assassin_token"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_012",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "defence",
+        "value": 1,
+        "target": null
+      }
+    ]
+  },
+  {
+    "id": "assassin_013",
+    "name": {
+      "fr": "Conclave de l’Ordre",
+      "en": "Order Conclave",
+      "es": "Conclave de la Orden"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992522/assassin_013_klx8qz.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992457/assassin_013_njv8je.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992442/assassin_013_vbs0ak.jpg"
+    },
+    "faction": "assassin",
+    "cost": 0,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "property_check",
+            "property": "all_assassins_stealthed",
+            "operator": "===",
+            "value": true
+          },
+          "action": "draw",
+          "amount": 2,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_013",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "property_check",
+            "property": "all_assassins_stealthed",
+            "operator": "!==",
+            "value": false
+          },
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_013",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "property_check",
+            "property": "all_assassins_stealthed",
+            "operator": "!==",
+            "value": false
+          },
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": [
+                "self"
+              ],
+              "amount": 3,
+              "type": [
+                "assassin_token"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "opponent"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "source": {
+            "id": "assassin_013",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "value": 0,
+        "target": null
+      }
+    ]
+  },
+  {
+    "id": "assassin_014",
+    "name": {
+      "fr": "Regard du Faucon",
+      "en": "Falcon's Gaze",
+      "es": "Mirada de Halcon"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992522/assassin_014_haxhqs.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992457/assassin_014_q5mqso.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992440/assassin_014_z7nmep.jpg"
+    },
+    "faction": "assassin",
+    "cost": 0,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "en": "top 5",
+                "fr": "5 du haut",
+                "es": "5 superiores"
+              },
+              "actions": [
+                {
+                  "action": "reveal",
+                  "amount": 5,
+                  "from": {
+                    "deck": {
+                      "owner": [
+                        "opponent"
+                      ]
+                    },
+                    "where": {
+                      "to_position": "top"
+                    }
+                  }
+                },
+                {
+                  "action": "reorder_revealed_cards",
+                  "target": {
+                    "owner": [
+                      "opponent"
+                    ],
+                    "type": [
+                      "attack",
+                      "defence",
+                      "support",
+                      "spell",
+                      "token"
+                    ]
+                  }
+                },
+                {
+                  "action": "select_from_revealed",
+                  "amount": 1,
+                  "prompt": {
+                    "en": "select 1 card to place at bottom of opponent’s deck",
+                    "fr": "sélectionnez 1 carte à placer en bas du deck adverse",
+                    "es": "selecciona 1 carta para colocar en la parte inferior del mazo del oponente"
+                  },
+                  "from": {
+                    "deck": {
+                      "owner": [
+                        "opponent"
+                      ]
+                    }
+                  },
+                  "to": {
+                    "deck": [
+                      "opponent"
+                    ],
+                    "where": {
+                      "to_position": "bottom"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "title": {
+                "en": "bottom 5",
+                "fr": "5 du bas",
+                "es": "5 inferiores"
+              },
+              "actions": [
+                {
+                  "action": "reveal",
+                  "amount": 5,
+                  "from": {
+                    "deck": {
+                      "owner": [
+                        "opponent"
+                      ],
+                      "where": {
+                        "to_position": "bottom"
+                      }
+                    }
+                  }
+                },
+                {
+                  "action": "reorder_revealed_cards",
+                  "target": {
+                    "owner": [
+                      "opponent"
+                    ],
+                    "type": [
+                      "attack",
+                      "defence",
+                      "support",
+                      "spell",
+                      "token"
+                    ]
+                  }
+                },
+                {
+                  "action": "select_from_revealed",
+                  "amount": 1,
+                  "prompt": {
+                    "en": "select 1 card to place at top of opponent’s deck",
+                    "fr": "sélectionnez 1 carte à placer en haut du deck adverse",
+                    "es": "selecciona 1 carta para colocar en la parte superior del mazo del oponente"
+                  },
+                  "from": {
+                    "deck": {
+                      "owner": [
+                        "opponent"
+                      ]
+                    }
+                  },
+                  "to": {
+                    "deck": [
+                      "opponent"
+                    ],
+                    "where": {
+                      "to_position": "top"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "source": {
+            "id": "assassin_014",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "value": 0,
+        "target": null
+      }
+    ]
+  },
+  {
+    "id": "assassin_015",
+    "name": {
+      "fr": "Raid d’Assassins",
+      "en": "Assassin's raid",
+      "es": "Redada de Asesinos"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992525/assassin_015_l5mzxs.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992455/assassin_015_u55kah.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992440/assassin_015_ots2uf.jpg"
+    },
+    "faction": "assassin",
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "restore_health_per_hidden_assassins",
+          "max": 6,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "source": {
+            "id": "assassin_015",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "nexus"
+            ]
+          },
+          "source": {
+            "id": "assassin_015",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "value": 0,
+        "target": null
+      }
+    ]
+  }
+]
