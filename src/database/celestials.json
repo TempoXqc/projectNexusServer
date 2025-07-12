@@ -1,0 +1,1264 @@
+[
+  {
+    "id": "celestial_001",
+    "name": {
+      "fr": "Vengeresse Rayonnante",
+      "en": "Radiant Avenger",
+      "es": "Vengadora Radiante"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992532/celestial_001_jw178p.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992499/celestial_001_ncfa6z.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992424/celestial_001_xkil1d.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["celestial_001"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "celestial_001",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "purify",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_001",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 3,
+        "target": [
+          {"owner": "opponent", "type": "defence"},
+          {"owner": "opponent", "type": "support"},
+          {"owner": "opponent", "type": "nexus"},
+          {"owner": "self", "type": "support"},
+          {"owner": "self", "type": "defence"},
+          {"owner": "self", "type": "nexus"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "celestial_002",
+    "name": {
+      "fr": "Vengeresse Rayonnante",
+      "en": "Radiant Avenger",
+      "es": "Vengadora Radiante"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992526/celestial_002_swivdb.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992501/celestial_002_ieiwjz.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992421/celestial_002_hp8ji0.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["celestial_002"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "celestial_002",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "purify",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_002",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 3,
+        "target": [
+          {"owner": "opponent", "type": "defence"},
+          {"owner": "opponent", "type": "support"},
+          {"owner": "opponent", "type": "nexus"},
+          {"owner": "self", "type": "support"},
+          {"owner": "self", "type": "defence"},
+          {"owner": "self", "type": "nexus"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "celestial_003",
+    "name": {
+      "fr": "Vengeresse Rayonnante",
+      "en": "Radiant Avenger",
+      "es": "Vengadora Radiante"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992527/celestial_003_vvslvn.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992499/celestial_003_ssmzbp.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992421/celestial_003_o6tjcm.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["celestial_003"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "celestial_003",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "purify",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_003",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 3,
+        "target": [
+          {"owner": "opponent", "type": "defence"},
+          {"owner": "opponent", "type": "support"},
+          {"owner": "opponent", "type": "nexus"},
+          {"owner": "self", "type": "support"},
+          {"owner": "self", "type": "defence"},
+          {"owner": "self", "type": "nexus"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "celestial_004",
+    "name": {
+      "fr": "Guerrière Céleste",
+      "en": "Celestial Warrior",
+      "es": "Guerrera Celestial"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992526/celestial_004_mssfnv.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992500/celestial_004_qsvd5v.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992422/celestial_004_y4al5k.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_004",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "purify",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_004",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "condition": {
+            "type": "property_check",
+            "property": "can_attack_all",
+            "operator": "===",
+            "value": true
+          },
+          "description": {
+            "en": "This card may attack Attack-type units.",
+            "fr": "Cette carte peut attaquer les unités de type Attaque.",
+            "es": "Esta carta puede atacar unidades de tipo Ataque."
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_004",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 3,
+        "target": [
+          {"owner": "opponent", "type": "attack"},
+          {"owner": "opponent", "type": "defence"},
+          {"owner": "opponent", "type": "support"},
+          {"owner": "opponent", "type": "nexus"},
+          {"owner": "self", "type": "support"},
+          {"owner": "self", "type": "defence"},
+          {"owner": "self", "type": "nexus"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "celestial_005",
+    "name": {
+      "fr": "Guerrière Céleste",
+      "en": "Celestial Warrior",
+      "es": "Guerrera Celestial"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992527/celestial_005_cteapc.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992502/celestial_005_it00vf.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992420/celestial_005_zfzlmh.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_005",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "purify",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_005",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "condition": {
+            "type": "property_check",
+            "property": "can_attack_all",
+            "operator": "===",
+            "value": true
+          },
+          "description": {
+            "en": "This card may attack Attack-type units.",
+            "fr": "Cette carte peut attaquer les unités de type Attaque.",
+            "es": "Esta carta puede atacar unidades de tipo Ataque."
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_005",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 3,
+        "target": [
+          {"owner": "opponent", "type": "attack"},
+          {"owner": "opponent", "type": "defence"},
+          {"owner": "opponent", "type": "support"},
+          {"owner": "opponent", "type": "nexus"},
+          {"owner": "self", "type": "support"},
+          {"owner": "self", "type": "defence"},
+          {"owner": "self", "type": "nexus"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "celestial_006",
+    "name": {
+      "fr": "Sentinelles de Lumière",
+      "en": "Sentinels of Light",
+      "es": "Centinelas de la Luz"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992530/celestial_006_hxn8ns.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992502/celestial_006_iczffl.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992422/celestial_006_ptsa46.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "restore_health",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_006",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_006",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_destroyed": [
+        {
+          "trigger": "on_destroyed",
+          "action": "purify",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_006",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "defence",
+        "value": 3,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "celestial_007",
+    "name": {
+      "fr": "Sentinelles de Lumière",
+      "en": "Sentinels of Light",
+      "es": "Centinelas de la Luz"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992528/celestial_007_hmivh5.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992503/celestial_007_hol04j.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992424/celestial_007_gkv4kt.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "restore_health",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_007",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_007",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_destroyed": [
+        {
+          "trigger": "on_destroyed",
+          "action": "purify",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_007",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "defence",
+        "value": 3,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "celestial_008",
+    "name": {
+      "fr": "Rédemptrices",
+      "en": "Redeemers",
+      "es": "Redentoras"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992531/celestial_008_pbxnno.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992500/celestial_008_cnsplt.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992425/celestial_008_glp7cw.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["celestial_008"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "celestial_008",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 3,
+          "from": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_008",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reorder_revealed_cards",
+          "target": {
+            "owner": ["self"],
+            "type": ["attack", "defence", "support", "spell", "token"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "celestial_008",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "condition": {
+            "type": "property_check",
+            "property": "target_type",
+            "operator": "===",
+            "value": "shield"
+          },
+          "action": "ignore_shield",
+          "priority": 1,
+          "source": {
+            "id": "celestial_008",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 2,
+        "target": [
+          {"owner": "opponent", "type": "defence"},
+          {"owner": "opponent", "type": "support"},
+          {"owner": "opponent", "type": "nexus"},
+          {"owner": "self", "type": "support"},
+          {"owner": "self", "type": "defence"},
+          {"owner": "self", "type": "nexus"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "celestial_009",
+    "name": {
+      "fr": "Rédemptrices",
+      "en": "Redeemers",
+      "es": "Redentoras"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992529/celestial_009_ao15y5.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992499/celestial_009_t9edvv.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992420/celestial_009_e0axyb.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["celestial_009"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "celestial_009",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 3,
+          "from": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_009",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reorder_revealed_cards",
+          "target": {
+            "owner": ["self"],
+            "type": ["attack", "defence", "support", "spell", "token"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "celestial_009",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "condition": {
+            "type": "property_check",
+            "property": "target_type",
+            "operator": "===",
+            "value": "shield"
+          },
+          "action": "ignore_shield",
+          "priority": 1,
+          "source": {
+            "id": "celestial_009",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 2,
+        "target": [
+          {"owner": "opponent", "type": "defence"},
+          {"owner": "opponent", "type": "support"},
+          {"owner": "opponent", "type": "nexus"},
+          {"owner": "self", "type": "support"},
+          {"owner": "self", "type": "defence"},
+          {"owner": "self", "type": "nexus"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "celestial_010",
+    "name": {
+      "fr": "Griffon Céleste",
+      "en": "Celestial Gryphon",
+      "es": "Grifo Celestial"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992530/celestial_010_dubw0t.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992504/celestial_010_srapr6.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992418/celestial_010_cuatt1.jpg"
+    },
+    "faction": "celestial",
+    "cost": 0,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "move_card",
+          "from": {
+            "field": {
+              "owner": ["opponent"],
+              "type": ["attack", "defence", "support"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["opponent"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "celestial_010",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "purify",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_010",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_attack": [
+        {
+          "trigger": "on_attack",
+          "condition": {
+            "type": "count",
+            "property": "units_in_play",
+            "filter": {
+              "faction": "celestial",
+              "exclude_self": true
+            },
+            "operator": ">=",
+            "value": 1
+          },
+          "action": "move_card",
+          "from": {
+            "field": {
+              "owner": ["self"],
+              "id": ["celestial_010"]
+            }
+          },
+          "to": {
+            "hand": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "celestial_010",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "attack",
+        "value": 1,
+        "target": [
+          {"owner": "opponent", "type": "defence"},
+          {"owner": "opponent", "type": "support"},
+          {"owner": "opponent", "type": "nexus"},
+          {"owner": "self", "type": "support"},
+          {"owner": "self", "type": "defence"},
+          {"owner": "self", "type": "nexus"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "celestial_011",
+    "name": {
+      "fr": "Héraut Rayonnant",
+      "en": "Radiant Herald",
+      "es": "Heraldo Radiante"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992530/celestial_011_ex4rkl.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992501/celestial_011_acopbm.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992425/celestial_011_m1psn6.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "activate_own_onPlay_ability",
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_011",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 5,
+          "from": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_011",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reorder_revealed_cards",
+          "target": {
+            "owner": ["self"],
+            "type": ["attack", "defence", "support", "spell", "token"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "celestial_011",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_011",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "support",
+        "value": 2,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "celestial_012",
+    "name": {
+      "fr": "Portes Divines",
+      "en": "Heavenly Gates",
+      "es": "Puertas del Cielo"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992525/celestial_012_iesrny.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992504/celestial_012_lxouma.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992418/celestial_012_bsvbna.jpg"
+    },
+    "faction": "celestial",
+    "cost": 0,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_012",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "reveal",
+          "amount": 3,
+          "from": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_012",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "reorder_revealed_cards",
+          "target": {
+            "owner": ["self"],
+            "type": ["attack", "defence", "support", "spell", "token"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "celestial_012",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "purify",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_012",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "support",
+        "value": 2,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "celestial_013",
+    "name": {
+      "fr": "Archange",
+      "en": "Archangel",
+      "es": "Archangel"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992529/celestial_013_umx7d5.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992504/celestial_013_cxd4sr.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992423/celestial_013_f8fpp7.jpg"
+    },
+    "faction": "celestial",
+    "cost": 1,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["celestial_013"]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "celestial_013",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "purify",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_013",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "purify",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_013",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "condition": {
+            "type": "event",
+            "event": "on_card_purified"
+          },
+          "action": "damage",
+          "amount": 1,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_013",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "support",
+        "value": 4,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "celestial_014",
+    "name": {
+      "fr": "Ascension Divine",
+      "en": "Divine Ascension",
+      "es": "Ascensión"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992525/celestial_014_uwcsba.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992500/celestial_014_aoyhaa.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992419/celestial_014_pyzgfg.jpg"
+    },
+    "faction": "celestial",
+    "cost": 0,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_014",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "type": ["attack", "support", "defence"]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "amount": 2,
+          "priority": 1,
+          "source": {
+            "id": "celestial_014",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "celestial_014",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "value": 0,
+        "target": []
+      }
+    ]
+  },
+  {
+    "id": "celestial_015",
+    "name": {
+      "fr": "Purification",
+      "en": "Purification",
+      "es": "Luz Divina"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992529/celestial_015_xzn6rc.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992503/celestial_015_chbnop.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992421/celestial_015_okgbgu.jpg"
+    },
+    "faction": "celestial",
+    "cost": 0,
+    "effects": {
+      "on_purified": [
+        {
+          "trigger": "on_purified",
+          "action": "restore_health",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_015",
+            "zone": "unknown"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "purify",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "celestial_015",
+            "zone": "unknown"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "restore_health",
+          "amount": 2,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "celestial_015",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "value": 0,
+        "target": []
+      }
+    ]
+  }
+]
