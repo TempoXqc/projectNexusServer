@@ -1,0 +1,379 @@
+[
+  {
+    "id": "samurai_001",
+    "name": {
+      "fr": "Daimyo",
+      "en": "Daimyo",
+      "es": "Daimyo"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992508/samurai_001_y3x0db.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992486/samurai_001_urstbj.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992401/samurai_001_nkncad.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Attack",
+        "target": [
+          "Defence",
+          "Support",
+          "Nexus_opponent"
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "samurai_002",
+    "name": {
+      "fr": "Hatamoto",
+      "en": "Hatamoto",
+      "es": "Hatamoto"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992510/samurai_002_eibiyf.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992484/samurai_002_jg1zv8.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992396/samurai_002_wkbirp.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Attack",
+        "target": [
+          "Defence",
+          "Support",
+          "Nexus_opponent"
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "samurai_003",
+    "name": {
+      "fr": "Hatamoto",
+      "en": "Hatamoto",
+      "es": "Hatamoto"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992507/samurai_003_fxpgiz.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992484/samurai_003_dbpuvp.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992398/samurai_003_cr3ph8.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Attack",
+        "target": [
+          "Defence",
+          "Support",
+          "Nexus_opponent"
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "samurai_004",
+    "name": {
+      "fr": "Samouraïs",
+      "en": "Samurais",
+      "es": "Samuráis"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992509/samurai_004_o2ztdw.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992484/samurai_004_syny5i.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992401/samurai_004_jhrggt.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Attack",
+        "target": [
+          "Defence",
+          "Support",
+          "Nexus_opponent"
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_005",
+    "name": {
+      "fr": "Samouraïs",
+      "en": "Samurais",
+      "es": "Samuráis"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992510/samurai_005_enegyo.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992482/samurai_005_h7a3xi.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992397/samurai_005_eh7w3c.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Attack",
+        "target": [
+          "Defence",
+          "Support",
+          "Nexus_opponent"
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_006",
+    "name": {
+      "fr": "Moines Sohei",
+      "en": "Sohei Monks",
+      "es": "Monjes Sohei"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992507/samurai_006_hcvzkh.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992480/samurai_006_mt8ahi.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992397/samurai_006_zdtqwj.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Attack",
+        "target": [
+          "Defence",
+          "Support",
+          "Nexus_opponent"
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_007",
+    "name": {
+      "fr": "Kunoichi",
+      "en": "Kunoichi",
+      "es": "Kunoichi"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992507/samurai_007_fvlc7r.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992482/samurai_007_nbxk9h.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992400/samurai_007_mxcipa.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Attack",
+        "target": [
+          "Defence",
+          "Support",
+          "Nexus_opponent"
+        ],
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "samurai_008",
+    "name": {
+      "fr": "Ronin",
+      "en": "Ronin",
+      "es": "Ronin"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992512/samurai_008_nlojsf.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992485/samurai_008_udkgln.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992400/samurai_008_kgaywh.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Attack",
+        "target": [
+          "Defence",
+          "Support",
+          "Nexus_opponent"
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_009",
+    "name": {
+      "fr": "Shogun",
+      "en": "Shogun",
+      "es": "Shogun"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992506/samurai_009_mg9d6x.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992480/samurai_009_xwshhk.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992398/samurai_009_jamjm6.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Support",
+        "target": null,
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_010",
+    "name": {
+      "fr": "Impératrice",
+      "en": "Empress",
+      "es": "Emperatriz"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992508/samurai_010_g8hqcn.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992484/samurai_010_iqgt87.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992401/samurai_010_rhrhyi.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Support",
+        "target": null,
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_011",
+    "name": {
+      "fr": "Rituel Shinrei",
+      "en": "Shinrei Ritual",
+      "es": "Ritual Shinrei"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992512/samurai_011_kcobnc.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992482/samurai_011_ffer6a.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992399/samurai_011_b3gaka.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Support",
+        "target": null,
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_012",
+    "name": {
+      "fr": "Rituel Shinrei",
+      "en": "Shinrei Ritual",
+      "es": "Ritual Shinrei"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992509/samurai_012_t3rcko.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992481/samurai_012_evqnqz.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992402/samurai_012_jkhi1p.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Support",
+        "target": null,
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_013",
+    "name": {
+      "fr": "Ashigaru",
+      "en": "Ashigaru",
+      "es": "Refuerzos Ashigaru"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992510/samurai_013_grqqbk.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992480/samurai_013_wz4g1z.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992396/samurai_013_kgd8cx.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Spell",
+        "target": null,
+        "value": 0
+      }
+    ]
+  },
+  {
+    "id": "samurai_014",
+    "name": {
+      "fr": "Soleil Levant",
+      "en": "Rising Sun",
+      "es": "Sol Naciente"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992511/samurai_014_kiagvw.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992481/samurai_014_wzlofz.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992396/samurai_014_d5jcqn.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 1,
+    "effects": [],
+    "types": [
+      {
+        "type": "Spell",
+        "target": null,
+        "value": 0
+      }
+    ]
+  },
+  {
+    "id": "samurai_015",
+    "name": {
+      "fr": "Assaut Ninja",
+      "en": "Ninja Assault",
+      "es": "Asalto Ninja"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992511/samurai_015_a8re3w.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992483/samurai_015_mtudmh.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992399/samurai_015_v3lty8.jpg"
+    },
+    "faction": "Samurai",
+    "cost": 0,
+    "effects": [],
+    "types": [
+      {
+        "type": "Spell",
+        "target": null,
+        "value": 0
+      }
+    ]
+  }
+]
