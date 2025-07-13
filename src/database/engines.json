@@ -11,12 +11,32 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992462/engine_001_h3tjww.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992417/engine_001_gp7vu4.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": "opponent", "type": "any" }],
+          "priority": 1,
+          "source": { "id": "engine_001", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 2,
+          "source": { "id": "engine_001", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 2
       }
@@ -34,12 +54,24 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992461/engine_002_mwjpzf.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992416/engine_002_eajvzx.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 3,
+          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "priority": 1,
+          "source": { "id": "engine_002", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 3
       }
@@ -57,12 +89,24 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992466/engine_003_sa51t9.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992416/engine_003_qjt0xt.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 3,
+          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "priority": 1,
+          "source": { "id": "engine_003", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 3
       }
@@ -80,12 +124,39 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992466/engine_004_vvhemm.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992412/engine_004_o9szsw.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "field": {
+              "owner": ["opponent"],
+              "amount": 1,
+              "target": {
+                "type": ["attack", "defence", "support"]
+              }
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["opponent"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": { "id": "engine_004", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 3
       }
@@ -103,12 +174,25 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992462/engine_005_aieaud.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992415/engine_005_xykdit.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 3,
+          "target": [{ "owner": "any", "type": "unit" }],
+          "trample": true,
+          "priority": 1,
+          "source": { "id": "engine_005", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 3
       }
@@ -126,12 +210,25 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992465/engine_006_ic6yfk.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992413/engine_006_ssvbv3.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 3,
+          "target": [{ "owner": "any", "type": "unit" }],
+          "trample": true,
+          "priority": 1,
+          "source": { "id": "engine_006", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 3
       }
@@ -149,12 +246,24 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992467/engine_007_mjyq6k.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992416/engine_007_oir1eu.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 1,
+          "source": { "id": "engine_007", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Defence",
+        "type": "defence",
         "target": null,
         "value": 2
       }
@@ -172,12 +281,24 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992461/engine_008_td71vt.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992414/engine_008_e1xkvv.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 1,
+          "source": { "id": "engine_008", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Defence",
+        "type": "defence",
         "target": null,
         "value": 2
       }
@@ -195,12 +316,36 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992465/engine_009_kz3gcq.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992412/engine_009_uykplm.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": "opponent", "type": "unit" }],
+          "ignore_defence": true,
+          "priority": 1,
+          "source": { "id": "engine_009", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 1,
+          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "priority": 1,
+          "source": { "id": "engine_009", "zone": "field" }
+        }
+      ]
+    },
+
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 3
       }
@@ -218,12 +363,42 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992464/engine_010_vqj0z9.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992415/engine_010_pl10ub.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 1,
+          "source": { "id": "engine_010", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "priority": 1,
+          "source": { "id": "engine_010", "zone": "field" }
+        },
+        {
+          "trigger": "on_exhaust",
+          "action": "disable_battle_phase",
+          "target": [{ "owner": "self", "type": "unit" }],
+          "duration": "this_turn",
+          "priority": 2,
+          "source": { "id": "engine_010", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 3
       }
@@ -241,12 +416,42 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992464/engine_011_wti0tb.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992413/engine_011_jgzmxb.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
+    "label": ["engine"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 1,
+          "source": { "id": "engine_011", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "priority": 1,
+          "source": { "id": "engine_011", "zone": "field" }
+        },
+        {
+          "trigger": "on_exhaust",
+          "action": "disable_battle_phase",
+          "target": [{ "owner": "self", "type": "unit" }],
+          "duration": "this_turn",
+          "priority": 2,
+          "source": { "id": "engine_011", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Support",
+        "type": "support",
         "target": null,
         "value": 3
       }
@@ -264,12 +469,34 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992463/engine_012_oerxgq.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992417/engine_012_ulwo04.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "activate_onPlay_ability",
+          "target": [{ "owner": "self", "type": "unit" }],
+          "amount": 1,
+          "priority": 1,
+          "source": { "id": "engine_012", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "gain_token",
+          "token": "gear_token",
+          "where": {
+            "token_pool" : "self"
+          },
+          "amount": 1,
+          "priority": 2,
+          "source": { "id": "engine_012", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Defence",
+        "type": "defence",
         "target": null,
         "value": 2
       }
@@ -287,12 +514,34 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992464/engine_013_svtwe0.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992413/engine_013_x6cdjx.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "activate_onPlay_ability",
+          "target": [{ "owner": "self", "type": "unit" }],
+          "amount": 1,
+          "priority": 1,
+          "source": { "id": "engine_013", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "gain_token",
+          "type": "gear_token",
+          "where": {
+            "token_pool" : "self"
+          },
+          "amount": 1,
+          "priority": 2,
+          "source": { "id": "engine_013", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Defence",
+        "type": "defence",
         "target": null,
         "value": 2
       }
@@ -310,12 +559,44 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992462/engine_014_gxcnfd.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992411/engine_014_lddxim.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_token_pool",
+            "filter": {
+              "type": ["gear_token"],
+              "owner": ["self"]
+            },
+            "operator": ">=",
+            "value": 3
+          },
+          "action": "set_cost_to_zero",
+          "target": {
+            "owner": [
+              "self"
+            ],
+            "id": [
+              "engine_014"
+            ]
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "activate_onPlay_ability",
+          "target": [{ "owner": "self", "type": "unit" }],
+          "amount": 3
+        }
+      ]
+    },
+
     "types": [
       {
-        "type": "Spell",
+        "type": "spell",
         "target": null,
         "value": 0
       }
@@ -333,12 +614,49 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992464/engine_015_wwt8nx.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992417/engine_015_zu2rfu.jpg"
     },
-    "faction": "Engine",
+    "faction": "engine",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "activate_onPlay_ability",
+          "target": [{ "owner": "self", "type": "unit" }],
+          "amount": 1,
+          "priority": 1
+        },
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "label": ["engine"]
+            }
+          },
+          "to": {
+            "hand": {
+              "owner": ["self"]
+            }
+          },
+          "amount": 1,
+          "priority": 2
+        },
+        {
+          "trigger": "on_play",
+          "action": "gain_token",
+          "type": "gear_token",
+          "where": {
+            "token_pool" : "self"
+          },
+          "amount": 1,
+          "priority": 3
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Spell",
+        "type": "spell",
         "target": null,
         "value": 0
       }

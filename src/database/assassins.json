@@ -26,10 +26,13 @@
             "operator": ">=",
             "value": 3
           },
-          "action": "reduce_cost_to_zero",
+          "action": "set_cost_to_zero",
           "target": {
             "owner": [
-              "opponent"
+              "self"
+            ],
+            "id": [
+              "assassin_001"
             ]
           },
           "priority": 1,
@@ -207,7 +210,6 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992441/assassin_002_vevyt3.jpg"
     },
     "faction": "assassin",
-    "label": null,
     "cost": 0,
     "effects": {
       "on_hit_nexus": [
@@ -1166,9 +1168,7 @@
           "action": "draw",
           "amount": 1,
           "target": {
-            "owner": [
-              "self"
-            ]
+            "owner": ["self"]
           },
           "source": {
             "id": "assassin_008",
@@ -1180,20 +1180,14 @@
           "action": "move_card",
           "from": {
             "token_pool": {
-              "owner": [
-                "self"
-              ],
+              "owner": ["self"],
               "amount": 2,
-              "type": [
-                "assassin_token"
-              ]
+              "type": ["assassin_token"]
             }
           },
           "to": {
             "deck": {
-              "owner": [
-                "opponent"
-              ],
+              "owner": ["opponent"],
               "where": {
                 "to_position": "shuffle"
               }
@@ -1211,12 +1205,8 @@
           "action": "damage",
           "amount": 1,
           "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "nexus"
-            ]
+            "owner": ["opponent"],
+            "type": ["nexus"]
           },
           "source": {
             "id": "assassin_008",
@@ -1225,16 +1215,21 @@
         },
         {
           "trigger": "on_exhaust",
-          "condition": "assassins_stealthed >= 5",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_deck",
+            "filter": {
+              "type": ["assassin_token"],
+              "owner": ["opponent"]
+            },
+            "operator": ">=",
+            "value": 5
+          },
           "action": "damage",
           "amount": 1,
           "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "nexus"
-            ]
+            "owner": ["opponent"],
+            "type": ["nexus"]
           },
           "source": {
             "id": "assassin_008",
