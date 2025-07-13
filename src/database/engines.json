@@ -575,25 +575,55 @@
             "operator": ">=",
             "value": 3
           },
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": ["self"],
+              "amount": 3,
+              "type": ["gear_token"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": { "id": "engine_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_token_pool",
+            "filter": {
+              "type": ["gear_token"],
+              "owner": ["self"]
+            },
+            "operator": ">=",
+            "value": 3
+          },
           "action": "set_cost_to_zero",
           "target": {
-            "owner": [
-              "self"
-            ],
-            "id": [
-              "engine_014"
-            ]
-          }
+            "owner": ["self"],
+            "id": ["engine_014"]
+          },
+          "priority": 2,
+          "source": { "id": "engine_014", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "activate_onPlay_ability",
           "target": [{ "owner": "self", "type": "unit" }],
-          "amount": 3
+          "amount": 3,
+          "priority": 3,
+          "source": { "id": "engine_014", "zone": "field" }
         }
       ]
     },
-
     "types": [
       {
         "type": "spell",
