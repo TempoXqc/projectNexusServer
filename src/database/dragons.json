@@ -98,8 +98,12 @@
     },
     "types": [
       {
-        "type": "attack",
-        "target": [{ "owner": "any", "type": "unit" }],
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 4,
         "trample": true
       }
@@ -199,8 +203,12 @@
     },
     "types": [
       {
-        "type": "attack",
-        "target": [{ "owner": "any", "type": "unit" }],
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 4,
         "trample": true
       }
@@ -268,8 +276,12 @@
     },
     "types": [
       {
-        "type": "attack",
-        "target": [{ "owner": "any", "type": "unit" }],
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -336,8 +348,12 @@
     },
     "types": [
       {
-        "type": "attack",
-        "target": [{ "owner": "any", "type": "unit" }],
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -388,8 +404,12 @@
     },
     "types": [
       {
-        "type": "attack",
-        "target": [{ "owner": "any", "type": "unit" }],
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 5,
         "trample": true
       }
@@ -441,16 +461,11 @@
     },
     "types": [
       {
-        "type": "attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "attack"},
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "attack"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "nexus"}
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 5,
         "trample": true
@@ -499,8 +514,12 @@
     },
     "types": [
       {
-        "type": "attack",
-        "target": [{ "owner": "any", "type": "unit" }],
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 4,
         "trample": true
       }
@@ -548,8 +567,12 @@
     },
     "types": [
       {
-        "type": "attack",
-        "target": [{ "owner": "any", "type": "unit" }],
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 4,
         "trample": true
       }
@@ -667,8 +690,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": [],
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -785,8 +812,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": [],
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -804,6 +835,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992434/dragon_011_cq4fql.jpg"
     },
     "faction": "dragon",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_destroyed": [
@@ -841,8 +873,12 @@
     },
     "types": [
       {
-        "type": "defence",
-        "target": [],
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 1
       }
     ]
@@ -860,6 +896,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992437/dragon_012_bfnqrl.jpg"
     },
     "faction": "dragon",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_destroyed": [
@@ -897,8 +934,12 @@
     },
     "types": [
       {
-        "type": "defence",
-        "target": [],
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 1
       }
     ]
@@ -916,6 +957,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992436/dragon_013_bacspn.jpg"
     },
     "faction": "dragon",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -969,7 +1011,10 @@
     "types": [
       {
         "type": "spell",
-        "target": [],
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
@@ -987,6 +1032,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992433/dragon_014_g1vy6k.jpg"
     },
     "faction": "dragon",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -1024,7 +1070,10 @@
     "types": [
       {
         "type": "spell",
-        "target": [],
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
@@ -1042,6 +1091,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992435/dragon_015_kafupa.jpg"
     },
     "faction": "dragon",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -1096,7 +1146,10 @@
     "types": [
       {
         "type": "spell",
-        "target": [],
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]

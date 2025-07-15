@@ -12,6 +12,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992443/assassin_001_fhn3bx.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -166,34 +167,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 2,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {
-            "owner": "opponent",
-            "type": "defence"
-          },
-          {
-            "owner": "opponent",
-            "type": "support"
-          },
-          {
-            "owner": "opponent",
-            "type": "nexus"
-          },
-          {
-            "owner": "self",
-            "type": "support"
-          },
-          {
-            "owner": "self",
-            "type": "defence"
-          },
-          {
-            "owner": "self",
-            "type": "nexus"
-          }
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -210,6 +190,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992441/assassin_002_vevyt3.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_hit_nexus": [
@@ -331,34 +312,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 1,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {
-            "owner": "opponent",
-            "type": "defence"
-          },
-          {
-            "owner": "opponent",
-            "type": "support"
-          },
-          {
-            "owner": "opponent",
-            "type": "nexus"
-          },
-          {
-            "owner": "self",
-            "type": "support"
-          },
-          {
-            "owner": "self",
-            "type": "defence"
-          },
-          {
-            "owner": "self",
-            "type": "nexus"
-          }
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 1
       }
     ]
   },
@@ -375,6 +335,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992445/assassin_003_ympb4e.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -535,34 +496,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 3,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {
-            "owner": "opponent",
-            "type": "defence"
-          },
-          {
-            "owner": "opponent",
-            "type": "support"
-          },
-          {
-            "owner": "opponent",
-            "type": "nexus"
-          },
-          {
-            "owner": "self",
-            "type": "support"
-          },
-          {
-            "owner": "self",
-            "type": "defence"
-          },
-          {
-            "owner": "self",
-            "type": "nexus"
-          }
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -579,6 +519,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992443/assassin_004_pvvqt4.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -739,34 +680,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 3,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {
-            "owner": "opponent",
-            "type": "defence"
-          },
-          {
-            "owner": "opponent",
-            "type": "support"
-          },
-          {
-            "owner": "opponent",
-            "type": "nexus"
-          },
-          {
-            "owner": "self",
-            "type": "support"
-          },
-          {
-            "owner": "self",
-            "type": "defence"
-          },
-          {
-            "owner": "self",
-            "type": "nexus"
-          }
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -783,6 +703,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992445/assassin_005_eyy9nn.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -887,34 +808,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 2,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {
-            "owner": "opponent",
-            "type": "defence"
-          },
-          {
-            "owner": "opponent",
-            "type": "support"
-          },
-          {
-            "owner": "opponent",
-            "type": "nexus"
-          },
-          {
-            "owner": "self",
-            "type": "support"
-          },
-          {
-            "owner": "self",
-            "type": "defence"
-          },
-          {
-            "owner": "self",
-            "type": "nexus"
-          }
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -931,6 +831,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992444/assassin_006_acxq03.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -1035,34 +936,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 2,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {
-            "owner": "opponent",
-            "type": "defence"
-          },
-          {
-            "owner": "opponent",
-            "type": "support"
-          },
-          {
-            "owner": "opponent",
-            "type": "nexus"
-          },
-          {
-            "owner": "self",
-            "type": "support"
-          },
-          {
-            "owner": "self",
-            "type": "defence"
-          },
-          {
-            "owner": "self",
-            "type": "nexus"
-          }
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -1079,6 +959,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992439/assassin_007_iwjwl3.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -1116,34 +997,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 1,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {
-            "owner": "opponent",
-            "type": "defence"
-          },
-          {
-            "owner": "opponent",
-            "type": "support"
-          },
-          {
-            "owner": "opponent",
-            "type": "nexus"
-          },
-          {
-            "owner": "self",
-            "type": "support"
-          },
-          {
-            "owner": "self",
-            "type": "defence"
-          },
-          {
-            "owner": "self",
-            "type": "nexus"
-          }
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 1
       }
     ]
   },
@@ -1160,6 +1020,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992439/assassin_008_tezfrx.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -1240,9 +1101,13 @@
     },
     "types": [
       {
-        "type": "support",
-        "value": 2,
-        "target": []
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -1259,6 +1124,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992441/assassin_009_mrquep.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -1350,9 +1216,13 @@
     },
     "types": [
       {
-        "type": "support",
-        "value": 2,
-        "target": []
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -1369,6 +1239,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992439/assassin_010_viqddu.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -1460,9 +1331,13 @@
     },
     "types": [
       {
-        "type": "support",
-        "value": 2,
-        "target": []
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -1479,6 +1354,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992442/assassin_011_ugt6cx.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -1529,9 +1405,13 @@
     },
     "types": [
       {
-        "type": "defence",
-        "value": 1,
-        "target": null
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 1
       }
     ]
   },
@@ -1548,6 +1428,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992442/assassin_012_jvctvc.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -1598,9 +1479,13 @@
     },
     "types": [
       {
-        "type": "defence",
-        "value": 1,
-        "target": null
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 1
       }
     ]
   },
@@ -1617,6 +1502,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992442/assassin_013_vbs0ak.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -1700,8 +1586,11 @@
     "types": [
       {
         "type": "spell",
-        "value": 0,
-        "target": null
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
       }
     ]
   },
@@ -1718,6 +1607,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992440/assassin_014_z7nmep.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -1860,8 +1750,11 @@
     "types": [
       {
         "type": "spell",
-        "value": 0,
-        "target": null
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
       }
     ]
   },
@@ -1878,6 +1771,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992440/assassin_015_ots2uf.jpg"
     },
     "faction": "assassin",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -1917,8 +1811,11 @@
     "types": [
       {
         "type": "spell",
-        "value": 0,
-        "target": null
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
       }
     ]
   }

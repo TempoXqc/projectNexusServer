@@ -12,6 +12,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992424/celestial_001_xkil1d.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -58,16 +59,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 3,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "nexus"}
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -84,6 +82,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992421/celestial_002_hp8ji0.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -130,16 +129,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 3,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "nexus"}
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -156,6 +152,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992421/celestial_003_o6tjcm.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -202,16 +199,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 3,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "nexus"}
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -228,6 +222,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992422/celestial_004_y4al5k.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -285,17 +280,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 3,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "attack"},
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "nexus"}
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -312,6 +303,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992420/celestial_005_zfzlmh.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -369,17 +361,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 3,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "attack"},
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "nexus"}
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -396,6 +384,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992422/celestial_006_ptsa46.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -446,9 +435,13 @@
     },
     "types": [
       {
-        "type": "defence",
-        "value": 3,
-        "target": []
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -465,6 +458,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992424/celestial_007_gkv4kt.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -515,9 +509,13 @@
     },
     "types": [
       {
-        "type": "defence",
-        "value": 3,
-        "target": []
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
       }
     ]
   },
@@ -534,6 +532,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992425/celestial_008_glp7cw.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -615,16 +614,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 2,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "nexus"}
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -641,6 +637,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992420/celestial_009_e0axyb.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -722,16 +719,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 2,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "nexus"}
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -748,6 +742,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992418/celestial_010_cuatt1.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_purified": [
@@ -830,16 +825,13 @@
     },
     "types": [
       {
-        "type": "attack",
-        "value": 1,
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          {"owner": "opponent", "type": "defence"},
-          {"owner": "opponent", "type": "support"},
-          {"owner": "opponent", "type": "nexus"},
-          {"owner": "self", "type": "support"},
-          {"owner": "self", "type": "defence"},
-          {"owner": "self", "type": "nexus"}
-        ]
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 1
       }
     ]
   },
@@ -856,6 +848,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992425/celestial_011_m1psn6.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -923,9 +916,13 @@
     },
     "types": [
       {
-        "type": "support",
-        "value": 2,
-        "target": []
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -942,6 +939,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992418/celestial_012_bsvbna.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_purified": [
@@ -1010,9 +1008,13 @@
     },
     "types": [
       {
-        "type": "support",
-        "value": 2,
-        "target": []
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
       }
     ]
   },
@@ -1029,6 +1031,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992423/celestial_013_f8fpp7.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_purified": [
@@ -1110,9 +1113,13 @@
     },
     "types": [
       {
-        "type": "support",
-        "value": 4,
-        "target": []
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 4
       }
     ]
   },
@@ -1129,6 +1136,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992419/celestial_014_pyzgfg.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_purified": [
@@ -1189,8 +1197,11 @@
     "types": [
       {
         "type": "spell",
-        "value": 0,
-        "target": []
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
       }
     ]
   },
@@ -1207,6 +1218,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992421/celestial_015_okgbgu.jpg"
     },
     "faction": "celestial",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_purified": [
@@ -1256,8 +1268,11 @@
     "types": [
       {
         "type": "spell",
-        "value": 0,
-        "target": []
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
       }
     ]
   }

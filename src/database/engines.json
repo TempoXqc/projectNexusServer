@@ -36,8 +36,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -71,8 +75,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -106,8 +114,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -156,8 +168,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -192,8 +208,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -228,8 +248,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -263,8 +287,12 @@
     },
     "types": [
       {
-        "type": "defence",
-        "target": null,
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -298,8 +326,12 @@
     },
     "types": [
       {
-        "type": "defence",
-        "target": null,
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -342,11 +374,14 @@
         }
       ]
     },
-
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -398,8 +433,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -451,8 +490,12 @@
     },
     "types": [
       {
-        "type": "support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 3
       }
     ]
@@ -470,6 +513,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992417/engine_012_ulwo04.jpg"
     },
     "faction": "engine",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -496,8 +540,12 @@
     },
     "types": [
       {
-        "type": "defence",
-        "target": null,
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -515,6 +563,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992413/engine_013_x6cdjx.jpg"
     },
     "faction": "engine",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -541,8 +590,12 @@
     },
     "types": [
       {
-        "type": "defence",
-        "target": null,
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -560,6 +613,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992411/engine_014_lddxim.jpg"
     },
     "faction": "engine",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -627,7 +681,10 @@
     "types": [
       {
         "type": "spell",
-        "target": null,
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
@@ -645,6 +702,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992417/engine_015_zu2rfu.jpg"
     },
     "faction": "engine",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -687,7 +745,10 @@
     "types": [
       {
         "type": "spell",
-        "target": null,
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
