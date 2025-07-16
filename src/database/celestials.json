@@ -20,25 +20,14 @@
           "trigger": "on_purified",
           "action": "move_card",
           "from": {
-            "graveyard": {
-              "owner": ["self"],
-              "id": ["celestial_001"]
-            }
+            "graveyard": { "owner": ["self"], "id": ["celestial_001"] }
           },
           "to": {
-            "field": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "field": { "owner": ["self"], "where": { "to_position": "any" } }
           },
           "amount": 1,
           "priority": 1,
-          "source": {
-            "id": "celestial_001",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_001", "zone": "field" }
         }
       ],
       "on_play": [
@@ -46,14 +35,9 @@
           "trigger": "on_play",
           "action": "purify",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_001",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_001", "zone": "field" }
         }
       ]
     },
@@ -90,25 +74,14 @@
           "trigger": "on_purified",
           "action": "move_card",
           "from": {
-            "graveyard": {
-              "owner": ["self"],
-              "id": ["celestial_002"]
-            }
+            "graveyard": { "owner": ["self"], "id": ["celestial_002"] }
           },
           "to": {
-            "field": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "field": { "owner": ["self"], "where": { "to_position": "any" } }
           },
           "amount": 1,
           "priority": 1,
-          "source": {
-            "id": "celestial_002",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_002", "zone": "field" }
         }
       ],
       "on_play": [
@@ -116,14 +89,9 @@
           "trigger": "on_play",
           "action": "purify",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_002",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_002", "zone": "field" }
         }
       ]
     },
@@ -160,25 +128,14 @@
           "trigger": "on_purified",
           "action": "move_card",
           "from": {
-            "graveyard": {
-              "owner": ["self"],
-              "id": ["celestial_003"]
-            }
+            "graveyard": { "owner": ["self"], "id": ["celestial_003"] }
           },
           "to": {
-            "field": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "field": { "owner": ["self"], "where": { "to_position": "any" } }
           },
           "amount": 1,
           "priority": 1,
-          "source": {
-            "id": "celestial_003",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_003", "zone": "field" }
         }
       ],
       "on_play": [
@@ -186,14 +143,9 @@
           "trigger": "on_play",
           "action": "purify",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_003",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_003", "zone": "field" }
         }
       ]
     },
@@ -230,15 +182,9 @@
           "trigger": "on_purified",
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": ["opponent"],
-            "type": ["nexus"]
-          },
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_004",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_004", "zone": "field" }
         }
       ],
       "on_play": [
@@ -246,14 +192,9 @@
           "trigger": "on_play",
           "action": "purify",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_004",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_004", "zone": "field" }
         }
       ],
       "aura": [
@@ -270,11 +211,11 @@
             "fr": "Cette carte peut attaquer les unités de type Attaque.",
             "es": "Esta carta puede atacar unidades de tipo Ataque."
           },
+          "action": "add_keyword",
+          "keyword": "can_attack_attack",
+          "target": { "owner": ["self"], "id": ["celestial_004"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_004",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_004", "zone": "field" }
         }
       ]
     },
@@ -311,15 +252,9 @@
           "trigger": "on_purified",
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": ["opponent"],
-            "type": ["nexus"]
-          },
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_005",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_005", "zone": "field" }
         }
       ],
       "on_play": [
@@ -327,14 +262,9 @@
           "trigger": "on_play",
           "action": "purify",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_005",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_005", "zone": "field" }
         }
       ],
       "aura": [
@@ -351,11 +281,11 @@
             "fr": "Cette carte peut attaquer les unités de type Attaque.",
             "es": "Esta carta puede atacar unidades de tipo Ataque."
           },
+          "action": "add_keyword",
+          "keyword": "can_attack_attack",
+          "target": { "owner": ["self"], "id": ["celestial_005"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_005",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_005", "zone": "field" }
         }
       ]
     },
@@ -392,14 +322,9 @@
           "trigger": "on_purified",
           "action": "restore_health",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_006",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_006", "zone": "field" }
         }
       ],
       "on_play": [
@@ -407,14 +332,9 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_006",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_006", "zone": "field" }
         }
       ],
       "on_destroyed": [
@@ -422,14 +342,9 @@
           "trigger": "on_destroyed",
           "action": "purify",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_006",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_006", "zone": "field" }
         }
       ]
     },
@@ -466,14 +381,9 @@
           "trigger": "on_purified",
           "action": "restore_health",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_007",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_007", "zone": "field" }
         }
       ],
       "on_play": [
@@ -481,14 +391,9 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_007",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_007", "zone": "field" }
         }
       ],
       "on_destroyed": [
@@ -496,14 +401,9 @@
           "trigger": "on_destroyed",
           "action": "purify",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_007",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_007", "zone": "field" }
         }
       ]
     },
@@ -540,25 +440,14 @@
           "trigger": "on_purified",
           "action": "move_card",
           "from": {
-            "graveyard": {
-              "owner": ["self"],
-              "id": ["celestial_008"]
-            }
+            "graveyard": { "owner": ["self"], "id": ["celestial_008"] }
           },
           "to": {
-            "field": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "field": { "owner": ["self"], "where": { "to_position": "any" } }
           },
           "amount": 1,
           "priority": 1,
-          "source": {
-            "id": "celestial_008",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_008", "zone": "field" }
         }
       ],
       "on_play": [
@@ -567,31 +456,17 @@
           "action": "reveal",
           "amount": 3,
           "from": {
-            "deck": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["self"], "where": { "to_position": "top" } }
           },
           "priority": 1,
-          "source": {
-            "id": "celestial_008",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_008", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reorder_revealed_cards",
-          "target": {
-            "owner": ["self"],
-            "type": ["attack", "defence", "support", "spell", "token"]
-          },
+          "target": { "owner": ["self"], "type": ["attack", "defence", "support", "spell", "token"] },
           "priority": 2,
-          "source": {
-            "id": "celestial_008",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_008", "zone": "field" }
         }
       ],
       "aura": [
@@ -603,12 +478,10 @@
             "operator": "===",
             "value": "shield"
           },
-          "action": "ignore_shield",
+          "action": "ignore_defence",
+          "target": { "owner": ["self"], "id": ["celestial_008"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_008",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_008", "zone": "field" }
         }
       ]
     },
@@ -645,25 +518,14 @@
           "trigger": "on_purified",
           "action": "move_card",
           "from": {
-            "graveyard": {
-              "owner": ["self"],
-              "id": ["celestial_009"]
-            }
+            "graveyard": { "owner": ["self"], "id": ["celestial_009"] }
           },
           "to": {
-            "field": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "field": { "owner": ["self"], "where": { "to_position": "any" } }
           },
           "amount": 1,
           "priority": 1,
-          "source": {
-            "id": "celestial_009",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_009", "zone": "field" }
         }
       ],
       "on_play": [
@@ -672,31 +534,17 @@
           "action": "reveal",
           "amount": 3,
           "from": {
-            "deck": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["self"], "where": { "to_position": "top" } }
           },
           "priority": 1,
-          "source": {
-            "id": "celestial_009",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_009", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reorder_revealed_cards",
-          "target": {
-            "owner": ["self"],
-            "type": ["attack", "defence", "support", "spell", "token"]
-          },
+          "target": { "owner": ["self"], "type": ["attack", "defence", "support", "spell", "token"] },
           "priority": 2,
-          "source": {
-            "id": "celestial_009",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_009", "zone": "field" }
         }
       ],
       "aura": [
@@ -708,12 +556,10 @@
             "operator": "===",
             "value": "shield"
           },
-          "action": "ignore_shield",
+          "action": "ignore_defence",
+          "target": { "owner": ["self"], "id": ["celestial_009"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_009",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_009", "zone": "field" }
         }
       ]
     },
@@ -750,25 +596,14 @@
           "trigger": "on_purified",
           "action": "move_card",
           "from": {
-            "field": {
-              "owner": ["opponent"],
-              "type": ["attack", "defence", "support"]
-            }
+            "field": { "owner": ["opponent"], "type": ["attack", "defence", "support"] }
           },
           "to": {
-            "graveyard": {
-              "owner": ["opponent"],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "graveyard": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
           "amount": 1,
           "priority": 1,
-          "source": {
-            "id": "celestial_010",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_010", "zone": "field" }
         }
       ],
       "on_play": [
@@ -776,14 +611,9 @@
           "trigger": "on_play",
           "action": "purify",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_010",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_010", "zone": "field" }
         }
       ],
       "on_attack": [
@@ -792,34 +622,20 @@
           "condition": {
             "type": "count",
             "property": "units_in_play",
-            "filter": {
-              "faction": "celestial",
-              "exclude_self": true
-            },
+            "filter": { "faction": "celestial", "exclude_self": true },
             "operator": ">=",
             "value": 1
           },
           "action": "move_card",
           "from": {
-            "field": {
-              "owner": ["self"],
-              "id": ["celestial_010"]
-            }
+            "field": { "owner": ["self"], "id": ["celestial_010"] }
           },
           "to": {
-            "hand": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "hand": { "owner": ["self"], "where": { "to_position": "top" } }
           },
           "amount": 1,
           "priority": 1,
-          "source": {
-            "id": "celestial_010",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_010", "zone": "field" }
         }
       ]
     },
@@ -855,14 +671,9 @@
         {
           "trigger": "on_purified",
           "action": "activate_ability",
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_011",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_011", "zone": "field" }
         }
       ],
       "on_play": [
@@ -871,31 +682,17 @@
           "action": "reveal",
           "amount": 5,
           "from": {
-            "deck": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["self"], "where": { "to_position": "top" } }
           },
           "priority": 1,
-          "source": {
-            "id": "celestial_011",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_011", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reorder_revealed_cards",
-          "target": {
-            "owner": ["self"],
-            "type": ["attack", "defence", "support", "spell", "token"]
-          },
+          "target": { "owner": ["self"], "type": ["attack", "defence", "support", "spell", "token"] },
           "priority": 2,
-          "source": {
-            "id": "celestial_011",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_011", "zone": "field" }
         }
       ],
       "on_exhaust": [
@@ -903,14 +700,9 @@
           "trigger": "on_exhaust",
           "action": "restore_health",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_011",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_011", "zone": "field" }
         }
       ]
     },
@@ -947,14 +739,9 @@
           "trigger": "on_purified",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_012",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_012", "zone": "field" }
         }
       ],
       "on_play": [
@@ -963,31 +750,17 @@
           "action": "reveal",
           "amount": 3,
           "from": {
-            "deck": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["self"], "where": { "to_position": "top" } }
           },
           "priority": 1,
-          "source": {
-            "id": "celestial_012",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_012", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reorder_revealed_cards",
-          "target": {
-            "owner": ["self"],
-            "type": ["attack", "defence", "support", "spell", "token"]
-          },
+          "target": { "owner": ["self"], "type": ["attack", "defence", "support", "spell", "token"] },
           "priority": 2,
-          "source": {
-            "id": "celestial_012",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_012", "zone": "field" }
         }
       ],
       "on_exhaust": [
@@ -995,14 +768,9 @@
           "trigger": "on_exhaust",
           "action": "purify",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_012",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_012", "zone": "field" }
         }
       ]
     },
@@ -1039,25 +807,14 @@
           "trigger": "on_purified",
           "action": "move_card",
           "from": {
-            "graveyard": {
-              "owner": ["self"],
-              "id": ["celestial_013"]
-            }
+            "graveyard": { "owner": ["self"], "id": ["celestial_013"] }
           },
           "to": {
-            "deck": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "field": { "owner": ["self"], "where": { "to_position": "any" } }
           },
           "amount": 1,
           "priority": 1,
-          "source": {
-            "id": "celestial_013",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_013", "zone": "field" }
         }
       ],
       "on_play": [
@@ -1065,14 +822,9 @@
           "trigger": "on_play",
           "action": "purify",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_013",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_013", "zone": "field" }
         }
       ],
       "on_exhaust": [
@@ -1080,14 +832,9 @@
           "trigger": "on_exhaust",
           "action": "purify",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_013",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_013", "zone": "field" }
         }
       ],
       "aura": [
@@ -1099,15 +846,9 @@
           },
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": ["opponent"],
-            "type": ["nexus"]
-          },
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_013",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_013", "zone": "field" }
         }
       ]
     },
@@ -1144,14 +885,9 @@
           "trigger": "on_purified",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_014",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_014", "zone": "field" }
         }
       ],
       "on_play": [
@@ -1159,38 +895,22 @@
           "trigger": "on_play",
           "action": "move_card",
           "from": {
-            "graveyard": {
-              "owner": ["self"],
-              "type": ["attack", "support", "defence"]
-            }
+            "graveyard": { "owner": ["self"], "type": ["attack", "support", "defence"] }
           },
           "to": {
-            "deck": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "deck": { "owner": ["self"], "where": { "to_position": "shuffle" } }
           },
           "amount": 2,
           "priority": 1,
-          "source": {
-            "id": "celestial_014",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_014", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"] },
           "priority": 2,
-          "source": {
-            "id": "celestial_014",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_014", "zone": "field" }
         }
       ]
     },
@@ -1226,14 +946,9 @@
           "trigger": "on_purified",
           "action": "restore_health",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_015",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_015", "zone": "field" }
         }
       ],
       "on_play": [
@@ -1241,27 +956,17 @@
           "trigger": "on_play",
           "action": "purify",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["unit"] },
           "priority": 1,
-          "source": {
-            "id": "celestial_015",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_015", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "restore_health",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": { "owner": ["self"], "type": ["nexus"] },
           "priority": 2,
-          "source": {
-            "id": "celestial_015",
-            "zone": "unknown"
-          }
+          "source": { "id": "celestial_015", "zone": "field" }
         }
       ]
     },

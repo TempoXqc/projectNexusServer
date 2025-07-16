@@ -34,8 +34,8 @@
           "action": "split_damage",
           "amount": 2,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "selection": "split",
           "priority": 1,
@@ -93,8 +93,8 @@
           "action": "split_damage",
           "amount": 2,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "selection": "split",
           "priority": 1,
@@ -139,8 +139,8 @@
           "action": "split_damage",
           "amount": 3,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "selection": "split",
           "priority": 1,
@@ -185,8 +185,8 @@
           "action": "split_damage",
           "amount": 3,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "selection": "split",
           "priority": 1,
@@ -230,7 +230,7 @@
           "trigger": "on_play",
           "action": "exhaust_unit",
           "target": [
-            { "owner": "any", "type": "unit" }
+            { "owner": "any", "type": ["unit"] }
           ],
           "priority": 1,
           "source": {
@@ -273,7 +273,7 @@
           "trigger": "on_play",
           "action": "exhaust_unit",
           "target": [
-            { "owner": "any", "type": "unit" }
+            { "owner": "any", "type": ["unit"] }
           ],
           "priority": 1,
           "source": {
@@ -316,8 +316,7 @@
           "trigger": "on_play",
           "action": "move_card",
           "from": {
-            "graveyard":
-            {
+            "graveyard": {
               "owner": ["self"],
               "type": ["spell"]
             }
@@ -339,12 +338,13 @@
     },
     "types": [
       {
-        "type": "spell",
+        "type": "unit",
+        "subTypes": "support",
         "target": [
-          { "owner": "any", "type": "unit" },
-          { "owner": "any", "type": "nexus" }
+          { "owner": "any", "type": ["unit"] },
+          { "owner": "any", "type": ["nexus"] }
         ],
-        "value": 0
+        "value": 2
       }
     ]
   },
@@ -370,7 +370,7 @@
           "action": "damage",
           "amount": 2,
           "target": [
-            { "owner": "any", "type": "unit" }
+            { "owner": "any", "type": ["unit"] }
           ],
           "priority": 1,
           "source": {
@@ -385,8 +385,8 @@
           "action": "damage",
           "amount": 1,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "priority": 1,
           "source": {
@@ -430,10 +430,7 @@
           "action": "damage",
           "amount": 2,
           "target": [
-            {
-              "owner": "opponent",
-              "type": "nexus"
-            }
+            { "owner": "opponent", "type": ["nexus"] }
           ],
           "priority": 1,
           "source": {
@@ -448,8 +445,8 @@
           "action": "damage",
           "amount": 1,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "priority": 1,
           "source": {
@@ -566,8 +563,8 @@
           "action": "damage",
           "amount": 5,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "trample": true,
           "priority": 1,
@@ -612,8 +609,8 @@
           "action": "damage",
           "amount": 5,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "trample": true,
           "priority": 1,
@@ -658,8 +655,8 @@
           "action": "split_damage",
           "amount": 3,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "selection": "split",
           "priority": 1,
@@ -680,7 +677,6 @@
         "value": 0
       }
     ]
-
   },
   {
     "id": "wizard_014",
@@ -704,8 +700,8 @@
           "action": "damage",
           "amount": 2,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "priority": 1,
           "source": {
@@ -759,8 +755,8 @@
           "action": "damage",
           "amount": 2,
           "target": [
-            { "owner": "any", "type": "unit" },
-            { "owner": "any", "type": "nexus" }
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
           ],
           "priority": 1,
           "source": {

@@ -28,7 +28,7 @@
           "action": "set_cost_to_zero",
           "target": { "owner": ["self"], "id": ["assassin_001"] },
           "priority": 1,
-          "source": { "id": "assassin_001", "zone": "unknown" }
+          "source": { "id": "assassin_001", "zone": "field" }
         }
       ],
       "on_hit_nexus": [
@@ -37,29 +37,18 @@
           "action": "move_card",
           "from": {
             "field": {
-              "owner": [
-                "self"
-              ],
-              "id": [
-                "assassin_001"
-              ]
+              "owner": ["self"],
+              "id": ["assassin_001"]
             }
           },
           "to": {
             "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
+              "owner": ["opponent"],
+              "where": { "to_position": "shuffle" }
             }
           },
           "priority": 1,
-          "source": {
-            "id": "assassin_001",
-            "zone": "unknown"
-          }
+          "source": { "id": "assassin_001", "zone": "field" }
         }
       ],
       "on_reveal": [
@@ -73,19 +62,9 @@
           },
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "nexus"
-            ]
-          },
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "assassin_001",
-            "zone": "unknown"
-          }
+          "source": { "id": "assassin_001", "zone": "field" }
         }
       ],
       "on_draw": [
@@ -93,63 +72,29 @@
           "trigger": "on_draw",
           "action": "damage",
           "amount": 2,
-          "target": {
-            "owner": [
-              "self"
-            ],
-            "type": [
-              "nexus"
-            ]
-          },
+          "target": { "owner": ["self"], "type": ["nexus"] },
           "priority": 1,
-          "source": {
-            "id": "assassin_001",
-            "zone": "unknown"
-          }
+          "source": { "id": "assassin_001", "zone": "field" }
         },
         {
           "trigger": "on_draw",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
+          "target": { "owner": ["self"] },
           "priority": 2,
-          "source": {
-            "id": "assassin_001",
-            "zone": "unknown"
-          }
+          "source": { "id": "assassin_001", "zone": "field" }
         },
         {
           "trigger": "on_draw",
           "action": "move_card",
           "from": {
-            "hand": {
-              "owner": [
-                "self"
-              ],
-              "id": [
-                "assassin_001"
-              ]
-            }
+            "hand": { "owner": ["self"], "id": ["assassin_001"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "self"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "deck": { "owner": ["self"], "where": { "to_position": "shuffle" } }
           },
           "priority": 3,
-          "source": {
-            "id": "assassin_001",
-            "zone": "unknown"
-          }
+          "source": { "id": "assassin_001", "zone": "field" }
         }
       ]
     },
@@ -186,29 +131,13 @@
           "trigger": "on_hit_nexus",
           "action": "move_card",
           "from": {
-            "field": {
-              "owner": [
-                "self"
-              ],
-              "id": [
-                "assassin_002"
-              ]
-            }
+            "field": { "owner": ["self"], "id": ["assassin_002"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "bottom"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "bottom" } }
           },
-          "source": {
-            "id": "assassin_002",
-            "zone": "unknown"
-          }
+          "priority": 1,
+          "source": { "id": "assassin_002", "zone": "field" }
         }
       ],
       "on_reveal": [
@@ -222,18 +151,9 @@
           },
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "nexus"
-            ]
-          },
-          "source": {
-            "id": "assassin_002",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "assassin_002", "zone": "field" }
         }
       ],
       "on_draw": [
@@ -241,60 +161,29 @@
           "trigger": "on_draw",
           "action": "damage",
           "amount": 2,
-          "target": {
-            "owner": [
-              "self"
-            ],
-            "type": [
-              "nexus"
-            ]
-          },
-          "source": {
-            "id": "assassin_002",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "assassin_002", "zone": "field" }
         },
         {
           "trigger": "on_draw",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
-          "source": {
-            "id": "assassin_002",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"] },
+          "priority": 2,
+          "source": { "id": "assassin_002", "zone": "field" }
         },
         {
           "trigger": "on_draw",
           "action": "move_card",
           "from": {
-            "hand": {
-              "owner": [
-                "self"
-              ],
-              "id": [
-                "assassin_002"
-              ]
-            }
+            "hand": { "owner": ["self"], "id": ["assassin_002"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "self"
-              ],
-              "where": {
-                "to_position": "bottom"
-              }
-            }
+            "deck": { "owner": ["self"], "where": { "to_position": "bottom" } }
           },
-          "source": {
-            "id": "assassin_002",
-            "zone": "unknown"
-          }
+          "priority": 3,
+          "source": { "id": "assassin_002", "zone": "field" }
         }
       ]
     },
@@ -332,19 +221,10 @@
           "action": "reveal",
           "amount": 4,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_003",
-            "zone": "unknown"
-          }
+          "priority": 1,
+          "source": { "id": "assassin_003", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -354,43 +234,16 @@
             "fr": "sélectionnez 1 carte à envoyer au cimetière",
             "es": "selecciona 1 carta para enviar al cementerio"
           },
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
           "amount": 1,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "id": [
-                "id_card__selected"
-              ]
-            }
+            "deck": { "owner": ["opponent"], "id": ["id_card__selected"] }
           },
           "to": {
-            "graveyard": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "graveyard": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_003",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_003", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -400,85 +253,31 @@
             "fr": "sélectionnez 1 carte à placer en haut du deck adverse",
             "es": "selecciona 1 carta para colocar en la parte superior del mazo del oponente"
           },
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
           "amount": 1,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "id": [
-                "id_card__selected"
-              ]
-            }
+            "deck": { "owner": ["opponent"], "id": ["id_card__selected"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_003",
-            "zone": "unknown"
-          }
+          "priority": 3,
+          "source": { "id": "assassin_003", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "move_remaining_to_bottom",
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "id": [
-                "id_card_un_selected"
-              ]
-            }
+            "deck": { "owner": ["opponent"], "id": ["id_card_un_selected"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "bottom"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "bottom" } }
           },
           "amount": 2,
           "order": "any",
-          "source": {
-            "id": "assassin_003",
-            "zone": "unknown"
-          }
+          "priority": 4,
+          "source": { "id": "assassin_003", "zone": "field" }
         }
       ]
     },
@@ -516,19 +315,10 @@
           "action": "reveal",
           "amount": 4,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_004",
-            "zone": "unknown"
-          }
+          "priority": 1,
+          "source": { "id": "assassin_004", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -538,43 +328,16 @@
             "fr": "sélectionnez 1 carte à envoyer au cimetière",
             "es": "selecciona 1 carta para enviar al cementerio"
           },
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
           "amount": 1,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "id": [
-                "id_card__selected"
-              ]
-            }
+            "deck": { "owner": ["opponent"], "id": ["id_card__selected"] }
           },
           "to": {
-            "graveyard": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "graveyard": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_004",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_004", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -584,85 +347,31 @@
             "fr": "sélectionnez 1 carte à placer en haut du deck adverse",
             "es": "selecciona 1 carta para colocar en la parte superior del mazo del oponente"
           },
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
           "amount": 1,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "id": [
-                "id_card__selected"
-              ]
-            }
+            "deck": { "owner": ["opponent"], "id": ["id_card__selected"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_004",
-            "zone": "unknown"
-          }
+          "priority": 3,
+          "source": { "id": "assassin_004", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "move_remaining_to_bottom",
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "id": [
-                "id_card_un_selected"
-              ]
-            }
+            "deck": { "owner": ["opponent"], "id": ["id_card_un_selected"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "bottom"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "bottom" } }
           },
           "amount": 2,
           "order": "any",
-          "source": {
-            "id": "assassin_004",
-            "zone": "unknown"
-          }
+          "priority": 4,
+          "source": { "id": "assassin_004", "zone": "field" }
         }
       ]
     },
@@ -705,18 +414,9 @@
           },
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "nexus"
-            ]
-          },
-          "source": {
-            "id": "assassin_005",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "assassin_005", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -728,69 +428,30 @@
           },
           "action": "move_card",
           "from": {
-            "token_pool": {
-              "owner": [
-                "self"
-              ],
-              "amount": 2,
-              "type": [
-                "assassin_token"
-              ]
-            }
+            "token_pool": { "owner": ["self"], "amount": 2, "type": ["assassin_token"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "shuffle" } }
           },
-          "source": {
-            "id": "assassin_005",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_005", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reveal",
           "amount": 4,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_005",
-            "zone": "unknown"
-          }
+          "priority": 3,
+          "source": { "id": "assassin_005", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reorder_revealed_cards",
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
-          "source": {
-            "id": "assassin_005",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
+          "priority": 4,
+          "source": { "id": "assassin_005", "zone": "field" }
         }
       ]
     },
@@ -833,18 +494,9 @@
           },
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "nexus"
-            ]
-          },
-          "source": {
-            "id": "assassin_006",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "assassin_006", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -856,69 +508,30 @@
           },
           "action": "move_card",
           "from": {
-            "token_pool": {
-              "owner": [
-                "self"
-              ],
-              "amount": 2,
-              "type": [
-                "assassin_token"
-              ]
-            }
+            "token_pool": { "owner": ["self"], "amount": 2, "type": ["assassin_token"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "shuffle" } }
           },
-          "source": {
-            "id": "assassin_006",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_006", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reveal",
           "amount": 4,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_006",
-            "zone": "unknown"
-          }
+          "priority": 3,
+          "source": { "id": "assassin_006", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reorder_revealed_cards",
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
-          "source": {
-            "id": "assassin_006",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
+          "priority": 4,
+          "source": { "id": "assassin_006", "zone": "field" }
         }
       ]
     },
@@ -956,30 +569,13 @@
           "action": "take_control_of_unit",
           "amount": 1,
           "from": {
-            "field": {
-              "owner": [
-                "opponent"
-              ],
-              "type": [
-                "attack",
-                "defence",
-                "support",
-                "token"
-              ],
-              "maxValue": 3
-            }
+            "field": { "owner": ["opponent"], "type": ["attack", "defence", "support", "token"], "maxValue": 3 }
           },
           "to": {
-            "field": {
-              "owner": [
-                "self"
-              ]
-            }
+            "field": { "owner": ["self"] }
           },
-          "source": {
-            "id": "assassin_007",
-            "zone": "unknown"
-          }
+          "priority": 1,
+          "source": { "id": "assassin_007", "zone": "field" }
         }
       ]
     },
@@ -1016,36 +612,21 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
-          "source": {
-            "id": "assassin_008",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"] },
+          "priority": 1,
+          "source": { "id": "assassin_008", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "move_card",
           "from": {
-            "token_pool": {
-              "owner": ["self"],
-              "amount": 2,
-              "type": ["assassin_token"]
-            }
+            "token_pool": { "owner": ["self"], "amount": 2, "type": ["assassin_token"] }
           },
           "to": {
-            "deck": {
-              "owner": ["opponent"],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "shuffle" } }
           },
-          "source": {
-            "id": "assassin_008",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_008", "zone": "field" }
         }
       ],
       "on_exhaust": [
@@ -1053,37 +634,24 @@
           "trigger": "on_exhaust",
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": ["opponent"],
-            "type": ["nexus"]
-          },
-          "source": {
-            "id": "assassin_008",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "assassin_008", "zone": "field" }
         },
         {
           "trigger": "on_exhaust",
           "condition": {
             "type": "count",
             "property": "cards_in_deck",
-            "filter": {
-              "type": ["assassin_token"],
-              "owner": ["opponent"]
-            },
+            "filter": { "type": ["assassin_token"], "owner": ["opponent"] },
             "operator": ">=",
             "value": 5
           },
           "action": "damage",
           "amount": 1,
-          "target": {
-            "owner": ["opponent"],
-            "type": ["nexus"]
-          },
-          "source": {
-            "id": "assassin_008",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 2,
+          "source": { "id": "assassin_008", "zone": "field" }
         }
       ]
     },
@@ -1121,39 +689,17 @@
           "action": "reveal",
           "amount": 4,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_009",
-            "zone": "unknown"
-          }
+          "priority": 1,
+          "source": { "id": "assassin_009", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reorder_revealed_cards",
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
-          "source": {
-            "id": "assassin_009",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
+          "priority": 2,
+          "source": { "id": "assassin_009", "zone": "field" }
         }
       ],
       "on_exhaust": [
@@ -1161,44 +707,21 @@
           "trigger": "on_exhaust",
           "action": "restore_health",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
-          "source": {
-            "id": "assassin_009",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "assassin_009", "zone": "field" }
         },
         {
           "trigger": "on_exhaust",
           "action": "move_card",
           "from": {
-            "token_pool": {
-              "owner": [
-                "self"
-              ],
-              "amount": 1,
-              "type": [
-                "assassin_token"
-              ]
-            }
+            "token_pool": { "owner": ["self"], "amount": 1, "type": ["assassin_token"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "bottom"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "bottom" } }
           },
-          "source": {
-            "id": "assassin_009",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_009", "zone": "field" }
         }
       ]
     },
@@ -1236,39 +759,17 @@
           "action": "reveal",
           "amount": 4,
           "from": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "top"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
           },
-          "source": {
-            "id": "assassin_010",
-            "zone": "unknown"
-          }
+          "priority": 1,
+          "source": { "id": "assassin_010", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "reorder_revealed_cards",
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "attack",
-              "defence",
-              "support",
-              "spell",
-              "token"
-            ]
-          },
-          "source": {
-            "id": "assassin_010",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
+          "priority": 2,
+          "source": { "id": "assassin_010", "zone": "field" }
         }
       ],
       "on_exhaust": [
@@ -1276,44 +777,21 @@
           "trigger": "on_exhaust",
           "action": "restore_health",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
-          "source": {
-            "id": "assassin_010",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "assassin_010", "zone": "field" }
         },
         {
           "trigger": "on_exhaust",
           "action": "move_card",
           "from": {
-            "token_pool": {
-              "owner": [
-                "self"
-              ],
-              "amount": 1,
-              "type": [
-                "assassin_token"
-              ]
-            }
+            "token_pool": { "owner": ["self"], "amount": 1, "type": ["assassin_token"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "bottom"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "bottom" } }
           },
-          "source": {
-            "id": "assassin_010",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_010", "zone": "field" }
         }
       ]
     },
@@ -1350,44 +828,21 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
-          "source": {
-            "id": "assassin_011",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"] },
+          "priority": 1,
+          "source": { "id": "assassin_011", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "move_card",
           "from": {
-            "token_pool": {
-              "owner": [
-                "self"
-              ],
-              "amount": 1,
-              "type": [
-                "assassin_token"
-              ]
-            }
+            "token_pool": { "owner": ["self"], "amount": 1, "type": ["assassin_token"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "shuffle" } }
           },
-          "source": {
-            "id": "assassin_011",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_011", "zone": "field" }
         }
       ]
     },
@@ -1424,44 +879,21 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
-          "source": {
-            "id": "assassin_012",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"] },
+          "priority": 1,
+          "source": { "id": "assassin_012", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "move_card",
           "from": {
-            "token_pool": {
-              "owner": [
-                "self"
-              ],
-              "amount": 1,
-              "type": [
-                "assassin_token"
-              ]
-            }
+            "token_pool": { "owner": ["self"], "amount": 1, "type": ["assassin_token"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "shuffle" } }
           },
-          "source": {
-            "id": "assassin_012",
-            "zone": "unknown"
-          }
+          "priority": 2,
+          "source": { "id": "assassin_012", "zone": "field" }
         }
       ]
     },
@@ -1504,15 +936,9 @@
           },
           "action": "draw",
           "amount": 2,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
-          "source": {
-            "id": "assassin_013",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"] },
+          "priority": 1,
+          "source": { "id": "assassin_013", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -1524,15 +950,9 @@
           },
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
-          "source": {
-            "id": "assassin_013",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"] },
+          "priority": 2,
+          "source": { "id": "assassin_013", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -1544,30 +964,13 @@
           },
           "action": "move_card",
           "from": {
-            "token_pool": {
-              "owner": [
-                "self"
-              ],
-              "amount": 3,
-              "type": [
-                "assassin_token"
-              ]
-            }
+            "token_pool": { "owner": ["self"], "amount": 3, "type": ["assassin_token"] }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "opponent"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
-            }
+            "deck": { "owner": ["opponent"], "where": { "to_position": "shuffle" } }
           },
-          "source": {
-            "id": "assassin_013",
-            "zone": "unknown"
-          }
+          "priority": 3,
+          "source": { "id": "assassin_013", "zone": "field" }
         }
       ]
     },
@@ -1614,30 +1017,16 @@
                   "action": "reveal",
                   "amount": 5,
                   "from": {
-                    "deck": {
-                      "owner": [
-                        "opponent"
-                      ]
-                    },
-                    "where": {
-                      "to_position": "top"
-                    }
-                  }
+                    "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
+                  },
+                  "priority": 1,
+                  "source": { "id": "assassin_014", "zone": "field" }
                 },
                 {
                   "action": "reorder_revealed_cards",
-                  "target": {
-                    "owner": [
-                      "opponent"
-                    ],
-                    "type": [
-                      "attack",
-                      "defence",
-                      "support",
-                      "spell",
-                      "token"
-                    ]
-                  }
+                  "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
+                  "priority": 2,
+                  "source": { "id": "assassin_014", "zone": "field" }
                 },
                 {
                   "action": "select_from_revealed",
@@ -1648,20 +1037,13 @@
                     "es": "selecciona 1 carta para colocar en la parte inferior del mazo del oponente"
                   },
                   "from": {
-                    "deck": {
-                      "owner": [
-                        "opponent"
-                      ]
-                    }
+                    "deck": { "owner": ["opponent"] }
                   },
                   "to": {
-                    "deck": [
-                      "opponent"
-                    ],
-                    "where": {
-                      "to_position": "bottom"
-                    }
-                  }
+                    "deck": { "owner": ["opponent"], "where": { "to_position": "bottom" } }
+                  },
+                  "priority": 3,
+                  "source": { "id": "assassin_014", "zone": "field" }
                 }
               ]
             },
@@ -1676,30 +1058,16 @@
                   "action": "reveal",
                   "amount": 5,
                   "from": {
-                    "deck": {
-                      "owner": [
-                        "opponent"
-                      ],
-                      "where": {
-                        "to_position": "bottom"
-                      }
-                    }
-                  }
+                    "deck": { "owner": ["opponent"], "where": { "to_position": "bottom" } }
+                  },
+                  "priority": 1,
+                  "source": { "id": "assassin_014", "zone": "field" }
                 },
                 {
                   "action": "reorder_revealed_cards",
-                  "target": {
-                    "owner": [
-                      "opponent"
-                    ],
-                    "type": [
-                      "attack",
-                      "defence",
-                      "support",
-                      "spell",
-                      "token"
-                    ]
-                  }
+                  "target": { "owner": ["opponent"], "type": ["attack", "defence", "support", "spell", "token"] },
+                  "priority": 2,
+                  "source": { "id": "assassin_014", "zone": "field" }
                 },
                 {
                   "action": "select_from_revealed",
@@ -1710,28 +1078,19 @@
                     "es": "selecciona 1 carta para colocar en la parte superior del mazo del oponente"
                   },
                   "from": {
-                    "deck": {
-                      "owner": [
-                        "opponent"
-                      ]
-                    }
+                    "deck": { "owner": ["opponent"] }
                   },
                   "to": {
-                    "deck": [
-                      "opponent"
-                    ],
-                    "where": {
-                      "to_position": "top"
-                    }
-                  }
+                    "deck": { "owner": ["opponent"], "where": { "to_position": "top" } }
+                  },
+                  "priority": 3,
+                  "source": { "id": "assassin_014", "zone": "field" }
                 }
               ]
             }
           ],
-          "source": {
-            "id": "assassin_014",
-            "zone": "unknown"
-          }
+          "priority": 1,
+          "source": { "id": "assassin_014", "zone": "field" }
         }
       ]
     },
@@ -1769,7 +1128,8 @@
           "amount": 1,
           "condition": { "type": "count", "property": "hidden_assassins", "operator": ">=", "value": 0 },
           "max": 6,
-          "target": { "owner": ["self"] },
+          "target": { "owner": ["self"], "type": ["nexus"] },
+          "priority": 1,
           "source": { "id": "assassin_015", "zone": "field" }
         },
         {
@@ -1777,6 +1137,7 @@
           "action": "damage",
           "amount": 2,
           "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 2,
           "source": { "id": "assassin_015", "zone": "field" }
         }
       ]

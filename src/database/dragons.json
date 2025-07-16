@@ -41,9 +41,12 @@
                   "action": "draw",
                   "amount": 1,
                   "target": {
-                    "owner": [
-                      "self"
-                    ]
+                    "owner": ["self"]
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "dragon_001",
+                    "zone": "field"
                   }
                 }
               ]
@@ -58,7 +61,11 @@
                 {
                   "action": "gain_extra_play",
                   "amount": 1,
-                  "target": { "owner": ["self"] }
+                  "priority": 1,
+                  "source": {
+                    "id": "dragon_001",
+                    "zone": "field"
+                  }
                 }
               ]
             }
@@ -66,7 +73,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_001",
-            "zone": "unknown"
+            "zone": "field"
           }
         },
         {
@@ -84,14 +91,12 @@
           "action": "draw",
           "amount": 1,
           "target": {
-            "owner": [
-              "self"
-            ]
+            "owner": ["self"]
           },
           "priority": 2,
           "source": {
             "id": "dragon_001",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -150,7 +155,12 @@
                 {
                   "action": "draw",
                   "amount": 1,
-                  "target": {"owner": ["self"]}
+                  "target": {"owner": ["self"]},
+                  "priority": 1,
+                  "source": {
+                    "id": "dragon_002",
+                    "zone": "field"
+                  }
                 }
               ]
             },
@@ -163,7 +173,12 @@
               "actions": [
                 {
                   "action": "gain_extra_play",
-                  "amount": 1
+                  "amount": 1,
+                  "priority": 1,
+                  "source": {
+                    "id": "dragon_002",
+                    "zone": "field"
+                  }
                 }
               ]
             }
@@ -171,7 +186,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_002",
-            "zone": "unknown"
+            "zone": "field"
           }
         },
         {
@@ -189,14 +204,12 @@
           "action": "draw",
           "amount": 1,
           "target": {
-            "owner": [
-              "self"
-            ]
+            "owner": ["self"]
           },
           "priority": 2,
           "source": {
             "id": "dragon_002",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -252,7 +265,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_003",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ],
@@ -265,11 +278,11 @@
             "operator": "===",
             "value": "defence"
           },
-          "action": "ignore_shield",
+          "action": "ignore_defence",
           "priority": 1,
           "source": {
             "id": "dragon_003",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -324,7 +337,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_004",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ],
@@ -337,11 +350,11 @@
             "operator": "===",
             "value": "defence"
           },
-          "action": "ignore_shield",
+          "action": "ignore_defence",
           "priority": 1,
           "source": {
             "id": "dragon_004",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -397,7 +410,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_005",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -454,7 +467,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_006",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -503,11 +516,11 @@
           },
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "any", "type": "unit" }],
+          "target": [{ "owner": "any", "type": ["unit"] }],
           "priority": 1,
           "source": {
             "id": "dragon_007",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -556,11 +569,11 @@
           },
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "any", "type": "unit" }],
+          "target": [{ "owner": "any", "type": ["unit"] }],
           "priority": 1,
           "source": {
             "id": "dragon_008",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -619,7 +632,12 @@
                 {
                   "action": "draw",
                   "amount": 1,
-                  "target": { "owner": ["self"] }
+                  "target": { "owner": ["self"] },
+                  "priority": 1,
+                  "source": {
+                    "id": "dragon_009",
+                    "zone": "field"
+                  }
                 }
               ]
             },
@@ -636,6 +654,11 @@
                   "target": {
                     "owner": ["opponent"],
                     "type": ["nexus"]
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "dragon_009",
+                    "zone": "field"
                   }
                 }
               ]
@@ -644,7 +667,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_009",
-            "zone": "unknown"
+            "zone": "field"
           }
         },
         {
@@ -667,7 +690,7 @@
           "priority": 2,
           "source": {
             "id": "dragon_009",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ],
@@ -683,7 +706,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_009",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -741,7 +764,12 @@
                 {
                   "action": "draw",
                   "amount": 1,
-                  "target": { "owner": ["self"] }
+                  "target": { "owner": ["self"] },
+                  "priority": 1,
+                  "source": {
+                    "id": "dragon_010",
+                    "zone": "field"
+                  }
                 }
               ]
             },
@@ -758,6 +786,11 @@
                   "target": {
                     "owner": ["opponent"],
                     "type": ["nexus"]
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "dragon_010",
+                    "zone": "field"
                   }
                 }
               ]
@@ -766,7 +799,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_010",
-            "zone": "unknown"
+            "zone": "field"
           }
         },
         {
@@ -789,7 +822,7 @@
           "priority": 2,
           "source": {
             "id": "dragon_010",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ],
@@ -805,7 +838,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_010",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -844,19 +877,13 @@
           "action": "move_card",
           "from": {
             "graveyard": {
-              "owner": [
-                "self"
-              ],
-              "type": [
-                "dragon"
-              ]
+              "owner": ["self"],
+              "type": ["dragon"]
             }
           },
           "to": {
             "hand": {
-              "owner": [
-                "self"
-              ],
+              "owner": ["self"],
               "where": {
                 "to_position": "top"
               }
@@ -866,7 +893,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_011",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -905,19 +932,13 @@
           "action": "move_card",
           "from": {
             "graveyard": {
-              "owner": [
-                "self"
-              ],
-              "type": [
-                "dragon"
-              ]
+              "owner": ["self"],
+              "type": ["dragon"]
             }
           },
           "to": {
             "hand": {
-              "owner": [
-                "self"
-              ],
+              "owner": ["self"],
               "where": {
                 "to_position": "top"
               }
@@ -927,7 +948,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_012",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -974,17 +995,13 @@
           },
           "action": "set_cost_to_zero",
           "target": {
-            "owner": [
-              "self"
-            ],
-            "id": [
-              "dragon_013"
-            ]
+            "owner": ["self"],
+            "id": ["dragon_013"]
           },
           "priority": 1,
           "source": {
             "id": "dragon_013",
-            "zone": "unknown"
+            "zone": "field"
           }
         },
         {
@@ -992,18 +1009,14 @@
           "action": "damage",
           "amount": 3,
           "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "any"
-            ],
-            "trample": true
+            "owner": ["opponent"],
+            "type": ["any"]
           },
+          "trample": true,
           "priority": 2,
           "source": {
             "id": "dragon_013",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -1041,19 +1054,13 @@
           "action": "move_card",
           "from": {
             "deck": {
-              "owner": [
-                "self"
-              ],
-              "type": [
-                "dragon"
-              ]
+              "owner": ["self"],
+              "type": ["dragon"]
             }
           },
           "to": {
             "field": {
-              "owner": [
-                "self"
-              ],
+              "owner": ["self"],
               "where": {
                 "to_position": "any"
               }
@@ -1062,7 +1069,7 @@
           "priority": 1,
           "source": {
             "id": "dragon_014",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -1108,19 +1115,15 @@
             "value": 1
           },
           "action": "add_keyword",
+          "keyword": "trample",
           "target": {
-            "owner": [
-              "self"
-            ],
-            "id": [
-              "dragon_015"
-            ],
-            "trample": true
+            "owner": ["self"],
+            "id": ["dragon_015"]
           },
           "priority": 1,
           "source": {
             "id": "dragon_015",
-            "zone": "unknown"
+            "zone": "field"
           }
         },
         {
@@ -1128,17 +1131,13 @@
           "action": "damage",
           "amount": 6,
           "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "any"
-            ]
+            "owner": ["opponent"],
+            "type": ["any"]
           },
           "priority": 2,
           "source": {
             "id": "dragon_015",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]

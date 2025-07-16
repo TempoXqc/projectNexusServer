@@ -20,7 +20,7 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "opponent", "type": "any" }],
+          "target": [{ "owner": ["opponent"], "type": ["any"] }],
           "priority": 1,
           "source": { "id": "engine_001", "zone": "field" }
         },
@@ -28,7 +28,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [{ "owner": ["self"] }],
           "priority": 2,
           "source": { "id": "engine_001", "zone": "field" }
         }
@@ -67,7 +67,7 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 3,
-          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
           "priority": 1,
           "source": { "id": "engine_002", "zone": "field" }
         }
@@ -106,7 +106,7 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 3,
-          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
           "priority": 1,
           "source": { "id": "engine_003", "zone": "field" }
         }
@@ -199,7 +199,7 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 3,
-          "target": [{ "owner": "any", "type": "unit" }],
+          "target": [{ "owner": "any", "type": ["unit"] }],
           "trample": true,
           "priority": 1,
           "source": { "id": "engine_005", "zone": "field" }
@@ -240,7 +240,7 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 3,
-          "target": [{ "owner": "any", "type": "unit" }],
+          "target": [{ "owner": "any", "type": ["unit"] }],
           "trample": true,
           "priority": 1,
           "source": { "id": "engine_006", "zone": "field" }
@@ -281,7 +281,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [{ "owner": ["self"] }],
           "priority": 1,
           "source": { "id": "engine_007", "zone": "field" }
         }
@@ -320,7 +320,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [{ "owner": ["self"] }],
           "priority": 1,
           "source": { "id": "engine_008", "zone": "field" }
         }
@@ -359,7 +359,7 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "opponent", "type": "unit" }],
+          "target": [{ "owner": ["opponent"], "type": ["unit"] }],
           "ignore_defence": true,
           "priority": 1,
           "source": { "id": "engine_009", "zone": "field" }
@@ -370,7 +370,7 @@
           "trigger": "on_exhaust",
           "action": "damage",
           "amount": 1,
-          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
           "priority": 1,
           "source": { "id": "engine_009", "zone": "field" }
         }
@@ -409,7 +409,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [{ "owner": ["self"] }],
           "priority": 1,
           "source": { "id": "engine_010", "zone": "field" }
         }
@@ -419,14 +419,14 @@
           "trigger": "on_exhaust",
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
           "priority": 1,
           "source": { "id": "engine_010", "zone": "field" }
         },
         {
           "trigger": "on_exhaust",
           "action": "disable_battle_phase",
-          "target": [{ "owner": "self", "type": "unit" }],
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
           "duration": "this_turn",
           "priority": 2,
           "source": { "id": "engine_010", "zone": "field" }
@@ -466,7 +466,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [{ "owner": ["self"] }],
           "priority": 1,
           "source": { "id": "engine_011", "zone": "field" }
         }
@@ -476,14 +476,14 @@
           "trigger": "on_exhaust",
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
           "priority": 1,
           "source": { "id": "engine_011", "zone": "field" }
         },
         {
           "trigger": "on_exhaust",
           "action": "disable_battle_phase",
-          "target": [{ "owner": "self", "type": "unit" }],
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
           "duration": "this_turn",
           "priority": 2,
           "source": { "id": "engine_011", "zone": "field" }
@@ -522,7 +522,7 @@
         {
           "trigger": "on_play",
           "action": "activate_ability",
-          "target": [{ "owner": "self", "type": "unit" }],
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
           "amount": 1,
           "priority": 1,
           "source": { "id": "engine_012", "zone": "field" }
@@ -532,7 +532,7 @@
           "action": "gain_token",
           "token": "gear_token",
           "where": {
-            "token_pool" : "self"
+            "token_pool": "self"
           },
           "amount": 1,
           "priority": 2,
@@ -572,7 +572,7 @@
         {
           "trigger": "on_play",
           "action": "activate_ability",
-          "target": [{ "owner": "self", "type": "unit" }],
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
           "amount": 1,
           "priority": 1,
           "source": { "id": "engine_013", "zone": "field" }
@@ -580,9 +580,9 @@
         {
           "trigger": "on_play",
           "action": "gain_token",
-          "type": "gear_token",
+          "token": "gear_token",
           "where": {
-            "token_pool" : "self"
+            "token_pool": "self"
           },
           "amount": 1,
           "priority": 2,
@@ -673,7 +673,7 @@
         {
           "trigger": "on_play",
           "action": "activate_onPlay_ability",
-          "target": [{ "owner": "self", "type": "unit" }],
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
           "amount": 3,
           "priority": 3,
           "source": { "id": "engine_014", "zone": "field" }
@@ -711,9 +711,10 @@
         {
           "trigger": "on_play",
           "action": "activate_onPlay_ability",
-          "target": [{ "owner": "self", "type": "unit" }],
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
           "amount": 1,
-          "priority": 1
+          "priority": 1,
+          "source": { "id": "engine_015", "zone": "field" }
         },
         {
           "trigger": "on_play",
@@ -730,17 +731,19 @@
             }
           },
           "amount": 1,
-          "priority": 2
+          "priority": 2,
+          "source": { "id": "engine_015", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "gain_token",
-          "type": "gear_token",
+          "token": "gear_token",
           "where": {
-            "token_pool" : "self"
+            "token_pool": "self"
           },
           "amount": 1,
-          "priority": 3
+          "priority": 3,
+          "source": { "id": "engine_015", "zone": "field" }
         }
       ]
     },

@@ -35,12 +35,23 @@
                     "type": ["nexus"]
                   },
                   "effect": {
-                    "action": "ignore_defence",
+                    "action": "add_keyword",
+                    "keyword": "ignore_defence",
                     "target": {
                       "owner": ["self"],
                       "id": ["vampire_001"]
                     },
-                    "duration": "this_turn"
+                    "duration": "this_turn",
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_001",
+                      "zone": "field"
+                    }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_001",
+                    "zone": "field"
                   }
                 }
               ]
@@ -78,7 +89,17 @@
                       "owner": ["self"],
                       "id": ["vampire_001"]
                     },
-                    "duration": "this_turn"
+                    "duration": "this_turn",
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_001",
+                      "zone": "field"
+                    }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_001",
+                    "zone": "field"
                   }
                 }
               ]
@@ -146,7 +167,17 @@
                       "id": ["vampire_002"]
                     },
                     "keyword": "can_attack_attack",
-                    "duration": "this_turn"
+                    "duration": "this_turn",
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_002",
+                      "zone": "field"
+                    }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_002",
+                    "zone": "field"
                   }
                 }
               ]
@@ -236,7 +267,17 @@
                       "id": ["vampire_003"]
                     },
                     "keyword": "can_attack_attack",
-                    "duration": "this_turn"
+                    "duration": "this_turn",
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_003",
+                      "zone": "field"
+                    }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_003",
+                    "zone": "field"
                   }
                 }
               ]
@@ -252,12 +293,23 @@
       "on_attack_resolve": [
         {
           "trigger": "on_attack_resolve",
-          "condition": {"type": "destroyed_unit", "filter": {"type": ["unit"]}},
+          "condition": {
+            "type": "destroyed_unit",
+            "filter": {
+              "type": ["unit"]
+            }
+          },
           "action": "restore_health",
           "amount": 2,
-          "target": {"owner": ["self"], "type": ["nexus"]},
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
           "priority": 1,
-          "source": {"id": "vampire_003", "zone": "field"}
+          "source": {
+            "id": "vampire_003",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -292,20 +344,42 @@
       "on_attack_resolve": [
         {
           "trigger": "on_attack_resolve",
-          "condition": { "type": "destroyed_unit", "filter": { "type": ["unit"]}},
+          "condition": {
+            "type": "destroyed_unit",
+            "filter": {
+              "type": ["unit"]
+            }
+          },
           "action": "restore_health",
           "amount": 1,
-          "target": { "owner": ["self"], "type": ["nexus"] },
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
           "priority": 1,
-          "source": { "id": "vampire_004", "zone": "field" }
+          "source": {
+            "id": "vampire_004",
+            "zone": "field"
+          }
         },
         {
           "trigger": "on_attack_resolve",
-          "condition": { "type": "destroyed_unit", "filter": { "type": ["unit"] } },
+          "condition": {
+            "type": "destroyed_unit",
+            "filter": {
+              "type": ["unit"]
+            }
+          },
           "action": "prevent_destruction",
-          "target": { "owner": ["self"], "id": ["vampire_004"] },
+          "target": {
+            "owner": ["self"],
+            "id": ["vampire_004"]
+          },
           "priority": 2,
-          "source": { "id": "vampire_004", "zone": "field" }
+          "source": {
+            "id": "vampire_004",
+            "zone": "field"
+          }
         }
       ],
       "on_destroyed": [
@@ -333,7 +407,17 @@
                       "owner": ["self"],
                       "id": ["vampire_004"]
                     },
-                    "duration": "this_turn"
+                    "duration": "this_turn",
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_004",
+                      "zone": "field"
+                    }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_004",
+                    "zone": "field"
                   }
                 }
               ]
@@ -412,7 +496,17 @@
                       "filter": {
                         "max_value": 3
                       }
+                    },
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_005",
+                      "zone": "field"
                     }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_005",
+                    "zone": "field"
                   }
                 }
               ]
@@ -435,6 +529,7 @@
             "id": ["vampire_005"]
           },
           "duration": "permanent",
+          "priority": 1,
           "source": {
             "id": "vampire_005",
             "zone": "field"
@@ -497,7 +592,17 @@
                       "filter": {
                         "max_value": 3
                       }
+                    },
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_006",
+                      "zone": "field"
                     }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_006",
+                    "zone": "field"
                   }
                 }
               ]
@@ -520,6 +625,7 @@
             "id": ["vampire_006"]
           },
           "duration": "permanent",
+          "priority": 1,
           "source": {
             "id": "vampire_006",
             "zone": "field"
@@ -574,8 +680,8 @@
           "condition": {
             "type": "health_compare",
             "operator": "<",
-            "target": "self",
-            "against": "opponent"
+            "target": { "owner": ["self"], "type": ["nexus"] },
+            "against": { "owner": ["opponent"], "type": ["nexus"] }
           },
           "action": "restore_health",
           "amount": 1,
@@ -622,7 +728,17 @@
                         "owner": ["self"],
                         "where": { "to_position": "shuffle" }
                       }
+                    },
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_007",
+                      "zone": "field"
                     }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_007",
+                    "zone": "field"
                   }
                 }
               ]
@@ -683,8 +799,8 @@
           "condition": {
             "type": "health_compare",
             "operator": "<",
-            "target": "self",
-            "against": "opponent"
+            "target": { "owner": ["self"], "type": ["nexus"] },
+            "against": { "owner": ["opponent"], "type": ["nexus"] }
           },
           "action": "restore_health",
           "amount": 1,
@@ -731,7 +847,17 @@
                         "owner": ["self"],
                         "where": { "to_position": "shuffle" }
                       }
+                    },
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_008",
+                      "zone": "field"
                     }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_008",
+                    "zone": "field"
                   }
                 }
               ]
@@ -809,7 +935,17 @@
                   "effect": {
                     "action": "gain_extra_play",
                     "amount": 1,
-                    "duration": "this_turn"
+                    "duration": "this_turn",
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_009",
+                      "zone": "field"
+                    }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_009",
+                    "zone": "field"
                   }
                 }
               ]
@@ -903,7 +1039,17 @@
                   "effect": {
                     "action": "gain_extra_play",
                     "amount": 1,
-                    "duration": "this_turn"
+                    "duration": "this_turn",
+                    "priority": 1,
+                    "source": {
+                      "id": "vampire_010",
+                      "zone": "field"
+                    }
+                  },
+                  "priority": 1,
+                  "source": {
+                    "id": "vampire_010",
+                    "zone": "field"
                   }
                 }
               ]
@@ -960,45 +1106,43 @@
     "faction": "vampire",
     "label": [],
     "cost": 1,
-    "effects": [
-      {
-        "on_play": [
-          {
-            "trigger": "on_play",
-            "action": "draw",
-            "amount": 1,
-            "target": { "owner": ["self"] },
-            "priority": 1,
-            "source": { "id": "vampire_011", "zone": "field" }
-          },
-          {
-            "trigger": "on_play",
-            "condition": {
-              "type": "health_compare",
-              "target": { "owner": ["self"], "type": ["nexus"] },
-              "operator": "<",
-              "against": { "owner": ["opponent"], "type": ["nexus"] }
-            },
-            "action": "restore_health",
-            "amount": 2,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": { "owner": ["self"] },
+          "priority": 58,
+          "source": { "id": "vampire_011", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
             "target": { "owner": ["self"], "type": ["nexus"] },
-            "priority": 2,
-            "source": { "id": "vampire_011", "zone": "field" }
-          }
-        ],
-        "on_exhaust": [
-          {
-            "trigger": "on_exhaust",
-            "cost": { "type": "pay_health", "amount": 1, "target": { "owner": ["self"], "type": ["nexus"] } },
-            "action": "damage",
-            "amount": 2,
-            "target": { "owner": ["opponent"], "type": ["nexus"] },
-            "priority": 1,
-            "source": { "id": "vampire_011", "zone": "field" }
-          }
-        ]
-      }
-    ],
+            "operator": "<",
+            "against": { "owner": ["opponent"], "type": ["nexus"] }
+          },
+          "action": "restore_health",
+          "amount": 2,
+          "target": { "owner": ["self"], "type": ["nexus"] },
+          "priority": 59,
+          "source": { "id": "vampire_011", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "cost": { "type": "pay_health", "amount": 1, "target": { "owner": ["self"], "type": ["nexus"] } },
+          "action": "damage",
+          "amount": 2,
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 60,
+          "source": { "id": "vampire_011", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "unit",
@@ -1026,45 +1170,43 @@
     "faction": "vampire",
     "label": [],
     "cost": 1,
-    "effects": [
-      {
-        "on_play": [
-          {
-            "trigger": "on_play",
-            "action": "draw",
-            "amount": 1,
-            "target": { "owner": ["self"] },
-            "priority": 1,
-            "source": { "id": "vampire_012", "zone": "field" }
-          },
-          {
-            "trigger": "on_play",
-            "condition": {
-              "type": "health_compare",
-              "target": { "owner": ["self"], "type": ["nexus"] },
-              "operator": "<",
-              "against": { "owner": ["opponent"], "type": ["nexus"] }
-            },
-            "action": "restore_health",
-            "amount": 2,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": { "owner": ["self"] },
+          "priority": 61,
+          "source": { "id": "vampire_012", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
             "target": { "owner": ["self"], "type": ["nexus"] },
-            "priority": 2,
-            "source": { "id": "vampire_012", "zone": "field" }
-          }
-        ],
-        "on_exhaust": [
-          {
-            "trigger": "on_exhaust",
-            "cost": { "type": "pay_health", "amount": 1, "target": { "owner": ["self"], "type": ["nexus"] } },
-            "action": "damage",
-            "amount": 2,
-            "target": { "owner": ["opponent"], "type": ["nexus"] },
-            "priority": 1,
-            "source": { "id": "vampire_012", "zone": "field" }
-          }
-        ]
-      }
-    ],
+            "operator": "<",
+            "against": { "owner": ["opponent"], "type": ["nexus"] }
+          },
+          "action": "restore_health",
+          "amount": 2,
+          "target": { "owner": ["self"], "type": ["nexus"] },
+          "priority": 62,
+          "source": { "id": "vampire_012", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "cost": { "type": "pay_health", "amount": 1, "target": { "owner": ["self"], "type": ["nexus"] } },
+          "action": "damage",
+          "amount": 2,
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 63,
+          "source": { "id": "vampire_012", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "unit",
@@ -1366,8 +1508,10 @@
                   "target": { "owner": ["self"], "type": ["nexus"] },
                   "effect": {
                     "action": "move_card",
-                    "from": { "graveyard": { "owner": ["self"], "id": ["vampire_015"] } },
-                    "to": { "deck": { "owner": ["self"], "where": { "to_position": "shuffle" } } }
+                    "from": { "field": { "owner": ["self"], "id": ["vampire_015"] } },
+                    "to": { "deck": { "owner": ["self"], "where": { "to_position": "shuffle" } } },
+                    "priority": 1,
+                    "source": { "id": "vampire_015", "zone": "field" }
                   },
                   "priority": 1,
                   "source": { "id": "vampire_015", "zone": "field" }
