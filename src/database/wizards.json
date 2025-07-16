@@ -13,7 +13,18 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 1,
+          "source": { "id": "wizard_001", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Attack",
@@ -40,7 +51,18 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 1,
+          "source": { "id": "wizard_002", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Attack",
@@ -67,7 +89,25 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "split_damage",
+          "amount": 3,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["unit", "nexus"],
+            "selection": "split"
+          },
+          "priority": 1,
+          "source": {
+            "id": "wizard_003",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Attack",
@@ -94,7 +134,25 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "split_damage",
+          "amount": 3,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["unit", "nexus"],
+            "selection": "split"
+          },
+          "priority": 1,
+          "source": {
+            "id": "wizard_004",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Attack",
@@ -167,7 +225,34 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "type": ["Spell"]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "wizard_007",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Defence",
@@ -190,7 +275,28 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "priority": 1,
+          "source": { "id": "wizard_008", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 1,
+          "target": [{ "owner": "opponent", "type": "any" }],
+          "priority": 1,
+          "source": { "id": "wizard_008", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Support",
@@ -213,7 +319,28 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "priority": 1,
+          "source": { "id": "wizard_008", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 1,
+          "target": [{ "owner": "opponent", "type": "any" }],
+          "priority": 1,
+          "source": { "id": "wizard_008", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Support",
@@ -236,7 +363,21 @@
     },
     "faction": "Wizard",
     "cost": 0,
-    "effects": [],
+    "effects": [
+      {
+        "trigger": "on_play",
+        "action": "draw",
+        "amount": 1,
+        "target": {
+          "owner": ["self"]
+        },
+        "priority": 1,
+        "source": {
+          "id": "wizard_010",
+          "zone": "unknown"
+        }
+      }
+    ],
     "types": [
       {
         "type": "Support",
@@ -259,7 +400,19 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 5,
+          "target": [{ "owner": "any", "type": "any" }],
+          "trample": true,
+          "priority": 1,
+          "source": { "id": "wizard_011", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Spell",
@@ -282,7 +435,19 @@
     },
     "faction": "Wizard",
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 5,
+          "target": [{ "owner": "any", "type": "any" }],
+          "trample": true,
+          "priority": 1,
+          "source": { "id": "wizard_012", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Spell",
@@ -305,7 +470,25 @@
     },
     "faction": "Wizard",
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "split_damage",
+          "amount": 3,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["unit", "nexus"],
+            "selection": "split"
+          },
+          "priority": 1,
+          "source": {
+            "id": "wizard_013",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Spell",
@@ -328,7 +511,26 @@
     },
     "faction": "Wizard",
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": "opponent", "type": "any" }],
+          "priority": 1,
+          "source": { "id": "wizard_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 2,
+          "source": { "id": "wizard_014", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Spell",
@@ -351,7 +553,26 @@
     },
     "faction": "Wizard",
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": "opponent", "type": "any" }],
+          "priority": 1,
+          "source": { "id": "wizard_015", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": "self" }],
+          "priority": 2,
+          "source": { "id": "wizard_015", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Spell",
