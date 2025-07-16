@@ -137,7 +137,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992497/wizard_003_w3aarr.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992427/wizard_003_tcqcil.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -145,16 +146,11 @@
           "trigger": "on_play",
           "action": "split_damage",
           "amount": 3,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "unit",
-              "nexus"
-            ],
-            "selection": "split"
-          },
+          "target": [
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
+          ],
+          "selection": "split",
           "priority": 1,
           "source": {
             "id": "wizard_003",
@@ -165,11 +161,11 @@
     },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 2
       }
@@ -187,7 +183,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992496/wizard_004_x5d3jq.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992431/wizard_004_a9cq4u.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -195,16 +192,11 @@
           "trigger": "on_play",
           "action": "split_damage",
           "amount": 3,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "unit",
-              "nexus"
-            ],
-            "selection": "split"
-          },
+          "target": [
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
+          ],
+          "selection": "split",
           "priority": 1,
           "source": {
             "id": "wizard_004",
@@ -215,11 +207,11 @@
     },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 2
       }
@@ -237,7 +229,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992496/wizard_005_gyscur.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992427/wizard_005_acivzf.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -257,8 +250,12 @@
     },
     "types": [
       {
-        "type": "Defence",
-        "target": null,
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -275,7 +272,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992493/wizard_006_nrk5mb.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992430/wizard_006_hb9wx4.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -287,7 +285,7 @@
           ],
           "priority": 1,
           "source": {
-            "id": "wizard_005",
+            "id": "wizard_006",
             "zone": "unknown"
           }
         }
@@ -295,8 +293,12 @@
     },
     "types": [
       {
-        "type": "Defence",
-        "target": null,
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -326,7 +328,7 @@
                 "self"
               ],
               "type": [
-                "Spell"
+                "spell"
               ]
             }
           },
