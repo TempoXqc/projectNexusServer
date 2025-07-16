@@ -19,9 +19,38 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [
+            {
+              "owner": "self"
+            }
+          ],
           "priority": 1,
-          "source": { "id": "wizard_001", "zone": "field" }
+          "source": {
+            "id": "wizard_001",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_hit_nexus": [
+        {
+          "trigger": "on_hit_nexus",
+          "action": "split_damage",
+          "amount": 2,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "unit",
+              "nexus"
+            ],
+            "selection": "split"
+          },
+          "priority": 2,
+          "source": {
+            "id": "wizard_001",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -57,9 +86,38 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [
+            {
+              "owner": "self"
+            }
+          ],
           "priority": 1,
-          "source": { "id": "wizard_002", "zone": "field" }
+          "source": {
+            "id": "wizard_002",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_hit_nexus": [
+        {
+          "trigger": "on_hit_nexus",
+          "action": "split_damage",
+          "amount": 2,
+          "target": {
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "unit",
+              "nexus"
+            ],
+            "selection": "split"
+          },
+          "priority": 2,
+          "source": {
+            "id": "wizard_002",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -96,8 +154,13 @@
           "action": "split_damage",
           "amount": 3,
           "target": {
-            "owner": ["opponent"],
-            "type": ["unit", "nexus"],
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "unit",
+              "nexus"
+            ],
             "selection": "split"
           },
           "priority": 1,
@@ -141,8 +204,13 @@
           "action": "split_damage",
           "amount": 3,
           "target": {
-            "owner": ["opponent"],
-            "type": ["unit", "nexus"],
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "unit",
+              "nexus"
+            ],
             "selection": "split"
           },
           "priority": 1,
@@ -179,7 +247,22 @@
     },
     "faction": "Wizard",
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "exhaust_unit",
+          "target": [
+            { "owner": "any", "type": "unit" }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "wizard_005",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Defence",
@@ -202,7 +285,22 @@
     },
     "faction": "Wizard",
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "exhaust_unit",
+          "target": [
+            { "owner": "any", "type": "unit" }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "wizard_005",
+            "zone": "unknown"
+          }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Defence",
@@ -232,13 +330,19 @@
           "action": "move_card",
           "from": {
             "graveyard": {
-              "owner": ["self"],
-              "type": ["Spell"]
+              "owner": [
+                "self"
+              ],
+              "type": [
+                "Spell"
+              ]
             }
           },
           "to": {
             "deck": {
-              "owner": ["self"],
+              "owner": [
+                "self"
+              ],
               "where": {
                 "to_position": "shuffle"
               }
@@ -281,9 +385,17 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "target": [
+            {
+              "owner": "opponent",
+              "type": "nexus"
+            }
+          ],
           "priority": 1,
-          "source": { "id": "wizard_008", "zone": "field" }
+          "source": {
+            "id": "wizard_008",
+            "zone": "field"
+          }
         }
       ],
       "on_exhaust": [
@@ -291,9 +403,17 @@
           "trigger": "on_exhaust",
           "action": "damage",
           "amount": 1,
-          "target": [{ "owner": "opponent", "type": "any" }],
+          "target": [
+            {
+              "owner": "opponent",
+              "type": "any"
+            }
+          ],
           "priority": 1,
-          "source": { "id": "wizard_008", "zone": "field" }
+          "source": {
+            "id": "wizard_008",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -325,9 +445,17 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "opponent", "type": "nexus" }],
+          "target": [
+            {
+              "owner": "opponent",
+              "type": "nexus"
+            }
+          ],
           "priority": 1,
-          "source": { "id": "wizard_008", "zone": "field" }
+          "source": {
+            "id": "wizard_008",
+            "zone": "field"
+          }
         }
       ],
       "on_exhaust": [
@@ -335,9 +463,17 @@
           "trigger": "on_exhaust",
           "action": "damage",
           "amount": 1,
-          "target": [{ "owner": "opponent", "type": "any" }],
+          "target": [
+            {
+              "owner": "opponent",
+              "type": "any"
+            }
+          ],
           "priority": 1,
-          "source": { "id": "wizard_008", "zone": "field" }
+          "source": {
+            "id": "wizard_008",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -363,21 +499,56 @@
     },
     "faction": "Wizard",
     "cost": 0,
-    "effects": [
-      {
-        "trigger": "on_play",
-        "action": "draw",
-        "amount": 1,
-        "target": {
-          "owner": ["self"]
-        },
-        "priority": 1,
-        "source": {
-          "id": "wizard_010",
-          "zone": "unknown"
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": [
+              "self"
+            ]
+          },
+          "priority": 1,
+          "source": {
+            "id": "wizard_010",
+            "zone": "unknown"
+          }
         }
-      }
-    ],
+      ],
+      "on_play_spell": [
+        {
+          "trigger": "on_play_spell",
+          "action": "move_card",
+          "from": {
+            "field": {
+              "owner": [
+                "self"
+              ],
+              "id": [
+                "wizard_010"
+              ]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": [
+                "self"
+              ],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "priority": 2,
+          "source": {
+            "id": "wizard_010",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
         "type": "Support",
@@ -406,10 +577,18 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 5,
-          "target": [{ "owner": "any", "type": "any" }],
+          "target": [
+            {
+              "owner": "any",
+              "type": "any"
+            }
+          ],
           "trample": true,
           "priority": 1,
-          "source": { "id": "wizard_011", "zone": "field" }
+          "source": {
+            "id": "wizard_011",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -441,10 +620,18 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 5,
-          "target": [{ "owner": "any", "type": "any" }],
+          "target": [
+            {
+              "owner": "any",
+              "type": "any"
+            }
+          ],
           "trample": true,
           "priority": 1,
-          "source": { "id": "wizard_012", "zone": "field" }
+          "source": {
+            "id": "wizard_012",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -477,8 +664,13 @@
           "action": "split_damage",
           "amount": 3,
           "target": {
-            "owner": ["opponent"],
-            "type": ["unit", "nexus"],
+            "owner": [
+              "opponent"
+            ],
+            "type": [
+              "unit",
+              "nexus"
+            ],
             "selection": "split"
           },
           "priority": 1,
@@ -517,17 +709,32 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "opponent", "type": "any" }],
+          "target": [
+            {
+              "owner": "opponent",
+              "type": "any"
+            }
+          ],
           "priority": 1,
-          "source": { "id": "wizard_014", "zone": "field" }
+          "source": {
+            "id": "wizard_014",
+            "zone": "field"
+          }
         },
         {
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [
+            {
+              "owner": "self"
+            }
+          ],
           "priority": 2,
-          "source": { "id": "wizard_014", "zone": "field" }
+          "source": {
+            "id": "wizard_014",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -559,17 +766,32 @@
           "trigger": "on_play",
           "action": "damage",
           "amount": 2,
-          "target": [{ "owner": "opponent", "type": "any" }],
+          "target": [
+            {
+              "owner": "opponent",
+              "type": "any"
+            }
+          ],
           "priority": 1,
-          "source": { "id": "wizard_015", "zone": "field" }
+          "source": {
+            "id": "wizard_015",
+            "zone": "field"
+          }
         },
         {
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [{ "owner": "self" }],
+          "target": [
+            {
+              "owner": "self"
+            }
+          ],
           "priority": 2,
-          "source": { "id": "wizard_015", "zone": "field" }
+          "source": {
+            "id": "wizard_015",
+            "zone": "field"
+          }
         }
       ]
     },
