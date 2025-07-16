@@ -945,7 +945,6 @@
       }
     ]
   },
-
   {
     "id": "vampire_011",
     "name": {
@@ -961,7 +960,45 @@
     "faction": "vampire",
     "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": [
+      {
+        "on_play": [
+          {
+            "trigger": "on_play",
+            "action": "draw",
+            "amount": 1,
+            "target": { "owner": ["self"] },
+            "priority": 1,
+            "source": { "id": "vampire_011", "zone": "field" }
+          },
+          {
+            "trigger": "on_play",
+            "condition": {
+              "type": "health_compare",
+              "target": { "owner": ["self"], "type": ["nexus"] },
+              "operator": "<",
+              "against": { "owner": ["opponent"], "type": ["nexus"] }
+            },
+            "action": "restore_health",
+            "amount": 2,
+            "target": { "owner": ["self"], "type": ["nexus"] },
+            "priority": 2,
+            "source": { "id": "vampire_011", "zone": "field" }
+          }
+        ],
+        "on_exhaust": [
+          {
+            "trigger": "on_exhaust",
+            "cost": { "type": "pay_health", "amount": 1, "target": { "owner": ["self"], "type": ["nexus"] } },
+            "action": "damage",
+            "amount": 2,
+            "target": { "owner": ["opponent"], "type": ["nexus"] },
+            "priority": 1,
+            "source": { "id": "vampire_011", "zone": "field" }
+          }
+        ]
+      }
+    ],
     "types": [
       {
         "type": "unit",
@@ -989,7 +1026,45 @@
     "faction": "vampire",
     "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": [
+      {
+        "on_play": [
+          {
+            "trigger": "on_play",
+            "action": "draw",
+            "amount": 1,
+            "target": { "owner": ["self"] },
+            "priority": 1,
+            "source": { "id": "vampire_012", "zone": "field" }
+          },
+          {
+            "trigger": "on_play",
+            "condition": {
+              "type": "health_compare",
+              "target": { "owner": ["self"], "type": ["nexus"] },
+              "operator": "<",
+              "against": { "owner": ["opponent"], "type": ["nexus"] }
+            },
+            "action": "restore_health",
+            "amount": 2,
+            "target": { "owner": ["self"], "type": ["nexus"] },
+            "priority": 2,
+            "source": { "id": "vampire_012", "zone": "field" }
+          }
+        ],
+        "on_exhaust": [
+          {
+            "trigger": "on_exhaust",
+            "cost": { "type": "pay_health", "amount": 1, "target": { "owner": ["self"], "type": ["nexus"] } },
+            "action": "damage",
+            "amount": 2,
+            "target": { "owner": ["opponent"], "type": ["nexus"] },
+            "priority": 1,
+            "source": { "id": "vampire_012", "zone": "field" }
+          }
+        ]
+      }
+    ],
     "types": [
       {
         "type": "unit",
@@ -1005,7 +1080,7 @@
   {
     "id": "vampire_013",
     "name": {
-      "fr": "Lune de Sange",
+      "fr": "Lune de Sang",
       "en": "Blood Moon",
       "es": "Luna De Sangre"
     },
@@ -1017,7 +1092,82 @@
     "faction": "vampire",
     "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Infisez 2 points de dégâts au nexus de l'adversaire et restaurez 2. Ensuite, vous pouvez jouer une carte supplémentaire.",
+                "en": "Deal 2 damage to the opponent's nexus and restore 2. Then, you may play an additional card.",
+                "es": "Inflija 2 puntos de daño al nexo del adversario y restaure 2. Luego, puede jugar una carta adicional."
+              },
+              "actions": [
+                {
+                  "action": "damage",
+                  "amount": 2,
+                  "target": {
+                    "owner": ["opponent"],
+                    "type": ["nexus"]
+                  },
+                  "priority": 1,
+                  "source": { "id": "vampire_013", "zone": "field" }
+                },
+                {
+                  "action": "restore_health",
+                  "amount": 2,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "priority": 2,
+                  "source": { "id": "vampire_013", "zone": "field" }
+                },
+                {
+                  "action": "gain_extra_play",
+                  "amount": 1,
+                  "priority": 3,
+                  "source": { "id": "vampire_013", "zone": "field" }
+                }
+              ]
+            },
+            {
+              "title": {
+                "fr": "Infisez X points de dégâts au nexus de l'adversaire et restaurez X. X étant le niveau de l'unité de votre cimetière au niveau le plus élevé parmi les unités de votre cimetière.",
+                "en": "Deal X damage to the opponent's nexus and restore X. X being the level of the unit in your graveyard with the highest level among your graveyard units.",
+                "es": "Inflija X puntos de daño al nexo del adversario y restaure X. X siendo el nivel de la unidad en su cementerio con el nivel más alto entre las unidades de su cementerio."
+              },
+              "actions": [
+                {
+                  "action": "damage",
+                  "amount": "max_graveyard_unit_value",
+                  "target": {
+                    "owner": ["opponent"],
+                    "type": ["nexus"]
+                  },
+                  "priority": 1,
+                  "source": { "id": "vampire_013", "zone": "field" }
+                },
+                {
+                  "action": "restore_health",
+                  "amount": "max_graveyard_unit_value",
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "priority": 2,
+                  "source": { "id": "vampire_013", "zone": "field" }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": { "id": "vampire_013", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "spell",
@@ -1044,7 +1194,110 @@
     "faction": "vampire",
     "label": [],
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 1,
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "vampire_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 1 point de vie pour infliger 1 dégât supplémentaire",
+                "en": "Pay 1 health to deal 1 additional damage",
+                "es": "Paga 1 de salud para infligir 1 daño adicional"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 1,
+                  "target": { "owner": ["self"], "type": ["nexus"] },
+                  "effect": {
+                    "action": "damage",
+                    "amount": 1,
+                    "target": { "owner": ["opponent"], "type": ["nexus"] },
+                    "priority": 1,
+                    "source": { "id": "vampire_014", "zone": "field" }
+                  },
+                  "priority": 1,
+                  "source": { "id": "vampire_014", "zone": "field" }
+                }
+              ]
+            }
+          ],
+          "priority": 2,
+          "source": { "id": "vampire_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
+            "property": "nexus_health",
+            "owner": ["self"],
+            "operator": ">=",
+            "value": 14
+          },
+          "action": "draw",
+          "amount": 1,
+          "target": { "owner": ["self"] },
+          "priority": 3,
+          "source": { "id": "vampire_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
+            "property": "nexus_health",
+            "owner": ["self"],
+            "operator": ">=",
+            "value": 14
+          },
+          "action": "move_card",
+          "from": { "field": { "owner": ["self"], "id": ["vampire_014"] } },
+          "to": { "deck": { "owner": ["self"], "where": { "to_position": "shuffle" } } },
+          "priority": 4,
+          "source": { "id": "vampire_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
+            "property": "nexus_health",
+            "owner": ["self"],
+            "operator": "<=",
+            "value": 13
+          },
+          "action": "move_card",
+          "from": { "field": { "owner": ["self"], "id": ["vampire_014"] } },
+          "to": { "hand": { "owner": ["self"], "where": { "to_position": "top" } } },
+          "priority": 5,
+          "source": { "id": "vampire_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
+            "property": "nexus_health",
+            "owner": ["self"],
+            "operator": "<=",
+            "value": 13
+          },
+          "action": "add_keyword",
+          "keyword": "cannot_play_this_turn",
+          "target": { "owner": ["self"], "id": ["vampire_014"] },
+          "duration": "this_turn",
+          "priority": 6,
+          "source": { "id": "vampire_014", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "spell",
@@ -1071,7 +1324,62 @@
     "faction": "vampire",
     "label": [],
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 2,
+          "target": { "owner": ["self"] },
+          "priority": 1,
+          "source": { "id": "vampire_015", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
+            "property": "nexus_health",
+            "owner": ["self"],
+            "operator": "<=",
+            "value": 13
+          },
+          "action": "draw",
+          "amount": 1,
+          "target": { "owner": ["self"] },
+          "priority": 2,
+          "source": { "id": "vampire_015", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 2 points de vie pour renvoyer cette carte au deck",
+                "en": "Pay 2 health to return this card to your deck",
+                "es": "Paga 2 de salud para devolver esta carta al mazo"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 2,
+                  "target": { "owner": ["self"], "type": ["nexus"] },
+                  "effect": {
+                    "action": "move_card",
+                    "from": { "graveyard": { "owner": ["self"], "id": ["vampire_015"] } },
+                    "to": { "deck": { "owner": ["self"], "where": { "to_position": "shuffle" } } }
+                  },
+                  "priority": 1,
+                  "source": { "id": "vampire_015", "zone": "field" }
+                }
+              ]
+            }
+          ],
+          "priority": 3,
+          "source": { "id": "vampire_015", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "spell",

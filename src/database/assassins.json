@@ -21,14 +21,14 @@
           "condition": {
             "type": "count",
             "property": "stealthed",
-            "filter": {"faction": "assassin"},
+            "filter": { "faction": "assassin" },
             "operator": ">=",
             "value": 3
           },
           "action": "set_cost_to_zero",
-          "target": {"owner": ["self"], "id": ["assassin_001"]},
+          "target": { "owner": ["self"], "id": ["assassin_001"] },
           "priority": 1,
-          "source": {"id": "assassin_001", "zone": "unknown"}
+          "source": { "id": "assassin_001", "zone": "unknown" }
         }
       ],
       "on_hit_nexus": [
