@@ -11,7 +11,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992498/wizard_001_qgdqbe.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992429/wizard_001_iy79zo.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -21,7 +22,7 @@
           "amount": 1,
           "target": [
             {
-              "owner": "self"
+              "owner": ["self"]
             }
           ],
           "priority": 1,
@@ -36,17 +37,12 @@
           "trigger": "on_hit_nexus",
           "action": "split_damage",
           "amount": 2,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "unit",
-              "nexus"
-            ],
-            "selection": "split"
-          },
-          "priority": 2,
+          "target": [
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
+          ],
+          "selection": "split",
+          "priority": 1,
           "source": {
             "id": "wizard_001",
             "zone": "field"
@@ -56,11 +52,11 @@
     },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 2
       }
@@ -78,7 +74,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992497/wizard_002_gsfwzk.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992430/wizard_002_oapimv.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -88,7 +85,7 @@
           "amount": 1,
           "target": [
             {
-              "owner": "self"
+              "owner": ["self"]
             }
           ],
           "priority": 1,
@@ -103,17 +100,12 @@
           "trigger": "on_hit_nexus",
           "action": "split_damage",
           "amount": 2,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "unit",
-              "nexus"
-            ],
-            "selection": "split"
-          },
-          "priority": 2,
+          "target": [
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
+          ],
+          "selection": "split",
+          "priority": 1,
           "source": {
             "id": "wizard_002",
             "zone": "field"
@@ -123,11 +115,11 @@
     },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 2
       }

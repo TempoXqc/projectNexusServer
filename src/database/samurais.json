@@ -1230,11 +1230,11 @@
           "trigger": "on_play",
           "action": "split_damage",
           "amount": 4,
-          "target": {
-            "owner": ["opponent"],
-            "type": ["unit", "nexus"],
-            "selection": "split"
-          },
+          "target": [
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
+          ],
+          "selection": "split",
           "priority": 2,
           "source": {
             "id": "samurai_015",
