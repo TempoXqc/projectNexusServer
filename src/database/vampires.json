@@ -11,16 +11,94 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992489/vampire_001_gfbm5q.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992409/vampire_001_lbfya1.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 2 vie pour ignorer les unités de défense ce tour",
+                "en": "Pay 2 health to ignore defence units this turn",
+                "es": "Pagar 2 de salud para ignorar unidades de defensa este turno"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 2,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "ignore_defence",
+                    "target": {
+                      "owner": ["self"],
+                      "id": ["vampire_001"]
+                    },
+                    "duration": "this_turn"
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "vampire_001",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_hit_nexus": [
+        {
+          "trigger": "on_hit_nexus",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 1 vie pour empêcher la destruction",
+                "en": "Pay 1 health to prevent destruction",
+                "es": "Pagar 1 de salud para prevenir la destrucción"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 1,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "prevent_destruction",
+                    "target": {
+                      "owner": ["self"],
+                      "id": ["vampire_001"]
+                    },
+                    "duration": "this_turn"
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "vampire_001",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 3
       }
@@ -38,16 +116,79 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992487/vampire_002_mfopqh.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992406/vampire_002_iontkq.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 1 vie pour pouvoir attaquer les unités de attaque ce tour",
+                "en": "Pay 1 health to be able to attack attack units this turn",
+                "es": "Pagar 1 de salud para poder atacar unidades de ataque este turno"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 1,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "add_keyword",
+                    "target": {
+                      "owner": ["self"],
+                      "id": ["vampire_002"]
+                    },
+                    "keyword": "can_attack_attack",
+                    "duration": "this_turn"
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "vampire_002",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_attack_resolve": [
+        {
+          "trigger": "on_attack_resolve",
+          "condition": {
+            "type": "destroyed_unit",
+            "filter": {
+              "type": ["unit"]
+            }
+          },
+          "action": "restore_health",
+          "amount": 2,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "vampire_002",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 3
       }
@@ -65,16 +206,68 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992486/vampire_003_w4un2x.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992409/vampire_003_nv7civ.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 1 vie pour pouvoir attaquer les unités de attaque ce tour",
+                "en": "Pay 1 health to be able to attack attack units this turn",
+                "es": "Pagar 1 de salud para poder atacar unidades de ataque este turno"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 1,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "add_keyword",
+                    "target": {
+                      "owner": ["self"],
+                      "id": ["vampire_003"]
+                    },
+                    "keyword": "can_attack_attack",
+                    "duration": "this_turn"
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "vampire_003",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_attack_resolve": [
+        {
+          "trigger": "on_attack_resolve",
+          "condition": {"type": "destroyed_unit", "filter": {"type": ["unit"]}},
+          "action": "restore_health",
+          "amount": 2,
+          "target": {"owner": ["self"], "type": ["nexus"]},
+          "priority": 1,
+          "source": {"id": "vampire_003", "zone": "field"}
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 3
       }
@@ -92,22 +285,86 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992489/vampire_004_hrvei6.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992410/vampire_004_pjc8pe.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_attack_resolve": [
+        {
+          "trigger": "on_attack_resolve",
+          "condition": { "type": "destroyed_unit", "filter": { "type": ["unit"]}},
+          "action": "restore_health",
+          "amount": 1,
+          "target": { "owner": ["self"], "type": ["nexus"] },
+          "priority": 1,
+          "source": { "id": "vampire_004", "zone": "field" }
+        },
+        {
+          "trigger": "on_attack_resolve",
+          "condition": { "type": "destroyed_unit", "filter": { "type": ["unit"] } },
+          "action": "prevent_destruction",
+          "target": { "owner": ["self"], "id": ["vampire_004"] },
+          "priority": 2,
+          "source": { "id": "vampire_004", "zone": "field" }
+        }
+      ],
+      "on_destroyed": [
+        {
+          "trigger": "on_destroyed",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 2 vie pour empêcher la destruction",
+                "en": "Pay 2 health to prevent destruction",
+                "es": "Pagar 2 de salud para prevenir la destrucción"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 2,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "prevent_destruction",
+                    "target": {
+                      "owner": ["self"],
+                      "id": ["vampire_004"]
+                    },
+                    "duration": "this_turn"
+                  }
+                }
+              ]
+            }
+          ],
+          "max": 1,
+          "priority": 1,
+          "source": {
+            "id": "vampire_004",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 2
       },
-	  {
-        "type": "Support",
-        "target": null,
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -124,16 +381,74 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992486/vampire_005_gu5ps3.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992402/vampire_005_mkcdst.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 2 vie pour détruire une unité de niveau 3 ou moins",
+                "en": "Pay 2 health to destroy a unit with value 3 or less",
+                "es": "Pagar 2 de salud para destruir una unidad de valor 3 o menos"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 2,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "destroy",
+                    "target": {
+                      "owner": ["opponent"],
+                      "type": ["unit"],
+                      "filter": {
+                        "max_value": 3
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "vampire_005",
+            "zone": "field"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "action": "add_keyword",
+          "keyword": "ignore_defence",
+          "target": {
+            "owner": ["self"],
+            "id": ["vampire_005"]
+          },
+          "duration": "permanent",
+          "source": {
+            "id": "vampire_005",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 3
       }
@@ -151,16 +466,74 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992492/vampire_006_nicdl1.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992403/vampire_006_ppqzye.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 2 vie pour détruire une unité de niveau 3 ou moins",
+                "en": "Pay 2 health to destroy a unit with value 3 or less",
+                "es": "Pagar 2 de salud para destruir una unidad de valor 3 o menos"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 2,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "destroy",
+                    "target": {
+                      "owner": ["opponent"],
+                      "type": ["unit"],
+                      "filter": {
+                        "max_value": 3
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "vampire_006",
+            "zone": "field"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "action": "add_keyword",
+          "keyword": "ignore_defence",
+          "target": {
+            "owner": ["self"],
+            "id": ["vampire_006"]
+          },
+          "duration": "permanent",
+          "source": {
+            "id": "vampire_006",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 3
       }
@@ -178,16 +551,98 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992489/vampire_007_w9u6rp.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992408/vampire_007_pjxcxe.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "vampire_007",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
+            "operator": "<",
+            "target": "self",
+            "against": "opponent"
+          },
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "vampire_007",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_attack": [
+        {
+          "trigger": "on_attack",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 2 vie pour renvoyer cette carte dans le deck",
+                "en": "Pay 2 health to return this card to your deck",
+                "es": "Pagar 2 de salud para devolver esta carta al mazo"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 2,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "move_card",
+                    "from": {
+                      "field": {
+                        "owner": ["self"],
+                        "id": ["vampire_007"]
+                      }
+                    },
+                    "to": {
+                      "deck": {
+                        "owner": ["self"],
+                        "where": { "to_position": "shuffle" }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "vampire_007",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 2
       }
@@ -205,16 +660,98 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992490/vampire_008_uprmpa.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992404/vampire_008_gc28pr.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 0,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": {
+            "owner": ["self"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "vampire_008",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "health_compare",
+            "operator": "<",
+            "target": "self",
+            "against": "opponent"
+          },
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "vampire_008",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_attack": [
+        {
+          "trigger": "on_attack",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 2 vie pour renvoyer cette carte dans le deck",
+                "en": "Pay 2 health to return this card to your deck",
+                "es": "Pagar 2 de salud para devolver esta carta al mazo"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 2,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "move_card",
+                    "from": {
+                      "field": {
+                        "owner": ["self"],
+                        "id": ["vampire_008"]
+                      }
+                    },
+                    "to": {
+                      "deck": {
+                        "owner": ["self"],
+                        "where": { "to_position": "shuffle" }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": {
+            "id": "vampire_008",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 2
       }
@@ -232,16 +769,83 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992491/vampire_009_xolmok.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992409/vampire_009_pgliki.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "vampire_009",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 1 PV pour jouer une carte supplémentaire ce tour",
+                "en": "Pay 1 HP to play one more card this turn",
+                "es": "Pagar 1 PV para jugar una carta extra este turno"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 1,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "gain_extra_play",
+                    "amount": 1,
+                    "duration": "this_turn"
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 2,
+          "source": {
+            "id": "vampire_009",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_hit_nexus": [
+        {
+          "trigger": "on_hit_nexus",
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "vampire_009",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 1
       }
@@ -259,21 +863,89 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992486/vampire_010_dt8xig.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992402/vampire_010_crlxcb.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "vampire_010",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Payer 1 PV pour jouer une carte supplémentaire ce tour",
+                "en": "Pay 1 HP to play one more card this turn",
+                "es": "Pagar 1 PV para jugar una carta extra este turno"
+              },
+              "actions": [
+                {
+                  "action": "pay_health",
+                  "amount": 1,
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "effect": {
+                    "action": "gain_extra_play",
+                    "amount": 1,
+                    "duration": "this_turn"
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 2,
+          "source": {
+            "id": "vampire_010",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_hit_nexus": [
+        {
+          "trigger": "on_hit_nexus",
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "vampire_010",
+            "zone": "field"
+          }
+        }
+      ]
+    },
     "types": [
       {
-        "type": "Attack",
+        "type": "unit",
+        "subTypes": "attack",
         "target": [
-          "Defence",
-          "Support",
-          "Nexus_opponent"
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
         ],
         "value": 1
       }
     ]
   },
+
   {
     "id": "vampire_011",
     "name": {
@@ -286,13 +958,18 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992557/vampire_011_z7lvhb.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992405/vampire_011_yqpjd0.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
     "effects": [],
     "types": [
       {
-        "type": "Support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -309,13 +986,18 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992488/vampire_012_evisss.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992406/vampire_012_cxcs6n.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
     "effects": [],
     "types": [
       {
-        "type": "Support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -332,13 +1014,17 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992490/vampire_013_bidfap.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992406/vampire_013_qb9s18.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 1,
     "effects": [],
     "types": [
       {
-        "type": "Spell",
-        "target": null,
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
@@ -355,13 +1041,17 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992488/vampire_014_kvwlvj.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992407/vampire_014_csv60j.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 0,
     "effects": [],
     "types": [
       {
-        "type": "Spell",
-        "target": null,
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
@@ -378,13 +1068,17 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992491/vampire_015_xreyhz.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992404/vampire_015_sdjpyo.jpg"
     },
-    "faction": "Vampire",
+    "faction": "vampire",
+    "label": [],
     "cost": 0,
     "effects": [],
     "types": [
       {
-        "type": "Spell",
-        "target": null,
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]

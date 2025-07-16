@@ -25,44 +25,26 @@
           "source": { "id": "samurai_001", "zone": "field" }
         }
       ],
-      "aura": [
+      "on_attack_resolve": [
         {
-          "trigger": "aura",
-          "condition": {
-            "type": "attack_resolve",
-            "source_id": "samurai_001"
-          },
-          "action": "conditional_action",
-          "cost": {
-            "type": "discard",
-            "owner": "self",
-            "from": "hand",
-            "filter": {
-              "faction": "samurai"
-            }
-          },
-          "effect": {
-            "action": "move_card",
-            "from": {
-              "graveyard": {
-                "owner": ["self"],
-                "id": ["samurai_001"]
-              }
-            },
-            "to": {
-              "hand": {
-                "owner": ["self"],
-                "where": {
-                  "to_position": "top"
+          "trigger": "on_attack_resolve",
+          "condition": { "type": "card_id_matches", "id": "samurai_001" },
+          "action": "choice",
+          "options": [
+            {
+              "title": { "fr": "", "en": "", "es": "" },
+              "actions": [
+                {
+                  "action": "move_card",
+                  "from": { "graveyard": { "owner": ["self"], "id": ["samurai_001"] } },
+                  "to": { "hand": { "owner": ["self"], "where": { "to_position": "top" } } },
+                  "cost": { "type": "discard", "owner": "self", "from": "hand", "filter": { "faction": "samurai" } }
                 }
-              }
+              ]
             }
-          },
+          ],
           "priority": 1,
-          "source": {
-            "id": "samurai_001",
-            "zone": "graveyard"
-          }
+          "source": { "id": "samurai_001", "zone": "graveyard" }
         }
       ]
     },
@@ -209,11 +191,7 @@
           "trigger": "on_discard",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
+          "target": [{"owner": ["self"]}],
           "priority": 1,
           "source": {
             "id": "samurai_004",
@@ -287,11 +265,7 @@
           "trigger": "on_discard",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
+          "target": [{"owner": ["self"]}],
           "priority": 1,
           "source": {
             "id": "samurai_005",
@@ -419,7 +393,7 @@
           }
         },
         {
-          "trigger": "attack_resolve",
+          "trigger": "on_attack_resolve",
           "condition": {
             "type": "card_id_matches",
             "id": "samurai_006"
@@ -519,20 +493,11 @@
       "aura": [
         {
           "trigger": "aura",
-          "condition": {
-            "type": "card_id_matches",
-            "id": "samurai_007"
-          },
-          "action": "prevent_graveyard_on_attack",
-          "target": {
-            "owner": ["self"],
-            "id": ["samurai_007"]
-          },
+          "condition": { "type": "card_id_matches", "id": "samurai_007" },
+          "action": "prevent_move",
+          "to": "graveyard",
           "priority": 3,
-          "source": {
-            "id": "samurai_007",
-            "zone": "field"
-          }
+          "source": { "id": "samurai_007", "zone": "field" }
         }
       ]
     },
@@ -600,9 +565,7 @@
             {
               "action": "draw",
               "amount": 1,
-              "target": {
-                "owner": ["self"]
-              },
+              "target": [{"owner": ["self"]}],
               "priority": 1
             },
             {
@@ -694,9 +657,7 @@
           "trigger": "on_attack",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": [{"owner": ["self"]}],
           "priority": 1,
           "source": {
             "id": "samurai_009",
@@ -807,9 +768,7 @@
           "trigger": "on_exhaust",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": [{"owner": ["self"]}],
           "priority": 2,
           "source": {
             "id": "samurai_010",
@@ -1019,9 +978,7 @@
           "trigger": "on_discard",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": [{"owner": ["self"]}],
           "priority": 1,
           "source": {
             "id": "samurai_013",
@@ -1056,9 +1013,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 2,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": [{"owner": ["self"]}],
           "priority": 1,
           "source": {
             "id": "samurai_013",
@@ -1136,21 +1091,12 @@
         },
         {
           "trigger": "on_play",
-          "action": "custom_discard_and_restore",
+          "action": "custom_action",
           "effect": {
-            "select": {
-              "zone": "hand",
-              "owner": "self",
-              "type": "any",
-              "min": 0,
-              "max": 10
-            },
+            "select": { "zone": "hand", "owner": "self", "type": "any", "min": 0, "max": 10 },
             "discard": true,
             "restore_per_card": 1,
-            "restore_target": {
-              "owner": ["self"],
-              "type": ["nexus"]
-            },
+            "restore_target": { "owner": ["self"], "type": ["nexus"] },
             "restore_max": 5
           },
           "priority": 2,
@@ -1163,9 +1109,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 3,
-          "target": {
-            "owner": ["self"]
-          },
+          "target": [{"owner": ["self"]}],
           "priority": 3,
           "source": {
             "id": "samurai_014",

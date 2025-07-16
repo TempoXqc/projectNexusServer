@@ -260,7 +260,7 @@
         {
           "trigger": "aura",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "target_type",
             "operator": "===",
             "value": "defence"
@@ -332,7 +332,7 @@
         {
           "trigger": "aura",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "target_type",
             "operator": "===",
             "value": "defence"

@@ -260,7 +260,7 @@
         {
           "trigger": "aura",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "can_attack_all",
             "operator": "===",
             "value": true
@@ -341,7 +341,7 @@
         {
           "trigger": "aura",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "can_attack_all",
             "operator": "===",
             "value": true
@@ -598,7 +598,7 @@
         {
           "trigger": "aura",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "target_type",
             "operator": "===",
             "value": "shield"
@@ -703,7 +703,7 @@
         {
           "trigger": "aura",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "target_type",
             "operator": "===",
             "value": "shield"
@@ -854,7 +854,7 @@
       "on_purified": [
         {
           "trigger": "on_purified",
-          "action": "activate_own_onPlay_ability",
+          "action": "activate_ability",
           "target": {
             "owner": ["self"]
           },

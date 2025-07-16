@@ -21,26 +21,14 @@
           "condition": {
             "type": "count",
             "property": "stealthed",
-            "filter": {
-              "faction": "assassin"
-            },
+            "filter": {"faction": "assassin"},
             "operator": ">=",
             "value": 3
           },
           "action": "set_cost_to_zero",
-          "target": {
-            "owner": [
-              "self"
-            ],
-            "id": [
-              "assassin_001"
-            ]
-          },
+          "target": {"owner": ["self"], "id": ["assassin_001"]},
           "priority": 1,
-          "source": {
-            "id": "assassin_001",
-            "zone": "unknown"
-          }
+          "source": {"id": "assassin_001", "zone": "unknown"}
         }
       ],
       "on_hit_nexus": [
@@ -78,7 +66,7 @@
         {
           "trigger": "on_reveal",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "detected",
             "operator": "===",
             "value": true
@@ -227,7 +215,7 @@
         {
           "trigger": "on_reveal",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "detected",
             "operator": "===",
             "value": true
@@ -710,7 +698,7 @@
         {
           "trigger": "on_play",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "all_assassins_stealthed",
             "operator": "===",
             "value": true
@@ -733,7 +721,7 @@
         {
           "trigger": "on_play",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "all_assassins_stealthed",
             "operator": "!==",
             "value": false
@@ -838,7 +826,7 @@
         {
           "trigger": "on_play",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "all_assassins_stealthed",
             "operator": "===",
             "value": true
@@ -861,7 +849,7 @@
         {
           "trigger": "on_play",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "all_assassins_stealthed",
             "operator": "!==",
             "value": false
@@ -1509,7 +1497,7 @@
         {
           "trigger": "on_play",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "all_assassins_stealthed",
             "operator": "===",
             "value": true
@@ -1529,7 +1517,7 @@
         {
           "trigger": "on_play",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "all_assassins_stealthed",
             "operator": "!==",
             "value": false
@@ -1549,7 +1537,7 @@
         {
           "trigger": "on_play",
           "condition": {
-            "type": "property_check",
+            "type": "count",
             "property": "all_assassins_stealthed",
             "operator": "!==",
             "value": false
@@ -1777,34 +1765,19 @@
       "on_play": [
         {
           "trigger": "on_play",
-          "action": "restore_health_per_hidden_assassins",
+          "action": "restore_health",
+          "amount": 1,
+          "condition": { "type": "count", "property": "hidden_assassins", "operator": ">=", "value": 0 },
           "max": 6,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
-          "source": {
-            "id": "assassin_015",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["self"] },
+          "source": { "id": "assassin_015", "zone": "field" }
         },
         {
           "trigger": "on_play",
           "action": "damage",
           "amount": 2,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "nexus"
-            ]
-          },
-          "source": {
-            "id": "assassin_015",
-            "zone": "unknown"
-          }
+          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "source": { "id": "assassin_015", "zone": "field" }
         }
       ]
     },
