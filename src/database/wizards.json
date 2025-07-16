@@ -20,11 +20,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [
-            {
-              "owner": ["self"]
-            }
-          ],
+          "target": [{"owner": ["self"]}],
           "priority": 1,
           "source": {
             "id": "wizard_001",
@@ -83,11 +79,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [
-            {
-              "owner": ["self"]
-            }
-          ],
+          "target": [{"owner": ["self"]}],
           "priority": 1,
           "source": {
             "id": "wizard_002",
@@ -243,7 +235,7 @@
           "priority": 1,
           "source": {
             "id": "wizard_005",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -286,7 +278,7 @@
           "priority": 1,
           "source": {
             "id": "wizard_006",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
@@ -315,7 +307,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992497/wizard_007_ivyfm2.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992428/wizard_007_am7whx.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -323,39 +316,35 @@
           "trigger": "on_play",
           "action": "move_card",
           "from": {
-            "graveyard": {
-              "owner": [
-                "self"
-              ],
-              "type": [
-                "spell"
-              ]
+            "graveyard":
+            {
+              "owner": ["self"],
+              "type": ["spell"]
             }
           },
           "to": {
-            "deck": {
-              "owner": [
-                "self"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
+            "hand": {
+              "owner": ["self"],
+              "where": {"to_position": "top"}
             }
           },
           "amount": 1,
           "priority": 1,
           "source": {
             "id": "wizard_007",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ]
     },
     "types": [
       {
-        "type": "Defence",
-        "target": null,
-        "value": 2
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
       }
     ]
   },
@@ -371,7 +360,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992494/wizard_008_ar27wu.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992429/wizard_008_f69tpj.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -380,10 +370,7 @@
           "action": "damage",
           "amount": 2,
           "target": [
-            {
-              "owner": "opponent",
-              "type": "nexus"
-            }
+            { "owner": "any", "type": "unit" }
           ],
           "priority": 1,
           "source": {
@@ -398,10 +385,8 @@
           "action": "damage",
           "amount": 1,
           "target": [
-            {
-              "owner": "opponent",
-              "type": "any"
-            }
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
           ],
           "priority": 1,
           "source": {
@@ -413,8 +398,12 @@
     },
     "types": [
       {
-        "type": "Support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -431,7 +420,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992492/wizard_009_bgomyx.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992431/wizard_009_fvizzv.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -447,7 +437,7 @@
           ],
           "priority": 1,
           "source": {
-            "id": "wizard_008",
+            "id": "wizard_009",
             "zone": "field"
           }
         }
@@ -458,14 +448,12 @@
           "action": "damage",
           "amount": 1,
           "target": [
-            {
-              "owner": "opponent",
-              "type": "any"
-            }
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
           ],
           "priority": 1,
           "source": {
-            "id": "wizard_008",
+            "id": "wizard_009",
             "zone": "field"
           }
         }
@@ -473,8 +461,12 @@
     },
     "types": [
       {
-        "type": "Support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -491,7 +483,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992493/wizard_010_lebcsf.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992428/wizard_010_vxtjv9.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -499,43 +492,39 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": {
-            "owner": [
-              "self"
-            ]
-          },
+          "target": [{"owner": ["self"]}],
           "priority": 1,
           "source": {
             "id": "wizard_010",
-            "zone": "unknown"
+            "zone": "field"
           }
         }
       ],
-      "on_play_spell": [
+      "reactions": [
         {
-          "trigger": "on_play_spell",
+          "trigger": "manual",
+          "condition": {
+            "type": "last_card_played",
+            "filter": {
+              "owner": ["self"],
+              "type": ["spell"]
+            }
+          },
           "action": "move_card",
           "from": {
-            "field": {
-              "owner": [
-                "self"
-              ],
-              "id": [
-                "wizard_010"
-              ]
+            "graveyard": {
+              "filter": {
+                "id": ["$last_card_played.id"]
+              }
             }
           },
           "to": {
             "deck": {
-              "owner": [
-                "self"
-              ],
-              "where": {
-                "to_position": "shuffle"
-              }
+              "owner": ["self"],
+              "where": { "to_position": "shuffle" }
             }
           },
-          "priority": 2,
+          "priority": 1,
           "source": {
             "id": "wizard_010",
             "zone": "field"
@@ -545,8 +534,12 @@
     },
     "types": [
       {
-        "type": "Support",
-        "target": null,
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 2
       }
     ]
@@ -563,7 +556,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992494/wizard_011_xbytyu.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992426/wizard_011_hdlcd4.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -572,10 +566,8 @@
           "action": "damage",
           "amount": 5,
           "target": [
-            {
-              "owner": "any",
-              "type": "any"
-            }
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
           ],
           "trample": true,
           "priority": 1,
@@ -588,9 +580,13 @@
     },
     "types": [
       {
-        "type": "Spell",
-        "target": null,
-        "value": 0
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0,
+        "trample": true
       }
     ]
   },
@@ -606,7 +602,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992495/wizard_012_k9iacw.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992426/wizard_012_cjxue5.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -615,10 +612,8 @@
           "action": "damage",
           "amount": 5,
           "target": [
-            {
-              "owner": "any",
-              "type": "any"
-            }
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
           ],
           "trample": true,
           "priority": 1,
@@ -631,9 +626,13 @@
     },
     "types": [
       {
-        "type": "Spell",
-        "target": null,
-        "value": 0
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0,
+        "trample": true
       }
     ]
   },
@@ -649,7 +648,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992496/wizard_013_d4df50.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992431/wizard_013_nimtoq.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -657,16 +657,11 @@
           "trigger": "on_play",
           "action": "split_damage",
           "amount": 3,
-          "target": {
-            "owner": [
-              "opponent"
-            ],
-            "type": [
-              "unit",
-              "nexus"
-            ],
-            "selection": "split"
-          },
+          "target": [
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
+          ],
+          "selection": "split",
           "priority": 1,
           "source": {
             "id": "wizard_013",
@@ -677,11 +672,15 @@
     },
     "types": [
       {
-        "type": "Spell",
-        "target": null,
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
+
   },
   {
     "id": "wizard_014",
@@ -695,7 +694,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992492/wizard_014_ensecf.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992428/wizard_014_mkllss.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -704,10 +704,8 @@
           "action": "damage",
           "amount": 2,
           "target": [
-            {
-              "owner": "opponent",
-              "type": "any"
-            }
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
           ],
           "priority": 1,
           "source": {
@@ -719,11 +717,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [
-            {
-              "owner": "self"
-            }
-          ],
+          "target": [{"owner": ["self"]}],
           "priority": 2,
           "source": {
             "id": "wizard_014",
@@ -734,8 +728,11 @@
     },
     "types": [
       {
-        "type": "Spell",
-        "target": null,
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
@@ -752,7 +749,8 @@
       "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992495/wizard_015_u5ozbt.jpg",
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992426/wizard_015_zj6q5z.jpg"
     },
-    "faction": "Wizard",
+    "faction": "wizard",
+    "label": [],
     "cost": 0,
     "effects": {
       "on_play": [
@@ -761,10 +759,8 @@
           "action": "damage",
           "amount": 2,
           "target": [
-            {
-              "owner": "opponent",
-              "type": "any"
-            }
+            { "owner": "any", "type": "unit" },
+            { "owner": "any", "type": "nexus" }
           ],
           "priority": 1,
           "source": {
@@ -776,11 +772,7 @@
           "trigger": "on_play",
           "action": "draw",
           "amount": 1,
-          "target": [
-            {
-              "owner": "self"
-            }
-          ],
+          "target": [{"owner": ["self"]}],
           "priority": 2,
           "source": {
             "id": "wizard_015",
@@ -791,8 +783,11 @@
     },
     "types": [
       {
-        "type": "Spell",
-        "target": null,
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
         "value": 0
       }
     ]
