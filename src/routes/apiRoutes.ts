@@ -63,6 +63,12 @@ export function initializeRoutes(db: Db) {
     }
   });
 
+  router.get('/card', async (req, res) => {
+    const cards = await db.collection('card').find().toArray();
+    res.json(cards);
+  });
+
+
   return router;
 }
 
