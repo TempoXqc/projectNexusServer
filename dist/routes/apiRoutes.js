@@ -58,6 +58,10 @@ export function initializeRoutes(db) {
             res.status(500).json({ error: 'Erreur serveur' });
         }
     });
+    router.get('/card', async (req, res) => {
+        const cards = await db.collection('card').find().toArray();
+        res.json(cards);
+    });
     return router;
 }
 export default initializeRoutes;
