@@ -62,7 +62,7 @@
           },
           "action": "damage",
           "amount": 1,
-          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "target": { "owner": ["self"], "type": ["nexus"] },
           "priority": 1,
           "source": { "id": "assassin_001", "zone": "field" }
         }
@@ -151,7 +151,7 @@
           },
           "action": "damage",
           "amount": 1,
-          "target": { "owner": ["opponent"], "type": ["nexus"] },
+          "target": { "owner": ["self"], "type": ["nexus"] },
           "priority": 1,
           "source": { "id": "assassin_002", "zone": "field" }
         }
