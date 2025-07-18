@@ -112,77 +112,7 @@
     "faction": "viking",
     "label": ["enraged"],
     "cost": 1,
-    "effects": {
-      "on_play": [
-        {
-          "trigger": "on_play",
-          "condition": {
-            "type": "count",
-            "property": "cards_in_token_pool",
-            "filter": {
-              "type": ["rage_token"],
-              "owner": ["self"]
-            },
-            "operator": ">=",
-            "value": 2
-          },
-          "action": "move_card",
-          "from": {
-            "token_pool": {
-              "owner": ["self"],
-              "amount": 2,
-              "type": ["rage_token"]
-            }
-          },
-          "to": {
-            "graveyard": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "top"
-              }
-            }
-          },
-          "priority": 1,
-          "source": { "id": "viking_002", "zone": "field" }
-        },
-        {
-          "trigger": "on_play",
-          "condition": {
-            "type": "count",
-            "property": "cards_in_token_pool",
-            "filter": {
-              "type": ["rage_token"],
-              "owner": ["self"]
-            },
-            "operator": ">=",
-            "value": 2
-          },
-          "action": "set_cost_to_zero",
-          "target": {
-            "owner": ["self"],
-            "id": ["rage_token"]
-          },
-          "priority": 2,
-          "source": { "id": "rage_token", "zone": "field" }
-        }
-      ],
-      "on_hit_nexus": [
-        {
-          "trigger": "on_hit_nexus",
-          "action": "restore_health",
-          "amount": 1,
-          "target": {
-            "owner": ["self"],
-            "type": ["nexus"]
-          },
-          "priority": 1,
-          "source": {
-            "id": "viking_002",
-            "zone": "field"
-          }
-        }
-      ]
-    },
+    "effects": {},
     "types": [
       {
         "type": "unit",
@@ -210,7 +140,7 @@
     "faction": "viking",
     "label": ["enraged"],
     "cost": 0,
-    "effects": [],
+    "effects": {},
     "types": [
       {
         "type": "unit",
@@ -238,52 +168,7 @@
     "faction": "viking",
     "label": [],
     "cost": 1,
-    "effects": {
-      "on_play": [
-        {
-          "trigger": "on_play",
-          "condition": {
-            "type": "graveyard_has_unit",
-            "owner": "self",
-            "faction": "viking"
-          },
-          "action": "move_card",
-          "from": {
-            "graveyard": {
-              "owner": ["self"],
-              "type": ["unit"],
-              "faction": ["viking"]
-            }
-          },
-          "to": {
-            "hand": {
-              "owner": ["self"],
-              "where": {
-                "to_position": "top"
-              }
-            }
-          },
-          "priority": 1,
-          "source": {
-            "id": "viking_006",
-            "zone": "field"
-          }
-        }
-      ],
-      "on_exhaust": [
-        {
-          "trigger": "on_exhaust",
-          "action": "gain_token",
-          "token": "rage_token",
-          "where": {
-            "token_pool": "self"
-          },
-          "amount": 1,
-          "priority": 2,
-          "source": { "id": "viking_006", "zone": "field" }
-        }
-      ]
-    },
+    "effects": {},
     "types": [
       {
         "type": "unit",
@@ -311,51 +196,7 @@
     "faction": "viking",
     "label": ["enraged"],
     "cost": 1,
-    "effects": {
-      "on_play": [
-        {
-          "trigger": "on_play",
-          "action": "reveal",
-          "amount": 3,
-          "from": {
-            "deck": { "owner": ["self"], "where": { "to_position": "top" } }
-          },
-          "priority": 1,
-          "source": { "id": "viking_005", "zone": "field" }
-        },
-        {
-          "trigger": "on_play",
-          "action": "reorder_revealed_cards",
-          "target": { "owner": ["self"], "type": ["attack", "defence", "support", "spell", "token"] },
-          "priority": 2,
-          "source": { "id": "viking_005", "zone": "field" }
-        },
-        {
-          "trigger": "on_play",
-          "action": "draw",
-          "amount": 1,
-          "target": { "owner": ["self"] },
-          "priority": 3,
-          "source": { "id": "viking_005", "zone": "field" }
-        }
-      ],
-      "on_hit_nexus": [
-        {
-          "trigger": "on_hit_nexus",
-          "action": "draw",
-          "amount": 1,
-          "target": {
-            "owner": ["self"],
-            "type": ["nexus"]
-          },
-          "priority": 4,
-          "source": {
-            "id": "viking_005",
-            "zone": "field"
-          }
-        }
-      ]
-    },
+    "effects": {},
     "types": [
       {
         "type": "unit",
@@ -383,51 +224,7 @@
     "faction": "viking",
     "label": ["enraged"],
     "cost": 1,
-    "effects": {
-      "on_play": [
-        {
-          "trigger": "on_play",
-          "action": "reveal",
-          "amount": 3,
-          "from": {
-            "deck": { "owner": ["self"], "where": { "to_position": "top" } }
-          },
-          "priority": 1,
-          "source": { "id": "viking_006", "zone": "field" }
-        },
-        {
-          "trigger": "on_play",
-          "action": "reorder_revealed_cards",
-          "target": { "owner": ["self"], "type": ["attack", "defence", "support", "spell", "token"] },
-          "priority": 2,
-          "source": { "id": "viking_006", "zone": "field" }
-        },
-        {
-          "trigger": "on_play",
-          "action": "draw",
-          "amount": 1,
-          "target": { "owner": ["self"] },
-          "priority": 3,
-          "source": { "id": "viking_006", "zone": "field" }
-        }
-      ],
-      "on_hit_nexus": [
-        {
-          "trigger": "on_hit_nexus",
-          "action": "draw",
-          "amount": 1,
-          "target": {
-            "owner": ["self"],
-            "type": ["nexus"]
-          },
-          "priority": 4,
-          "source": {
-            "id": "viking_006",
-            "zone": "field"
-          }
-        }
-      ]
-    },
+    "effects": {},
     "types": [
       {
         "type": "unit",
@@ -883,7 +680,7 @@
     "faction": "viking",
     "label": ["enraged"],
     "cost": 1,
-    "effects": [],
+    "effects": {},
     "types": [
       {
         "type": "unit",
@@ -911,7 +708,7 @@
     "faction": "viking",
     "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {},
     "types": [
       {
         "type": "unit",
@@ -939,7 +736,7 @@
     "faction": "viking",
     "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {},
     "types": [
       {
         "type": "spell",
@@ -966,7 +763,7 @@
     "faction": "viking",
     "label": [],
     "cost": 1,
-    "effects": [],
+    "effects": {},
     "types": [
       {
         "type": "spell",
@@ -993,7 +790,7 @@
     "faction": "viking",
     "label": [],
     "cost": 0,
-    "effects": [],
+    "effects": {},
     "types": [
       {
         "type": "spell",

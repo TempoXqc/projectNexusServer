@@ -5,10 +5,9 @@ import { GameLogic } from '../game/gameLogic.js';
 import { CardManager } from '../game/cardManager.js';
 import { PlayerManager } from '../game/playerManager.js';
 import { JoinGameSchema, PlayCardSchema } from './socketSchemas.js';
-import { Db, ObjectId } from 'mongodb';
-import { GameState, ServerGameState } from "@tempoxqc/project-nexus-types";
-import { Card } from "@tempoxqc/project-nexus-types";
-import { z } from 'zod';
+import { Db } from 'mongodb';
+import { GameState, ServerGameState, Card, HiddenCard, CardSchema } from "@tempoxqc/project-nexus-types";
+import { z } from "zod";
 
 function generateGameId(): string {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -33,24 +32,23 @@ function drawCardServer(game: ServerGameState, playerKey: 'player1' | 'player2')
 }
 
 async function checkWinCondition(gameId: string, game: ServerGameState, gameRepository: GameRepository, gameCache: GameCache, io: Server) {
-  if (game.state.player1.lifePoints <= 0) {
-    game.state.gameOver = true;
-    game.state.winner = 'player2';
-  } else if (game.state.player2.lifePoints <= 0) {
-    game.state.gameOver = true;
-    game.state.winner = 'player1';
+  if (game.state.player1.lifePoints! <= 0) {
+    game.state.game.gameOver = true;
+    game.state.game.winner = 'player2';
+  } else if (game.state.player2.lifePoints! <= 0) {
+    game.state.game.gameOver = true;
+    game.state.game.winner = 'player1';
   }
-  if (game.state.gameOver) {
+  if (game.state.game.gameOver) {
     await gameRepository.updateGame(gameId, { state: game.state, status: 'finished' });
     gameCache.setGame(gameId, game);
-    game.players.forEach((playerSocketId) => {
+    game.players.forEach((playerSocketId: string) => {
       const clientGameState = mapServerToClientGameState(game, playerSocketId);
       io.to(playerSocketId).emit('updateGameState', clientGameState);
     });
   }
 }
 
-// Existing mapServerToClientGameState function (unchanged)
 function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId: string): GameState {
   const playerId = serverGame.players.indexOf(playerSocketId) + 1;
   const isPlayer1 = playerId === 1;
@@ -60,48 +58,50 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
   console.log('[DEBUG] mapServerToClientGameState:', {
     playerSocketId,
     playerId,
-    activePlayer: serverGame.state.activePlayer,
-    isMyTurn: serverGame.state.activePlayer === playerSocketId,
+    activePlayer: serverGame.state.game.activePlayerId,
+    isMyTurn: serverGame.state.game.activePlayerId === playerSocketId,
   });
 
-  const opponentHand: Card[] = Array(serverGame.state[opponentKey].hand.length).fill({
+  const opponentHand: HiddenCard[] = Array(serverGame.state[playerKey].hand.length).fill({
     id: 'hidden',
     name: 'Hidden Card',
     image: 'unknown',
     exhausted: false,
-  } as Card);
+  });
 
   return {
     player: {
+      ...serverGame.state[playerKey],
       hand: serverGame.state[playerKey].hand,
-      deck: serverGame.state[playerKey].deck,
-      graveyard: serverGame.state[playerKey].graveyard,
-      field: serverGame.state[playerKey].field,
-      mustDiscard: serverGame.state[playerKey].mustDiscard,
-      hasPlayedCard: serverGame.state[playerKey].hasPlayedCard,
-      lifePoints: serverGame.state[playerKey].lifePoints,
-      tokenCount: serverGame.state[playerKey].tokenCount,
-      tokenType: serverGame.state[playerKey].tokenType,
+      opponentField: serverGame.state[opponentKey].field,
+      opponentHand: opponentHand,
     },
     opponent: {
+      ...serverGame.state[opponentKey],
       hand: opponentHand,
-      deck: serverGame.state[opponentKey].deck,
-      graveyard: serverGame.state[opponentKey].graveyard,
-      field: serverGame.state[opponentKey].field,
-      mustDiscard: serverGame.state[opponentKey].mustDiscard,
-      hasPlayedCard: serverGame.state[opponentKey].hasPlayedCard,
-      lifePoints: serverGame.state[opponentKey].lifePoints,
-      tokenCount: serverGame.state[opponentKey].tokenCount,
-      tokenType: serverGame.state[opponentKey].tokenType,
+      opponentField: serverGame.state[playerKey].field,
+      opponentHand: Array(serverGame.state[playerKey].hand.length).fill({
+        id: 'hidden',
+        name: 'Hidden Card',
+        image: 'unknown',
+        exhausted: false,
+      }),
     },
+    revealedCards: serverGame.state.revealedCards,
+    lastCardPlayed: serverGame.state.lastCardPlayed,
+    lastDestroyedUnit: serverGame.state.lastDestroyedUnit,
+    targetType: serverGame.state.targetType,
+    detected: serverGame.state.detected,
+    currentCard: serverGame.state.currentCard,
+    turnState: serverGame.state.turnState,
     game: {
-      turn: serverGame.state.turn,
-      currentPhase: serverGame.state.phase,
-      isMyTurn: serverGame.state.activePlayer === playerSocketId,
-      activePlayerId: serverGame.state.activePlayer,
-      gameOver: serverGame.state.gameOver,
-      winner: serverGame.state.winner,
-      updateTimestamp: serverGame.state.updateTimestamp,
+      turn: serverGame.state.game.turn,
+      currentPhase: serverGame.state.game.currentPhase,
+      isMyTurn: serverGame.state.game.activePlayerId === playerSocketId,
+      activePlayerId: serverGame.state.game.activePlayerId,
+      gameOver: serverGame.state.game.gameOver,
+      winner: serverGame.state.game.winner,
+      updateTimestamp: serverGame.state.game.updateTimestamp,
     },
     ui: {
       hoveredCardId: null,
@@ -113,6 +113,10 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
       isRightPanelHovered: false,
       isTokenZoneOpen: false,
       isOpponentTokenZoneOpen: false,
+      isRevealedCardsOpen: false,
+      isReorderCardsOpen: false,
+      isSelectCardOpen: false,
+      isChoiceOpen: false,
     },
     chat: {
       messages: serverGame.chatHistory,
@@ -121,13 +125,13 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
     deckSelection: {
       selectedDecks: [...serverGame.deckChoices['1'], ...serverGame.deckChoices['2']],
       player1DeckId: serverGame.deckChoices['1'],
-      player1Deck: serverGame.state['player1'].deck,
-      player2Deck: serverGame.state['player2'].deck,
+      player1Deck: serverGame.state.player1.deck,
+      player2Deck: serverGame.state.player2.deck,
       hasChosenDeck: playerId === 1 ? !!serverGame.deckChoices['1'].length : serverGame.deckChoices['2'].length > 0,
       deckSelectionDone: serverGame.deckChoices['1'].length >= 2 && serverGame.deckChoices['2'].length >= 2,
       initialDraw: serverGame.state[playerKey].hand,
       selectedForMulligan: [],
-      mulliganDone: serverGame.state[playerKey].mulliganDone,
+      mulliganDone: serverGame.state[playerKey].mulliganDone ?? false,
       isReady: serverGame.playersReady.has(playerId),
       bothReady: serverGame.playersReady.size === 2,
       opponentReady: serverGame.playersReady.has(playerId === 1 ? 2 : 1),
@@ -136,7 +140,7 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
         player2DeckIds: serverGame.deckChoices['2'],
         selectedDecks: [...serverGame.deckChoices['1'], ...serverGame.deckChoices['2']],
       },
-      randomizers: serverGame.availableDecks, // Préserver les decks disponibles
+      randomizers: serverGame.availableDecks,
       waitingForPlayer1: !serverGame.deckChoices['1'].length,
     },
     connection: {
@@ -192,7 +196,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     connectedSockets.add(socket.id);
 
     const existingPlayerInfo = playerManager.getPlayer(socket.id);
-    console.log('[DEBUG] connection - État PlayerManager:', { socketId: socket.id, existingPlayerInfo });
+    console.log('[DEBUG] connection - État PlayerManager:', {socketId: socket.id, existingPlayerInfo});
 
     socket.on('reconnectPlayer', async (data: { gameId: string, playerId: number }) => {
       console.log('[WebSocket] Événement reconnectPlayer reçu:', data, 'socket.id:', socket.id);
@@ -205,22 +209,26 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
       const oldSocketId = playerManager.findPlayerByGameIdAndPlayerId(data.gameId, data.playerId);
       if (oldSocketId && game.players.includes(oldSocketId)) {
-        game.players = game.players.map((id) => (id === oldSocketId ? socket.id : id));
+        game.players = game.players.map((id: string) => (id === oldSocketId ? socket.id : id));
         playerManager.updatePlayerSocketId(oldSocketId, socket.id);
-        await gameRepository.updateGame(data.gameId, { players: game.players });
+        await gameRepository.updateGame(data.gameId, {players: game.players});
         gameCache.setGame(data.gameId, game);
         socket.join(data.gameId);
         const clientGameState = mapServerToClientGameState(game, socket.id);
         io.to(socket.id).emit('updateGameState', clientGameState);
-        console.log('[WebSocket] Reconnexion réussie pour:', { gameId: data.gameId, playerId: data.playerId, newSocketId: socket.id });
-        if (game.state.activePlayer === oldSocketId) {
-          game.state.activePlayer = socket.id;
-          await gameRepository.updateGame(data.gameId, { state: game.state });
+        console.log('[WebSocket] Reconnexion réussie pour:', {
+          gameId: data.gameId,
+          playerId: data.playerId,
+          newSocketId: socket.id
+        });
+        if (game.state.game.activePlayerId === oldSocketId) {
+          game.state.game.activePlayerId = socket.id;
+          await gameRepository.updateGame(data.gameId, {state: game.state});
           gameCache.setGame(data.gameId, game);
           io.to(socket.id).emit('yourTurn');
         }
       } else {
-        console.warn('[WebSocket] Reconnexion échouée:', { gameId: data.gameId, playerId: data.playerId });
+        console.warn('[WebSocket] Reconnexion échouée:', {gameId: data.gameId, playerId: data.playerId});
         socket.emit('error', 'Reconnexion échouée - Joueur non trouvé');
       }
     });
@@ -265,22 +273,22 @@ export async function registerSocketHandlers(io: Server, db: Db) {
       if (playerInfo && playerInfo.gameId) {
         const game = await gameRepository.findGameById(playerInfo.gameId);
         if (game) {
-          const remainingPlayers = game.players.filter((id) => id !== socket.id);
+          const remainingPlayers = game.players.filter((id: string) => id !== socket.id);
           if (remainingPlayers.length === 0) {
             console.log('[WebSocket] Suppression de la partie, aucun joueur restant:', playerInfo.gameId);
             await gameRepository.deleteGame(playerInfo.gameId);
             gameCache.deleteGame(playerInfo.gameId);
             io.to(playerInfo.gameId).emit('gameNotFound');
           } else {
-            console.log('[WebSocket] Joueur restant dans la partie:', { gameId: playerInfo.gameId, remainingPlayers });
-            game.state.activePlayer = remainingPlayers[0];
-            game.state.updateTimestamp = Date.now();
-            await gameRepository.updateGame(playerInfo.gameId, { state: game.state });
+            console.log('[WebSocket] Joueur restant dans la partie:', {gameId: playerInfo.gameId, remainingPlayers});
+            game.state.game.activePlayerId = remainingPlayers[0];
+            game.state.game.updateTimestamp = Date.now();
+            await gameRepository.updateGame(playerInfo.gameId, {state: game.state});
             gameCache.setGame(playerInfo.gameId, game);
-            remainingPlayers.forEach((playerSocketId) => {
+            remainingPlayers.forEach((playerSocketId: string) => {
               const clientGameState = mapServerToClientGameState(game, playerSocketId);
               io.to(playerSocketId).emit('updateGameState', clientGameState);
-              io.to(playerSocketId).emit('opponentDisconnected', { disconnectedPlayerId: playerInfo.playerId });
+              io.to(playerSocketId).emit('opponentDisconnected', {disconnectedPlayerId: playerInfo.playerId});
               io.to(playerSocketId).emit('yourTurn');
             });
           }
@@ -296,7 +304,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
     socket.on('createGame', async (data, ack) => {
       try {
-        const { isRanked, gameFormat } = z
+        const {isRanked, gameFormat} = z
             .object({
               isRanked: z.boolean(),
               gameFormat: z.enum(['BO1', 'BO3']),
@@ -307,18 +315,35 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         const playerInfo = playerManager.getPlayer(socket.id);
         if (playerInfo && playerInfo.gameId) {
           console.log('[WebSocket] Erreur: Joueur déjà dans une partie:', playerInfo.gameId);
-          ack({ error: 'Vous avez déjà une partie en cours' });
+          ack({error: 'Vous avez déjà une partie en cours'});
           return;
         }
 
-        const availableDecksRaw = await db.collection('decklists').aggregate([{ $sample: { size: 4 } }]).toArray();
-        const playmatBottom = await db.collection('playmats').findOne({ id: 'playmat_bottom' });
-        const playmatTop = await db.collection('playmats').findOne({ id: 'playmat_top' });
-        const lifeToken = await db.collection('addons').findOne({ id: 'token_officiel' });
+        const deckListsCollection = db.collection('decklists');
+        const totalDecks = await deckListsCollection.countDocuments();
+        console.log('[DEBUG] Total decks in decklists:', totalDecks);
+        if (totalDecks < 4) {
+          console.error('[WebSocket] Erreur: Pas assez de decks disponibles', {totalDecks});
+          ack({error: 'Pas assez de decks disponibles'});
+          return;
+        }
+
+        const availableDecksRaw = await deckListsCollection
+            .aggregate([{$sample: {size: 4}}])
+            .toArray();
+        console.log('[DEBUG] availableDecksRaw:', availableDecksRaw);
+
+        const playmatBottom = await db.collection('playmats').findOne({id: 'playmat_bottom'});
+        const playmatTop = await db.collection('playmats').findOne({id: 'playmat_top'});
+        const lifeToken = await db.collection('addons').findOne({id: 'token_officiel'});
 
         if (!playmatBottom || !playmatTop || !lifeToken) {
-          console.error('[WebSocket] Erreur: Playmats ou token_officiel non trouvés', { playmatBottom, playmatTop, lifeToken });
-          ack({ error: 'Erreur lors de la récupération des playmats ou du token' });
+          console.error('[WebSocket] Erreur: Playmats ou token_officiel non trouvés', {
+            playmatBottom,
+            playmatTop,
+            lifeToken
+          });
+          ack({error: 'Erreur lors de la récupération des playmats ou du token'});
           return;
         }
 
@@ -328,6 +353,8 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           image: deck.image,
           infoImage: deck.infoImage,
         }));
+        console.log('[DEBUG] availableDecks:', availableDecks);
+
         const playmats = [
           {
             id: playmatBottom.id,
@@ -353,42 +380,60 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           chatHistory: [],
           state: {
             player1: {
+              id: 'player1',
+              nexus: {health: 30},
               hand: [],
-              field: Array(8).fill(null),
-              opponentField: Array(8).fill(null),
+              field: [],
+              opponentField: [],
               opponentHand: [],
               deck: [],
               graveyard: [],
+              tokenPool: [],
               mustDiscard: false,
               hasPlayedCard: false,
               lifePoints: 30,
               tokenCount: 0,
               tokenType: null,
               mulliganDone: false,
-              playmat: playmats[0] || { id: '', name: '', image: '' },
+              playmat: playmats[0] || {id: '', name: '', image: ''},
             },
             player2: {
+              id: 'player2',
+              nexus: {health: 30},
               hand: [],
-              field: Array(8).fill(null),
-              opponentField: Array(8).fill(null),
+              field: [],
+              opponentField: [],
               opponentHand: [],
               deck: [],
               graveyard: [],
+              tokenPool: [],
               mustDiscard: false,
               hasPlayedCard: false,
               lifePoints: 30,
               tokenCount: 0,
               tokenType: null,
               mulliganDone: false,
-              playmat: playmats[1] || { id: '', name: '', image: '' },
+              playmat: playmats[1] || {id: '', name: '', image: ''},
             },
-            turn: 1,
-            activePlayer: null,
-            phase: 'Main',
-            gameOver: false,
-            winner: null,
+            game: {
+              turn: 1,
+              currentPhase: 'Main',
+              isMyTurn: false,
+              activePlayerId: null,
+              gameOver: false,
+              winner: null,
+              updateTimestamp: Date.now(),
+            },
+            revealedCards: [],
+            turnState: {
+              unitsDeployed: [],
+              discardedCardsCount: 0,
+              temporaryKeywords: [],
+              preventDestructionCards: [],
+              battlePhaseDisabled: false,
+            },
           },
-          deckChoices: { '1': [], '2': [] },
+          deckChoices: {'1': [], '2': []},
           availableDecks,
           playmats,
           lifeToken: lifeTokenData,
@@ -399,7 +444,8 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
         await gameRepository.insertGame(newGame);
         gameCache.setGame(gameId, newGame);
-        playerManager.addPlayer(socket.id, { gameId, playerId: 1 });
+        const playerId = Math.random() < 0.5 ? 1 : 2;
+        playerManager.addPlayer(socket.id, {gameId, playerId: 1});
 
         socket.join(gameId);
         if (socket.rooms.has('lobby')) {
@@ -409,7 +455,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
         const ackResponse = {
           gameId,
-          playerId: 1,
+          playerId,
           chatHistory: newGame.chatHistory,
           availableDecks: newGame.availableDecks,
           playmats: newGame.playmats,
@@ -419,7 +465,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         ack(ackResponse);
       } catch (error) {
         console.error('[WebSocket] Erreur lors de la création de la partie:', error);
-        ack({ error: 'Erreur lors de la création de la partie' });
+        ack({error: 'Erreur lors de la création de la partie'});
       }
     });
 
@@ -465,15 +511,21 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
         game.players.push(socket.id);
         socket.join(gameId);
-        const newPlayerId = game.players.length; // 1 pour le premier joueur, 2 pour le second
-        playerManager.addPlayer(socket.id, { gameId, playerId: newPlayerId });
+        const newPlayerId = game.players.length;
+        playerManager.addPlayer(socket.id, {gameId, playerId: newPlayerId});
 
         if (game.players.length === 2) {
           const [player1SocketId, player2SocketId] = game.players;
-          playerManager.addPlayer(player1SocketId, { gameId, playerId: 1 });
-          playerManager.addPlayer(player2SocketId, { gameId, playerId: 2 });
-          game.state.activePlayer = player1SocketId;
-          console.log('[WebSocket] activePlayer défini:', game.state.activePlayer, 'pour gameId:', gameId, 'timestamp:', new Date().toISOString());
+          playerManager.addPlayer(player1SocketId, {
+            gameId,
+            playerId: playerManager.getPlayer(player1SocketId)?.playerId || 1
+          });
+          playerManager.addPlayer(player2SocketId, {
+            gameId,
+            playerId: playerManager.getPlayer(player2SocketId)?.playerId || 2
+          });
+          game.state.game.activePlayerId = player1SocketId;
+          console.log('[WebSocket] activePlayer défini:', game.state.game.activePlayerId, 'pour gameId:', gameId, 'timestamp:', new Date().toISOString());
           console.log('[DEBUG] joinGame - Joueurs attribués:', {
             player1SocketId,
             player1Id: playerManager.getPlayer(player1SocketId)?.playerId,
@@ -484,19 +536,26 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           try {
             await gameRepository.updateGame(gameId, {
               players: [player1SocketId, player2SocketId],
-              state: { ...game.state, activePlayer: player1SocketId, updateTimestamp: Date.now() },
+              state: {
+                ...game.state,
+                game: {...game.state.game, activePlayerId: player1SocketId, updateTimestamp: Date.now()}
+              },
               status: 'started',
             });
             gameCache.setGame(gameId, game);
             console.log(`[WebSocket] Partie ${gameId} mise à jour, statut: started, joueurs: ${game.players}, timestamp: ${new Date().toISOString()}`);
-            game.players.forEach((playerSocketId) => {
+            game.players.forEach((playerSocketId: string) => {
               const clientGameState = mapServerToClientGameState(game, playerSocketId);
               io.to(playerSocketId).emit('updateGameState', clientGameState);
             });
-            io.to(gameId).emit('updatePhase', { gameId, phase: game.state.phase, turn: game.state.turn });
+            io.to(gameId).emit('updatePhase', {
+              gameId,
+              phase: game.state.game.currentPhase,
+              turn: game.state.game.turn
+            });
 
             const gameStartDataPlayer1 = {
-              playerId: 1,
+              playerId: playerManager.getPlayer(player1SocketId)?.playerId || 1,
               gameId,
               chatHistory: game.chatHistory,
               availableDecks: game.availableDecks,
@@ -504,7 +563,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
               lifeToken: game.lifeToken,
             };
             const gameStartDataPlayer2 = {
-              playerId: 2,
+              playerId: playerManager.getPlayer(player2SocketId)?.playerId || 2,
               gameId,
               chatHistory: game.chatHistory,
               availableDecks: game.availableDecks,
@@ -514,13 +573,13 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
             io.to(player1SocketId).emit('gameStart', gameStartDataPlayer1);
             io.to(player2SocketId).emit('gameStart', gameStartDataPlayer2);
-            io.to(gameId).emit('playerJoined', { playerId: 2 });
+            io.to(gameId).emit('playerJoined', {playerId: playerManager.getPlayer(player2SocketId)?.playerId || 2});
             io.to(gameId).emit('initialDeckList', game.availableDecks);
             io.to(gameId).emit('deckSelectionUpdate', game.deckChoices);
 
             if (!game.deckChoices['1'].length) {
-              console.log(`[WebSocket] Émission de waitingForPlayer1Choice à player2 (${player2SocketId}):`, { waiting: true }, 'timestamp:', new Date().toISOString());
-              io.to(player2SocketId).emit('waitingForPlayer1Choice', { waiting: true });
+              console.log(`[WebSocket] Émission de waitingForPlayer1Choice à player2 (${player2SocketId}):`, {waiting: true}, 'timestamp:', new Date().toISOString());
+              io.to(player2SocketId).emit('waitingForPlayer1Choice', {waiting: true});
             }
           } catch (error) {
             console.error(`[WebSocket] Erreur lors de la mise à jour de la partie ${gameId}:`, error);
@@ -528,7 +587,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             return;
           }
         } else {
-          socket.emit('waiting', { gameId, message: 'En attente d\'un autre joueur...' });
+          socket.emit('waiting', {gameId, message: 'En attente d\'un autre joueur...'});
           console.log(`[WebSocket] Socket ${socket.id} en attente d'un autre joueur pour ${gameId}, timestamp: ${new Date().toISOString()}`);
         }
 
@@ -545,22 +604,22 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('checkPlayerGame', async (data, callback) => {
       console.log('[WebSocket] Événement checkPlayerGame reçu:', data, 'socket.id:', socket.id);
       try {
-        const { playerId } = z.object({ playerId: z.string().transform((val) => parseInt(val, 10)) }).parse(data);
+        const {playerId} = z.object({playerId: z.string().transform((val) => parseInt(val, 10))}).parse(data);
         const games = await gameRepository.findActiveGames();
         const playerGame = games.find((game) => game.players.includes(String(playerId)) || game.players.includes(socket.id));
         if (playerGame) {
           const fullGame = await gameRepository.findGameById(playerGame.gameId);
           if (fullGame) {
-            callback({ exists: true, gameId: fullGame.gameId, availableDecks: fullGame.availableDecks });
+            callback({exists: true, gameId: fullGame.gameId, availableDecks: fullGame.availableDecks});
           } else {
-            callback({ exists: false });
+            callback({exists: false});
           }
         } else {
-          callback({ exists: false });
+          callback({exists: false});
         }
       } catch (error) {
         console.error('[WebSocket] Erreur lors de checkPlayerGame:', error);
-        callback({ exists: false });
+        callback({exists: false});
       }
     });
 
@@ -578,7 +637,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('leaveGame', async (data) => {
       console.log('[WebSocket] Événement leaveGame reçu:', data, 'socket.id:', socket.id);
       try {
-        const { gameId, playerId } = z.object({ gameId: z.string(), playerId: z.number() }).parse(data);
+        const {gameId, playerId} = z.object({gameId: z.string(), playerId: z.number()}).parse(data);
         const game = await gameRepository.findGameById(gameId);
         if (game && (game.players.includes(String(playerId)) || game.players.includes(socket.id))) {
           await gameRepository.deleteGame(gameId);
@@ -600,7 +659,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         const { gameId, card, fieldIndex } = PlayCardSchema.parse(data);
         const game = await gameRepository.findGameById(gameId);
         const playerInfo = playerManager.getPlayer(socket.id);
-        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.activePlayer !== socket.id) {
+        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.game.activePlayerId !== socket.id) {
           console.log('[WebSocket] Erreur: Non autorisé pour playCard, gameId:', gameId, 'playerInfo:', playerInfo);
           socket.emit('error', 'Non autorisé');
           return;
@@ -608,20 +667,35 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
         const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
         const opponentKey = playerInfo.playerId === 1 ? 'player2' : 'player1';
-        if (game.state.phase !== 'Main') return;
+        if (game.state.game.currentPhase !== 'Main') return;
 
-        game.state[playerKey].field[fieldIndex] = { ...card, exhausted: false } as Card;
+        const validatedCard = CardSchema.parse({
+          ...card,
+          exhausted: false,
+          effects: card.effects || {},
+        });
+        game.state[playerKey].field[fieldIndex] = validatedCard;
         game.state[playerKey].hand = game.state[playerKey].hand.filter((c: Card) => c.id !== card.id);
-        game.state[playerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({});
-        game.state[opponentKey].opponentHand = Array(game.state[playerKey].hand.length).fill({});
+        game.state[playerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({
+          id: 'hidden',
+          name: 'Hidden Card',
+          image: 'unknown',
+          exhausted: false,
+        });
+        game.state[opponentKey].opponentHand = Array(game.state[playerKey].hand.length).fill({
+          id: 'hidden',
+          name: 'Hidden Card',
+          image: 'unknown',
+          exhausted: false,
+        });
         game.state[playerKey].mulliganDone = true;
 
         await gameRepository.updateGame(gameId, { state: game.state });
         gameCache.setGame(gameId, game);
 
-        game.players.forEach((playerSocketId) => {
+        game.players.forEach((playerSocketId: string) => {
           const clientGameState = mapServerToClientGameState(game, playerSocketId);
-          console.log('[WebSocket] Envoi de updateGameState pour playerSocketId:', playerSocketId, 'avec isMyTurn:', game.state.activePlayer === playerSocketId, 'timestamp:', new Date().toISOString());
+          console.log('[WebSocket] Envoi de updateGameState pour playerSocketId:', playerSocketId, 'avec isMyTurn:', game.state.game.activePlayerId === playerSocketId, 'timestamp:', new Date().toISOString());
           io.to(playerSocketId).emit('updateGameState', clientGameState);
         });
       } catch (error) {
@@ -652,22 +726,27 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             socket.emit('error', 'Le joueur 1 a déjà choisi un deck');
             return;
           }
-          if (!game.availableDecks.some((deck) => deck.id === data.deckId)) {
+          if (!game.availableDecks.some((deck: {
+            id: string;
+            name: string;
+            image: string;
+            infoImage: string
+          }) => deck.id === data.deckId)) {
             console.log(`[WebSocket] Erreur : Deck invalide ${data.deckId} pour gameId: ${data.gameId}`);
             socket.emit('error', 'Deck invalide');
             return;
           }
           game.deckChoices['1'] = [data.deckId];
-          await gameRepository.updateGame(data.gameId, { deckChoices: game.deckChoices });
+          await gameRepository.updateGame(data.gameId, {deckChoices: game.deckChoices});
           gameCache.setGame(data.gameId, game);
           console.log(`[WebSocket] Joueur 1 a choisi le deck: ${data.deckId}, gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
-          console.log('[WebSocket] Émission de player1ChoseDeck:', { player1DeckId: data.deckId }, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
-          io.to(data.gameId).emit('player1ChoseDeck', { player1DeckId: data.deckId });
+          console.log('[WebSocket] Émission de player1ChoseDeck:', {player1DeckId: data.deckId}, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
+          io.to(data.gameId).emit('player1ChoseDeck', {player1DeckId: data.deckId});
           console.log('[WebSocket] Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
           io.to(data.gameId).emit('deckSelectionUpdate', game.deckChoices);
           if (game.players[1]) {
-            console.log('[WebSocket] Émission de waitingForPlayer1Choice:', { waiting: false }, 'to player2:', game.players[1], 'timestamp:', new Date().toISOString());
-            io.to(game.players[1]).emit('waitingForPlayer1Choice', { waiting: false });
+            console.log('[WebSocket] Émission de waitingForPlayer1Choice:', {waiting: false}, 'to player2:', game.players[1], 'timestamp:', new Date().toISOString());
+            io.to(game.players[1]).emit('waitingForPlayer1Choice', {waiting: false});
           } else {
             console.log('[WebSocket] Joueur 2 non connecté, waitingForPlayer1Choice non émis, timestamp:', new Date().toISOString());
           }
@@ -687,24 +766,34 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             socket.emit('error', 'Deck déjà choisi');
             return;
           }
-          if (!game.availableDecks.some((deck) => deck.id === data.deckId)) {
+          if (!game.availableDecks.some((deck: {
+            id: string;
+            name: string;
+            image: string;
+            infoImage: string
+          }) => deck.id === data.deckId)) {
             console.log(`[WebSocket] Erreur : Deck invalide ${data.deckId} pour gameId: ${data.gameId}`);
             socket.emit('error', 'Deck invalide');
             return;
           }
           game.deckChoices['2'].push(data.deckId);
-          await gameRepository.updateGame(data.gameId, { deckChoices: game.deckChoices });
+          await gameRepository.updateGame(data.gameId, {deckChoices: game.deckChoices});
           gameCache.setGame(data.gameId, game);
           console.log(`[WebSocket] Joueur 2 a choisi le deck: ${data.deckId}, gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
           console.log('[WebSocket] Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
           io.to(data.gameId).emit('deckSelectionUpdate', game.deckChoices);
           if (game.deckChoices['2'].length === 2) {
             const remainingDeck = game.availableDecks.find(
-                (deck) => !game.deckChoices['1'].includes(deck.id) && !game.deckChoices['2'].includes(deck.id)
+                (deck: {
+                  id: string;
+                  name: string;
+                  image: string;
+                  infoImage: string
+                }) => !game.deckChoices['1'].includes(deck.id) && !game.deckChoices['2'].includes(deck.id)
             );
             if (remainingDeck) {
               game.deckChoices['1'].push(remainingDeck.id);
-              await gameRepository.updateGame(data.gameId, { deckChoices: game.deckChoices });
+              await gameRepository.updateGame(data.gameId, {deckChoices: game.deckChoices});
               gameCache.setGame(data.gameId, game);
               console.log(`[WebSocket] Deck restant ${remainingDeck.id} attribué au joueur 1 pour gameId: ${data.gameId}, timestamp: ${new Date().toISOString()}`);
               console.log('[WebSocket] Émission de deckSelectionUpdate:', game.deckChoices, 'to gameId:', data.gameId, 'timestamp:', new Date().toISOString());
@@ -745,43 +834,59 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
         game.playersReady = game.playersReady || new Set<number>();
         game.playersReady.add(data.playerId);
-        await gameRepository.updateGame(data.gameId, { playersReady: Array.from(game.playersReady) });
-        io.to(data.gameId).emit('playerReady', { playerId: data.playerId });
+        await gameRepository.updateGame(data.gameId, {playersReady: Array.from(game.playersReady)});
+        io.to(data.gameId).emit('playerReady', {playerId: data.playerId});
 
         if (game.playersReady.size === 2 && game.deckChoices['1'].length >= 2 && game.deckChoices['2'].length >= 2) {
-          console.log('[WebSocket] bothPlayersReady, envoi de l\'état initial pour gameId:', data.gameId, 'activePlayer:', game.state.activePlayer, 'timestamp:', new Date().toISOString());
-          io.to(data.gameId).emit('bothPlayersReady', { bothReady: true });
-          game.state.phase = 'Main';
-          game.state.turn = 1;
-          game.state.activePlayer = game.players[0];
+          console.log('[WebSocket] bothPlayersReady, envoi de l\'état initial pour gameId:', data.gameId, 'activePlayer:', game.state.game.activePlayerId, 'timestamp:', new Date().toISOString());
+          io.to(data.gameId).emit('bothPlayersReady', {bothReady: true});
+          game.state.game.currentPhase = 'Main';
+          game.state.game.turn = 1;
+          game.state.game.activePlayerId = game.players[0];
 
           for (const playerId of ['1', '2'] as const) {
-            const playerSocketId = game.players.find(p => playerManager.getPlayer(p)?.playerId === Number(playerId));
+            const playerSocketId = game.players.find((p: string) => playerManager.getPlayer(p)?.playerId === Number(playerId));
             if (!playerSocketId) {
               console.error(`[WebSocket] Erreur : Socket non trouvé pour playerId: ${playerId}`, 'timestamp:', new Date().toISOString());
               continue;
             }
             const selectedDeckIds = game.deckChoices[playerId];
+            console.log('[DEBUG] selectedDeckIds:', selectedDeckIds);
             const deck: Card[] = [];
-            selectedDeckIds.forEach((deckId: string) => {
-              const cardIds = deckLists[deckId];
-              const deckCards = cardIds.map((cardId: string) => {
-                const card = allCards.find(c => c.id === cardId);
-                if (!card) {
-                  console.error(`[WebSocket] Erreur : Carte ${cardId} non trouvée dans allCards`, 'timestamp:', new Date().toISOString());
+            for (const deckId of selectedDeckIds) {
+              const deckList = await db.collection('decklists').findOne({id: deckId});
+              if (!deckList) {
+                console.error(`[WebSocket] Erreur : Deck ${deckId} non trouvé`, 'timestamp:', new Date().toISOString());
+                continue;
+              }
+              console.log('[DEBUG] deckList:', deckList);
+              const cardIds = deckList.cardIds;
+              console.log('[DEBUG] cardIds:', cardIds);
+              const deckCards = await db.collection('card').find({id: {$in: cardIds}}).toArray();
+              console.log('[DEBUG] deckCards:', deckCards);
+              const validatedCards = deckCards.map(card => {
+                try {
+                  return CardSchema.parse({
+                    ...card,
+                    exhausted: false,
+                  });
+                } catch (error) {
+                  console.error(`[WebSocket] Erreur de validation pour la carte ${card.id}:`, error);
                   return null;
                 }
-                return { ...card, exhausted: false } as Card;
               }).filter((card): card is Card => card !== null);
-              deck.push(...deckCards);
-            });
+              console.log('[DEBUG] validatedCards:', validatedCards);
+              deck.push(...validatedCards);
+            }
+            console.log('[DEBUG] deck:', deck);
 
             const shuffledDeck = deck.sort(() => Math.random() - 0.5);
             const initialDraw = shuffledDeck.slice(0, 5);
             const remainingDeck = shuffledDeck.slice(5);
+            console.log('[DEBUG] initialDraw:', initialDraw, 'remainingDeck:', remainingDeck);
 
             const primaryDeckId = selectedDeckIds[0];
-            const deckList = await db.collection('decklists').findOne({ id: primaryDeckId });
+            const deckList = await db.collection('decklists').findOne({id: primaryDeckId});
             const tokenType = deckList?.id || null;
             const tokenCount = tokenType === 'assassin' ? 8 : tokenType === 'viking' ? 1 : 0;
 
@@ -801,16 +906,16 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             game.state[playerKey].mulliganDone = false;
           }
 
-          await gameRepository.updateGame(data.gameId, { state: game.state });
+          await gameRepository.updateGame(data.gameId, {state: game.state});
           gameCache.setGame(data.gameId, game);
 
-          game.players.forEach((playerSocketId) => {
+          game.players.forEach((playerSocketId: string) => {
             const clientGameState = mapServerToClientGameState(game, playerSocketId);
             console.log('[WebSocket] Envoi de updateGameState après bothPlayersReady pour playerSocketId:', playerSocketId, 'isMyTurn:', clientGameState.game.isMyTurn, 'timestamp:', new Date().toISOString());
             io.to(playerSocketId).emit('updateGameState', clientGameState);
           });
 
-          io.to(data.gameId).emit('mulliganPhaseStart', { gameId: data.gameId });
+          io.to(data.gameId).emit('mulliganPhaseStart', {gameId: data.gameId});
           io.to(data.gameId).emit('phaseChangeMessage', {
             phase: 'Main',
             turn: 1,
@@ -826,14 +931,14 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('updateGameState', async (data) => {
       console.log('[WebSocket] Événement updateGameState reçu:', data, 'socket.id:', socket.id);
       try {
-        const { gameId, state: clientState } = z.object({
+        const {gameId, state: clientState} = z.object({
           gameId: z.string(),
           state: z.object({
             hand: z.array(z.any()).optional(),
             deck: z.array(z.any()).optional(),
             field: z.array(z.any()).optional(),
             graveyard: z.array(z.any()).optional(),
-            deckSelection: z.object({ mulliganDone: z.boolean() }).optional(),
+            deckSelection: z.object({mulliganDone: z.boolean()}).optional(),
           }),
         }).parse(data);
 
@@ -848,20 +953,22 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
         const opponentKey = playerInfo.playerId === 1 ? 'player2' : 'player1';
 
-        // Autoriser la mise à jour de mulliganDone même si le joueur n'est pas actif
         if (clientState.deckSelection?.mulliganDone && !game.state[playerKey].mulliganDone) {
           game.state[playerKey].mulliganDone = clientState.deckSelection.mulliganDone;
-        } else if (game.state.activePlayer !== socket.id) {
-          // Vérifier activePlayer pour les autres mises à jour
+        } else if (game.state.game.activePlayerId !== socket.id) {
           console.log('[WebSocket] Erreur: Non autorisé pour updateGameState (pas le joueur actif), gameId:', gameId, 'playerInfo:', playerInfo);
           socket.emit('error', 'Non autorisé - pas votre tour');
           return;
         }
 
-        // Appliquer les autres mises à jour si le joueur est autorisé
         if (clientState.hand) {
           game.state[playerKey].hand = clientState.hand;
-          game.state[opponentKey].opponentHand = Array(clientState.hand.length).fill({});
+          game.state[opponentKey].opponentHand = Array(clientState.hand.length).fill({
+            id: 'hidden',
+            name: 'Hidden Card',
+            image: 'unknown',
+            exhausted: false,
+          });
         }
         if (clientState.deck) {
           game.state[playerKey].deck = clientState.deck;
@@ -874,10 +981,10 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           game.state[playerKey].graveyard = clientState.graveyard;
         }
 
-        await gameRepository.updateGame(gameId, { state: game.state });
+        await gameRepository.updateGame(gameId, {state: game.state});
         gameCache.setGame(gameId, game);
 
-        game.players.forEach((playerSocketId) => {
+        game.players.forEach((playerSocketId: string) => {
           const clientGameState = mapServerToClientGameState(game, playerSocketId);
           io.to(playerSocketId).emit('updateGameState', clientGameState);
         });
@@ -890,7 +997,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('exhaustCard', async (data) => {
       console.log('[WebSocket] Événement exhaustCard reçu:', data, 'socket.id:', socket.id);
       try {
-        const { gameId, cardId, fieldIndex } = z.object({
+        const {gameId, cardId, fieldIndex} = z.object({
           gameId: z.string(),
           cardId: z.string(),
           fieldIndex: z.number(),
@@ -898,14 +1005,14 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
         const game = await gameRepository.findGameById(gameId);
         const playerInfo = playerManager.getPlayer(socket.id);
-        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.activePlayer !== socket.id) {
+        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.game.activePlayerId !== socket.id) {
           console.log('[WebSocket] Erreur: Non autorisé pour exhaustCard, gameId:', gameId, 'playerInfo:', playerInfo);
           socket.emit('error', 'Non autorisé');
           return;
         }
 
         const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
-        if (game.state.phase !== 'Main') {
+        if (game.state.game.currentPhase !== 'Main') {
           socket.emit('error', 'Épuisement de carte non autorisé en dehors de la phase Main');
           return;
         }
@@ -917,11 +1024,11 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           return;
         }
 
-        game.state[playerKey].field[fieldIndex] = { ...card, exhausted: !card.exhausted };
-        await gameRepository.updateGame(gameId, { state: game.state });
+        game.state[playerKey].field[fieldIndex] = {...card, exhausted: !card.exhausted};
+        await gameRepository.updateGame(gameId, {state: game.state});
         gameCache.setGame(gameId, game);
 
-        game.players.forEach((playerSocketId) => {
+        game.players.forEach((playerSocketId: string) => {
           const clientGameState = mapServerToClientGameState(game, playerSocketId);
           io.to(playerSocketId).emit('updateGameState', clientGameState);
         });
@@ -934,7 +1041,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('updatePhase', async (data) => {
       console.log('[WebSocket] Événement updatePhase reçu:', data, 'socket.id:', socket.id);
       try {
-        const { gameId, phase, turn } = z.object({
+        const {gameId, phase, turn} = z.object({
           gameId: z.string(),
           phase: z.enum(['Standby', 'Main', 'Battle', 'End']),
           turn: z.number(),
@@ -946,12 +1053,12 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           gameId,
           socketId: socket.id,
           playerInfo,
-          activePlayer: game?.state.activePlayer,
+          activePlayer: game?.state.game.activePlayerId,
           gameExists: !!game,
           playerInfoExists: !!playerInfo,
           gameIdMatch: playerInfo?.gameId === gameId,
-          isActivePlayer: game?.state.activePlayer === socket.id,
-          expectedTurn: game?.state.turn,
+          isActivePlayer: game?.state.game.activePlayerId === socket.id,
+          expectedTurn: game?.state.game.turn,
           receivedTurn: turn,
         });
 
@@ -965,10 +1072,10 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           return;
         }
 
-        if (game.state.activePlayer !== socket.id) {
+        if (game.state.game.activePlayerId !== socket.id) {
           console.warn('[WebSocket] Avertissement: Joueur non actif tente updatePhase:', {
             socketId: socket.id,
-            activePlayer: game.state.activePlayer,
+            activePlayer: game.state.game.activePlayerId,
             playerId: playerInfo.playerId,
           });
           socket.emit('error', 'Non autorisé - Pas votre tour');
@@ -976,9 +1083,9 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         }
 
         // Vérifier si le tour est valide
-        if (game.state.turn !== turn) {
+        if (game.state.game.turn !== turn) {
           console.warn('[WebSocket] Erreur: Tour non synchronisé:', {
-            expectedTurn: game.state.turn,
+            expectedTurn: game.state.game.turn,
             receivedTurn: turn,
           });
           socket.emit('error', 'Tour non synchronisé');
@@ -986,40 +1093,40 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         }
 
         // Vérifier la transition de phase valide
-        const validTransitions = {
+        const validTransitions: { [key: string]: string[] } = {
           Standby: ['Main'],
           Main: ['Battle'],
           Battle: ['End'],
           End: ['Standby'],
         };
-        if (!validTransitions[game.state.phase]?.includes(phase)) {
+        if (!validTransitions[game.state.game.currentPhase]?.includes(phase)) {
           console.warn('[WebSocket] Erreur: Transition de phase invalide:', {
-            currentPhase: game.state.phase,
+            currentPhase: game.state.game.currentPhase,
             requestedPhase: phase,
           });
           socket.emit('error', 'Transition de phase invalide');
           return;
         }
 
-        game.state.phase = phase;
-        game.state.updateTimestamp = Date.now();
-        await gameRepository.updateGame(gameId, { state: game.state });
+        game.state.game.currentPhase = phase;
+        game.state.game.updateTimestamp = Date.now();
+        await gameRepository.updateGame(gameId, {state: game.state});
         gameCache.setGame(gameId, game);
 
-        game.players.forEach((playerSocketId) => {
+        game.players.forEach((playerSocketId: string) => {
           const clientGameState = mapServerToClientGameState(game, playerSocketId);
           console.log('[DEBUG] updatePhase - Envoi updateGameState à:', {
             playerSocketId,
             isMyTurn: clientGameState.game.isMyTurn,
             phase: clientGameState.game.currentPhase,
             turn: clientGameState.game.turn,
-            updateTimestamp: game.state.updateTimestamp,
+            updateTimestamp: game.state.game.updateTimestamp,
           });
           io.to(playerSocketId).emit('updateGameState', clientGameState);
         });
 
-        io.to(gameId).emit('updatePhase', { gameId, phase, turn });
-        io.to(gameId).emit('phaseChangeMessage', { phase, turn, nextPlayerId: playerInfo.playerId });
+        io.to(gameId).emit('updatePhase', {gameId, phase, turn});
+        io.to(gameId).emit('phaseChangeMessage', {phase, turn, nextPlayerId: playerInfo.playerId});
       } catch (error) {
         console.error('[WebSocket] Erreur lors de l\'action updatePhase:', error);
         socket.emit('error', 'Erreur lors du changement de phase');
@@ -1029,7 +1136,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('endTurn', async (data) => {
       console.log('[WebSocket] Événement endTurn reçu:', data, 'socket.id:', socket.id);
       try {
-        const { gameId, nextPlayerId } = z.object({
+        const {gameId, nextPlayerId} = z.object({
           gameId: z.string(),
           nextPlayerId: z.number(),
         }).parse(data);
@@ -1040,19 +1147,19 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           gameId,
           socketId: socket.id,
           playerInfo,
-          activePlayer: game?.state.activePlayer,
+          activePlayer: game?.state.game.activePlayerId,
           gameExists: !!game,
           playerInfoExists: !!playerInfo,
           gameIdMatch: playerInfo?.gameId === gameId,
-          isActivePlayer: game?.state.activePlayer === socket.id,
+          isActivePlayer: game?.state.game.activePlayerId === socket.id,
         });
 
-        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.activePlayer !== socket.id) {
+        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.game.activePlayerId !== socket.id) {
           console.log('[WebSocket] Erreur: Non autorisé pour endTurn, détails:', {
             gameExists: !!game,
             playerInfoExists: !!playerInfo,
             gameIdMatch: playerInfo?.gameId === gameId,
-            isActivePlayer: game?.state.activePlayer === socket.id,
+            isActivePlayer: game?.state.game.activePlayerId === socket.id,
           });
           socket.emit('error', 'Non autorisé');
           return;
@@ -1072,15 +1179,15 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           currentSocketId: socket.id,
           nextPlayerId,
           nextPlayerSocketId,
-          turn: game.state.turn,
-          phase: game.state.phase,
+          turn: game.state.game.turn,
+          phase: game.state.game.currentPhase,
         });
 
         // Update game state
-        game.state.activePlayer = nextPlayerSocketId;
-        game.state.turn += 1;
-        game.state.phase = 'Standby';
-        game.state.updateTimestamp = Date.now();
+        game.state.game.activePlayerId = nextPlayerSocketId;
+        game.state.game.turn += 1;
+        game.state.game.currentPhase = 'Standby';
+        game.state.game.updateTimestamp = Date.now();
         const currentPlayerKey = currentPlayerId === 1 ? 'player1' : 'player2';
         const nextPlayerKey = nextPlayerId === 1 ? 'player1' : 'player2';
         const opponentKey = nextPlayerId === 1 ? 'player2' : 'player1';
@@ -1092,19 +1199,21 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         game.state.player2.mustDiscard = false;
 
         // Reset exhausted state for all cards
-        game.state.player1.field = game.state.player1.field.map((card) =>
-            card ? { ...card, exhausted: false } : null,
-        );
-        game.state.player2.field = game.state.player2.field.map((card) =>
-            card ? { ...card, exhausted: false } : null,
-        );
+        game.state.player1.field = game.state.player1.field.map((card: Card) => ({
+          ...card,
+          exhausted: false,
+        }));
+        game.state.player2.field = game.state.player2.field.map((card: Card) => ({
+          ...card,
+          exhausted: false,
+        }));
 
         // Sync opponentField
         game.state.player1.opponentField = [...game.state.player2.field];
         game.state.player2.opponentField = [...game.state.player1.field];
 
         // Automatic card draw for the next player
-        if (game.state.turn > 1 && game.state[nextPlayerKey].deck.length > 0 && game.state[nextPlayerKey].hand.length < 10) {
+        if (game.state.game.turn > 1 && game.state[nextPlayerKey].deck.length > 0 && game.state[nextPlayerKey].hand.length < 10) {
           const drawnCard = drawCardServer(game, nextPlayerKey);
           console.log('[DEBUG] Automatic draw in endTurn:', {
             nextPlayerKey,
@@ -1113,21 +1222,31 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             deckLength: game.state[nextPlayerKey].deck.length,
           });
 
-          if (drawnCard && drawnCard.name === 'Assassin Token' && game.state[opponentKey].tokenType === 'assassin') {
+          if (drawnCard && drawnCard.types.some(type => type.type === 'unit' && type.subTypes === 'token') && game.state[opponentKey].tokenType === 'assassin') {
             console.log('[DEBUG] Assassin Token drawn in endTurn, applying effects');
-            game.state[nextPlayerKey].lifePoints = Math.max(0, game.state[nextPlayerKey].lifePoints - 2);
-            game.state[opponentKey].tokenCount = Math.min(game.state[opponentKey].tokenCount + 1, 8);
+            game.state[nextPlayerKey].lifePoints = Math.max(0, game.state[nextPlayerKey].lifePoints! - 2);
+            game.state[opponentKey].tokenCount = Math.min(game.state[opponentKey].tokenCount! + 1, 8);
 
             let newDrawnCard: Card | null = null;
             if (game.state[nextPlayerKey].deck.length > 0) {
               newDrawnCard = drawCardServer(game, nextPlayerKey);
-              console.log('[DEBUG] Repioche after Assassin Token in endTurn:', { newDrawnCard });
+              console.log('[DEBUG] Repioche after Assassin Token in endTurn:', {newDrawnCard});
             } else {
               console.log('[DEBUG] No cards left to repioche');
             }
 
-            game.state[nextPlayerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({});
-            game.state[opponentKey].opponentHand = Array(game.state[nextPlayerKey].hand.length).fill({});
+            game.state[nextPlayerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({
+              id: 'hidden',
+              name: 'Hidden Card',
+              image: 'unknown',
+              exhausted: false,
+            });
+            game.state[opponentKey].opponentHand = Array(game.state[nextPlayerKey].hand.length).fill({
+              id: 'hidden',
+              name: 'Hidden Card',
+              image: 'unknown',
+              exhausted: false,
+            });
 
             io.to(gameId).emit('handleAssassinTokenDraw', {
               playerLifePoints: game.state[nextPlayerKey].lifePoints,
@@ -1136,42 +1255,52 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           }
         }
 
-        game.state.player1.opponentHand = Array(game.state.player2.hand.length).fill({});
-        game.state.player2.opponentHand = Array(game.state.player1.hand.length).fill({});
+        game.state.player1.opponentHand = Array(game.state.player2.hand.length).fill({
+          id: 'hidden',
+          name: 'Hidden Card',
+          image: 'unknown',
+          exhausted: false,
+        });
+        game.state.player2.opponentHand = Array(game.state.player1.hand.length).fill({
+          id: 'hidden',
+          name: 'Hidden Card',
+          image: 'unknown',
+          exhausted: false,
+        });
 
         // Persist game state
-        await gameRepository.updateGame(gameId, { state: game.state });
+        await gameRepository.updateGame(gameId, {state: game.state});
         gameCache.setGame(gameId, game);
 
         // Emit updated game state to all players
-        game.players.forEach((playerSocketId) => {
+        game.players.forEach((playerSocketId: string) => {
           const clientGameState = mapServerToClientGameState(game, playerSocketId);
           console.log('[DEBUG] endTurn - Envoi updateGameState à:', {
             playerSocketId,
             isMyTurn: clientGameState.game.isMyTurn,
             phase: clientGameState.game.currentPhase,
             turn: clientGameState.game.turn,
-            updateTimestamp: game.state.updateTimestamp,
+            updateTimestamp: game.state.game.updateTimestamp,
           });
           io.to(playerSocketId).emit('updateGameState', clientGameState);
         });
 
         // Emit additional events
         io.to(gameId).emit('endTurn');
-        console.log('[DEBUG] endTurn - Émission yourTurn à:', { nextPlayerSocketId });
+        console.log('[DEBUG] endTurn - Émission yourTurn à:', {nextPlayerSocketId});
         io.to(nextPlayerSocketId).emit('yourTurn');
-        io.to(gameId).emit('updatePhase', { gameId, phase: 'Standby', turn: game.state.turn });
-        io.to(gameId).emit('phaseChangeMessage', { phase: 'Standby', turn: game.state.turn, nextPlayerId });
+        io.to(gameId).emit('updatePhase', {gameId, phase: 'Standby', turn: game.state.game.turn});
+        io.to(gameId).emit('phaseChangeMessage', {phase: 'Standby', turn: game.state.game.turn, nextPlayerId});
 
         // Check win condition
         await checkWinCondition(gameId, game, gameRepository, gameCache, io);
 
         console.log('[DEBUG] endTurn - Après émission:', {
           gameId,
-          activePlayer: game.state.activePlayer,
-          phase: game.state.phase,
-          turn: game.state.turn,
-          updateTimestamp: game.state.updateTimestamp,
+          activePlayer: game.state.game.activePlayerId,
+          phase: game.state.game.currentPhase,
+          turn: game.state.game.turn,
+          updateTimestamp: game.state.game.updateTimestamp,
         });
       } catch (error) {
         console.error('[WebSocket] Erreur lors de l\'action endTurn:', error);

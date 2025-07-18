@@ -1,5 +1,6 @@
+// server/src/game/cardManager.ts
 import { Db } from 'mongodb';
-import {Card} from "@tempoxqc/project-nexus-types";
+import { Card, CardSchema } from '@tempoxqc/project-nexus-types';
 
 interface DeckDocument {
   id: string;
@@ -27,7 +28,7 @@ export class CardManager {
   private async loadData() {
     try {
       const deckListsCollection = this.db.collection('decklists');
-      const deckListsDocs = await deckListsCollection.find({}).toArray();
+      const deckListsDocs = await deckListsCollection.find<DeckDocument>({}).toArray();
       if (deckListsDocs.length === 0) {
         console.warn('[CardManager] Aucune donnée trouvée dans la collection decklists, initialisation avec deckLists vide', 'timestamp:', new Date().toISOString());
         this.deckLists = {};
@@ -44,14 +45,20 @@ export class CardManager {
 
     try {
       const cardsCollection = this.db.collection('card');
-      this.allCards = (await cardsCollection.find({}).toArray()).map((card: any) => ({
-        id: card.id,
-        name: card.name,
-        image: card.image,
-        exhausted: false,
-      }));
+      const rawCards = await cardsCollection.find({}).toArray();
+      this.allCards = rawCards.map((card: any) => {
+        try {
+          return CardSchema.parse({
+            ...card,
+            exhausted: false,
+          });
+        } catch (error) {
+          console.error(`[CardManager] Erreur de validation pour la carte ${card.id}:`, error, 'timestamp:', new Date().toISOString());
+          return null;
+        }
+      }).filter((card): card is Card => card !== null);
       if (this.allCards.length === 0) {
-        console.warn('[CardManager] Aucune carte trouvée dans la collection card, initialisation avec allCards vide', 'timestamp:', new Date().toISOString());
+        console.warn('[CardManager] Aucune carte valide trouvée dans la collection card, initialisation avec allCards vide', 'timestamp:', new Date().toISOString());
       }
     } catch (error) {
       console.error('Erreur lors du chargement de cards depuis MongoDB Atlas:', error, 'timestamp:', new Date().toISOString());
