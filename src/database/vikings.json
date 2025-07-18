@@ -12,7 +12,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992450/viking_001_hfiq31.jpg"
     },
     "faction": "viking",
-    "label": [enraged],
+    "label": ["enraged"],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -110,7 +110,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992450/viking_002_arzjua.jpg"
     },
     "faction": "viking",
-    "label": [enraged],
+    "label": ["enraged"],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -208,7 +208,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992453/viking_003_fodyfu.jpg"
     },
     "faction": "viking",
-    "label": [enraged],
+    "label": ["enraged"],
     "cost": 0,
     "effects": [],
     "types": [
@@ -309,7 +309,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992448/viking_005_ymaf2o.jpg"
     },
     "faction": "viking",
-    "label": [enraged],
+    "label": ["enraged"],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -381,7 +381,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992449/viking_006_n1xume.jpg"
     },
     "faction": "viking",
-    "label": [enraged],
+    "label": ["enraged"],
     "cost": 1,
     "effects": {
       "on_play": [
@@ -491,6 +491,83 @@
           },
           "priority": 2,
           "source": { "id": "rage_token", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_token_pool",
+            "filter": {
+              "type": ["rage_token"],
+              "owner": ["self"]
+            },
+            "operator": ">=",
+            "value": 1
+          },
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": ["self"],
+              "amount": 1,
+              "type": ["rage_token"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 3,
+          "source": { "id": "viking_007", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_token_pool",
+            "filter": {
+              "type": [
+                "rage_token"
+              ],
+              "owner": [
+                "self"
+              ]
+            },
+            "operator": ">=",
+            "value": 1
+          }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "graveyard_has_unit",
+            "owner": "self",
+            "card": "viking_008"
+          },
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "type": ["unit"],
+              "card": "viking_008"
+            }
+          },
+          "to": {
+            "hand": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 4,
+          "source": {
+            "id": "viking_007",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -566,6 +643,83 @@
           },
           "priority": 2,
           "source": { "id": "rage_token", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_token_pool",
+            "filter": {
+              "type": ["rage_token"],
+              "owner": ["self"]
+            },
+            "operator": ">=",
+            "value": 1
+          },
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": ["self"],
+              "amount": 1,
+              "type": ["rage_token"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 3,
+          "source": { "id": "viking_008", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_token_pool",
+            "filter": {
+              "type": [
+                "rage_token"
+              ],
+              "owner": [
+                "self"
+              ]
+            },
+            "operator": ">=",
+            "value": 1
+          }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "graveyard_has_unit",
+            "owner": "self",
+            "card": "viking_007"
+          },
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "type": ["unit"],
+              "card": "viking_007"
+            }
+          },
+          "to": {
+            "hand": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 4,
+          "source": {
+            "id": "viking_008",
+            "zone": "field"
+          }
         }
       ]
     },
@@ -603,9 +757,43 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992448/viking_009_og5drh.jpg"
     },
     "faction": "viking",
-    "label": [enraged],
+    "label": ["enraged"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_attack_resolve": [
+        {
+          "trigger": "on_attack_resolve",
+          "condition": {
+            "type": "destroyed_unit",
+            "filter": {
+              "type": ["unit"]
+            }
+          },
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "viking_009",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_attack_resolve",
+          "action": "gain_token",
+          "token": "rage_token",
+          "where": {
+            "token_pool": "self"
+          },
+          "amount": 1,
+          "priority": 2,
+          "source": { "id": "viking_009", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "unit",
@@ -631,9 +819,43 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992446/viking_010_apjxoy.jpg"
     },
     "faction": "viking",
-    "label": [enraged],
+    "label": ["enraged"],
     "cost": 1,
-    "effects": [],
+    "effects": {
+      "on_attack_resolve": [
+        {
+          "trigger": "on_attack_resolve",
+          "condition": {
+            "type": "destroyed_unit",
+            "filter": {
+              "type": ["unit"]
+            }
+          },
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "viking_010",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_attack_resolve",
+          "action": "gain_token",
+          "token": "rage_token",
+          "where": {
+            "token_pool": "self"
+          },
+          "amount": 1,
+          "priority": 2,
+          "source": { "id": "viking_010", "zone": "field" }
+        }
+      ]
+    },
     "types": [
       {
         "type": "unit",
@@ -659,7 +881,7 @@
       "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992446/viking_011_hz868y.jpg"
     },
     "faction": "viking",
-    "label": [enraged],
+    "label": ["enraged"],
     "cost": 1,
     "effects": [],
     "types": [
