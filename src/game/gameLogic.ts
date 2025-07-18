@@ -1,14 +1,6 @@
-import { Server } from 'socket.io';
+import { ServerGameState, Card } from "@tempoxqc/project-nexus-types";
 import { GameRepository } from '../database/gameRepository.js';
 import { CardManager } from './cardManager.js';
-
-interface ActiveGameProjection {
-  gameId: string;
-  players: string[];
-  createdAt: Date;
-  status: 'waiting' | 'started';
-  playersReady: number[];
-}
 
 export class GameLogic {
   private gameRepository: GameRepository;
@@ -19,46 +11,35 @@ export class GameLogic {
     this.cardManager = cardManager;
   }
 
-  async emitActiveGames(io: Server, lastUpdate: string | null, updateCallback: (newUpdate: string) => void) {
-    const games = await this.gameRepository.findActiveGames();
-    const activeGames = games.map((game) => ({
-      gameId: game.gameId,
-      players: game.players,
-      createdAt: game.createdAt,
-      status: game.status,
-    }));
-    const currentUpdate = JSON.stringify(activeGames);
-    if (currentUpdate !== lastUpdate) {
-      io.to('lobby').emit('activeGamesUpdate', activeGames);
-      updateCallback(currentUpdate);
-    }
-  }
-
-  async drawCardServer(gameId: string, playerKey: 'player1' | 'player2') {
-    const game = await this.gameRepository.findGameById(gameId);
+  async drawCard(game: ServerGameState, playerKey: 'player1' | 'player2'): Promise<Card | null> {
     if (!game || game.state[playerKey].deck.length === 0) return null;
-
     const [drawnCard] = game.state[playerKey].deck.splice(0, 1);
     game.state[playerKey].hand.push(drawnCard);
-
-    await this.gameRepository.updateGame(gameId, { state: game.state });
     return drawnCard;
   }
 
-  async checkWinCondition(gameId: string): Promise<{ winner: string } | null> {
-    const game = await this.gameRepository.findGameById(gameId);
-    if (!game) return null;
-
+  async checkWinCondition(game: ServerGameState): Promise<boolean> {
     const player1Life = game.state.player1.lifePoints;
     const player2Life = game.state.player2.lifePoints;
 
-    if (player1Life <= 0 || player2Life <= 0) {
-      const winner = player1Life <= 0 ? 'player2' : 'player1';
-      game.state.gameOver = true;
-      game.state.winner = winner;
-      await this.gameRepository.updateGame(gameId, { state: game.state });
-      return { winner };
+    if (player1Life! <= 0 || player2Life! <= 0) {
+      return true;
     }
-    return null;
+    return false;
+  }
+
+  async emitActiveGames(io: any, lastUpdate: string | null, callback: (newUpdate: string) => void): Promise<void> {
+    const games = await this.gameRepository.findActiveGames();
+    const newUpdate = new Date().toISOString();
+    io.to('lobby').emit('activeGamesUpdate', {
+      games: games.map((game) => ({
+        gameId: game.gameId,
+        players: game.players,
+        createdAt: game.createdAt,
+        status: game.status,
+      })),
+      lastUpdate: newUpdate,
+    });
+    callback(newUpdate);
   }
 }
