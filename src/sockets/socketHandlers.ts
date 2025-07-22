@@ -75,6 +75,7 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
       hand: serverGame.state[playerKey].hand,
       opponentField: serverGame.state[opponentKey].field,
       opponentHand: opponentHand,
+      nexus: serverGame.state[playerKey].nexus || { health: 30 },
     },
     opponent: {
       ...serverGame.state[opponentKey],
@@ -86,6 +87,7 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
         image: 'unknown',
         exhausted: false,
       }),
+      nexus: serverGame.state[opponentKey].nexus || { health: 30 },
     },
     revealedCards: serverGame.state.revealedCards,
     lastCardPlayed: serverGame.state.lastCardPlayed,
@@ -232,6 +234,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         socket.emit('error', 'Reconnexion échouée - Joueur non trouvé');
       }
     });
+
     socket.removeAllListeners('createGame');
     socket.removeAllListeners('joinLobby');
     socket.removeAllListeners('leaveLobby');
@@ -383,7 +386,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
               id: 'player1',
               nexus: {health: 30},
               hand: [],
-              field: [],
+              field: Array(8).fill(null),
               opponentField: [],
               opponentHand: [],
               deck: [],
@@ -401,7 +404,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
               id: 'player2',
               nexus: {health: 30},
               hand: [],
-              field: [],
+              field: Array(8).fill(null),
               opponentField: [],
               opponentHand: [],
               deck: [],
@@ -432,6 +435,11 @@ export async function registerSocketHandlers(io: Server, db: Db) {
               preventDestructionCards: [],
               battlePhaseDisabled: false,
             },
+            lastCardPlayed: undefined,
+            lastDestroyedUnit: undefined,
+            targetType: undefined,
+            detected: false,
+            currentCard: undefined,
           },
           deckChoices: {'1': [], '2': []},
           availableDecks,
@@ -469,7 +477,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
       }
     });
 
-    socket.on('joinGame', async (data) => {
+    socket.on('joinGame', async (data, ack) => {
       console.log('[WebSocket] Événement joinGame reçu:', data, 'socket.id:', socket.id);
       try {
         const gameId = JoinGameSchema.parse(data);
@@ -477,6 +485,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         if (!game) {
           console.log('[WebSocket] Partie non trouvée:', gameId);
           socket.emit('gameNotFound');
+          ack({ error: 'Partie non trouvée' });
           return;
         }
 
@@ -484,6 +493,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         if (playerInfo && playerInfo.gameId && playerInfo.gameId !== gameId) {
           console.log('[WebSocket] Erreur: Joueur déjà dans une autre partie:', playerInfo.gameId);
           socket.emit('error', 'Vous êtes déjà dans une autre partie');
+          ack({ error: 'Vous êtes déjà dans une autre partie' });
           return;
         }
 
@@ -500,12 +510,21 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             playmats: game.playmats,
             lifeToken: game.lifeToken,
           });
+          ack({
+            playerId: playerInfo?.playerId || game.players.indexOf(socket.id) + 1,
+            gameId,
+            chatHistory: game.chatHistory,
+            availableDecks: game.availableDecks,
+            playmats: game.playmats,
+            lifeToken: game.lifeToken,
+          });
           return;
         }
 
         if (game.players.length >= 2) {
           console.log('[WebSocket] Erreur: La partie est pleine:', gameId, 'players:', game.players);
           socket.emit('error', 'La partie est pleine');
+          ack({ error: 'La partie est pleine' });
           return;
         }
 
@@ -533,62 +552,62 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             player2Id: playerManager.getPlayer(player2SocketId)?.playerId,
           });
 
-          try {
-            await gameRepository.updateGame(gameId, {
-              players: [player1SocketId, player2SocketId],
-              state: {
-                ...game.state,
-                game: {...game.state.game, activePlayerId: player1SocketId, updateTimestamp: Date.now()}
-              },
-              status: 'started',
-            });
-            gameCache.setGame(gameId, game);
-            console.log(`[WebSocket] Partie ${gameId} mise à jour, statut: started, joueurs: ${game.players}, timestamp: ${new Date().toISOString()}`);
-            game.players.forEach((playerSocketId: string) => {
-              const clientGameState = mapServerToClientGameState(game, playerSocketId);
-              io.to(playerSocketId).emit('updateGameState', clientGameState);
-            });
-            io.to(gameId).emit('updatePhase', {
-              gameId,
-              phase: game.state.game.currentPhase,
-              turn: game.state.game.turn
-            });
+          await gameRepository.updateGame(gameId, {
+            players: [player1SocketId, player2SocketId],
+            state: {
+              ...game.state,
+              game: {...game.state.game, activePlayerId: player1SocketId, updateTimestamp: Date.now()}
+            },
+            status: 'started',
+          });
+          gameCache.setGame(gameId, game);
+          console.log(`[WebSocket] Partie ${gameId} mise à jour, statut: started, joueurs: ${game.players}, timestamp: ${new Date().toISOString()}`);
+          game.players.forEach((playerSocketId: string) => {
+            const clientGameState = mapServerToClientGameState(game, playerSocketId);
+            io.to(playerSocketId).emit('updateGameState', clientGameState);
+          });
+          io.to(gameId).emit('updatePhase', {
+            gameId,
+            phase: game.state.game.currentPhase,
+            turn: game.state.game.turn
+          });
 
-            const gameStartDataPlayer1 = {
-              playerId: playerManager.getPlayer(player1SocketId)?.playerId || 1,
-              gameId,
-              chatHistory: game.chatHistory,
-              availableDecks: game.availableDecks,
-              playmats: game.playmats,
-              lifeToken: game.lifeToken,
-            };
-            const gameStartDataPlayer2 = {
-              playerId: playerManager.getPlayer(player2SocketId)?.playerId || 2,
-              gameId,
-              chatHistory: game.chatHistory,
-              availableDecks: game.availableDecks,
-              playmats: game.playmats,
-              lifeToken: game.lifeToken,
-            };
+          const gameStartDataPlayer1 = {
+            playerId: playerManager.getPlayer(player1SocketId)?.playerId || 1,
+            gameId,
+            chatHistory: game.chatHistory,
+            availableDecks: game.availableDecks,
+            playmats: game.playmats,
+            lifeToken: game.lifeToken,
+          };
+          const gameStartDataPlayer2 = {
+            playerId: playerManager.getPlayer(player2SocketId)?.playerId || 2,
+            gameId,
+            chatHistory: game.chatHistory,
+            availableDecks: game.availableDecks,
+            playmats: game.playmats,
+            lifeToken: game.lifeToken,
+          };
 
-            io.to(player1SocketId).emit('gameStart', gameStartDataPlayer1);
-            io.to(player2SocketId).emit('gameStart', gameStartDataPlayer2);
-            io.to(gameId).emit('playerJoined', {playerId: playerManager.getPlayer(player2SocketId)?.playerId || 2});
-            io.to(gameId).emit('initialDeckList', game.availableDecks);
-            io.to(gameId).emit('deckSelectionUpdate', game.deckChoices);
+          io.to(player1SocketId).emit('gameStart', gameStartDataPlayer1);
+          io.to(player2SocketId).emit('gameStart', gameStartDataPlayer2);
+          io.to(gameId).emit('playerJoined', {playerId: playerManager.getPlayer(player2SocketId)?.playerId || 2});
+          io.to(gameId).emit('initialDeckList', game.availableDecks);
+          io.to(gameId).emit('deckSelectionUpdate', game.deckChoices);
 
-            if (!game.deckChoices['1'].length) {
-              console.log(`[WebSocket] Émission de waitingForPlayer1Choice à player2 (${player2SocketId}):`, {waiting: true}, 'timestamp:', new Date().toISOString());
-              io.to(player2SocketId).emit('waitingForPlayer1Choice', {waiting: true});
-            }
-          } catch (error) {
-            console.error(`[WebSocket] Erreur lors de la mise à jour de la partie ${gameId}:`, error);
-            socket.emit('error', 'Erreur lors de la mise à jour de la partie');
-            return;
-          }
+          console.log(`[WebSocket] Émission de waitingForPlayer1Choice à player2 (${player2SocketId}):`, {waiting: true}, 'timestamp:', new Date().toISOString());
+          io.to(player2SocketId).emit('waitingForPlayer1Choice', {waiting: true});
         } else {
           socket.emit('waiting', {gameId, message: 'En attente d\'un autre joueur...'});
           console.log(`[WebSocket] Socket ${socket.id} en attente d'un autre joueur pour ${gameId}, timestamp: ${new Date().toISOString()}`);
+          ack({
+            playerId: newPlayerId,
+            gameId,
+            chatHistory: game.chatHistory,
+            availableDecks: game.availableDecks,
+            playmats: game.playmats,
+            lifeToken: game.lifeToken,
+          });
         }
 
         if (socket.rooms.has('lobby')) {
@@ -598,6 +617,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
       } catch (error) {
         console.error('[WebSocket] Erreur lors de la jointure de la partie:', error);
         socket.emit('error', 'Erreur lors de la jointure de la partie');
+        ack({ error: 'Erreur lors de la jointure de la partie' });
       }
     });
 
@@ -1199,14 +1219,8 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         game.state.player2.mustDiscard = false;
 
         // Reset exhausted state for all cards
-        game.state.player1.field = game.state.player1.field.map((card: Card) => ({
-          ...card,
-          exhausted: false,
-        }));
-        game.state.player2.field = game.state.player2.field.map((card: Card) => ({
-          ...card,
-          exhausted: false,
-        }));
+        game.state.player1.field = game.state.player1.field.map((card: Card | null) => card ? {...card, exhausted: false} : null);
+        game.state.player2.field = game.state.player2.field.map((card: Card | null) => card ? {...card, exhausted: false} : null);
 
         // Sync opponentField
         game.state.player1.opponentField = [...game.state.player2.field];
