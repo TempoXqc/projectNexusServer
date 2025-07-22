@@ -738,7 +738,21 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
         const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
         const opponentKey = playerInfo.playerId === 1 ? 'player2' : 'player1';
-        if (game.state.game.currentPhase !== 'Main') return;
+        if (game.state.game.currentPhase !== 'Main') {
+          socket.emit('error', 'Impossible de jouer une carte en dehors de la phase Main');
+          return;
+        }
+
+        // Vérifier les points d'action
+        const playerActionPoints = game.state[playerKey].actionPoints || 0;
+        if (playerActionPoints < card.cost) {
+          console.log('[WebSocket] Erreur: Pas assez de points d\'action', {
+            playerActionPoints,
+            cardCost: card.cost,
+          });
+          socket.emit('error', 'Pas assez de points d\'action pour jouer cette carte');
+          return;
+        }
 
         game.state[playerKey].field[fieldIndex] = CardSchema.parse({
           ...card,
@@ -746,6 +760,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           effects: card.effects || {},
         });
         game.state[playerKey].hand = game.state[playerKey].hand.filter((c: Card) => c.id !== card.id);
+        game.state[playerKey].actionPoints = playerActionPoints - card.cost; // Déduire les points d'action
         game.state[playerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({
           id: 'hidden',
           name: 'Hidden Card',
@@ -1247,6 +1262,8 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         game.state.player2.hasPlayedCard = false;
         game.state.player1.mustDiscard = false;
         game.state.player2.mustDiscard = false;
+        game.state.player1.actionPoints = 1;
+        game.state.player2.actionPoints = 1;
 
         game.state.player1.field = game.state.player1.field.map((card: Card | null) => card ? { ...card, exhausted: false } : null);
         game.state.player2.field = game.state.player2.field.map((card: Card | null) => card ? { ...card, exhausted: false } : null);
