@@ -1,7 +1,6 @@
 import { Db } from 'mongodb';
 import { ServerGameState, PersistedServerGameState } from "@tempoxqc/project-nexus-types";
 
-// Interface pour la projection utilisée dans findActiveGames
 interface ActiveGameProjection {
   gameId: string;
   players: string[];
@@ -56,9 +55,9 @@ export class GameRepository {
 
   async findActiveGames(): Promise<ActiveGameProjection[]> {
     const games = await this.collection
-      .find({ status: { $in: ['waiting', 'started'] } })
-      .project<ActiveGameProjection>({ gameId: 1, status: 1, createdAt: 1, players: 1, playersReady: 1, _id: 0 })
-      .toArray();
+        .find({ status: { $in: ['waiting', 'started'] } })
+        .project<ActiveGameProjection>({ gameId: 1, status: 1, createdAt: 1, players: 1, playersReady: 1, _id: 0 })
+        .toArray();
     return games;
   }
 

@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 const router = Router();
 
-interface User {
+export interface User {
   _id: ObjectId;
   username: string;
   password: string;
