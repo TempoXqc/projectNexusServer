@@ -457,6 +457,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
               tokenType: null,
               mulliganDone: false,
               playmat: playmats[0] || { id: '', name: '', image: '' },
+              actionPoints: 1
             },
             player2: {
               id: 'player2',
@@ -475,6 +476,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
               tokenType: null,
               mulliganDone: false,
               playmat: playmats[1] || { id: '', name: '', image: '' },
+              actionPoints: 1
             },
             game: {
               turn: 1,
@@ -739,16 +741,27 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
         const opponentKey = playerInfo.playerId === 1 ? 'player2' : 'player1';
         if (game.state.game.currentPhase !== 'Main') {
+          console.log('[WebSocket] Erreur: Phase incorrecte pour jouer une carte', {
+            currentPhase: game.state.game.currentPhase,
+          });
           socket.emit('error', 'Impossible de jouer une carte en dehors de la phase Main');
           return;
         }
 
         // Vérifier les points d'action
         const playerActionPoints = game.state[playerKey].actionPoints || 0;
+        console.log('[WebSocket] Vérification des points d\'action:', {
+          playerActionPoints,
+          cardCost: card.cost,
+          playerKey,
+          gameId,
+        });
         if (playerActionPoints < card.cost) {
           console.log('[WebSocket] Erreur: Pas assez de points d\'action', {
             playerActionPoints,
             cardCost: card.cost,
+            playerKey,
+            gameId,
           });
           socket.emit('error', 'Pas assez de points d\'action pour jouer cette carte');
           return;
@@ -760,7 +773,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           effects: card.effects || {},
         });
         game.state[playerKey].hand = game.state[playerKey].hand.filter((c: Card) => c.id !== card.id);
-        game.state[playerKey].actionPoints = playerActionPoints - card.cost; // Déduire les points d'action
+        game.state[playerKey].actionPoints = playerActionPoints - card.cost;
         game.state[playerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({
           id: 'hidden',
           name: 'Hidden Card',
@@ -774,6 +787,14 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           exhausted: false,
         });
         game.state[playerKey].mulliganDone = true;
+
+        console.log('[WebSocket] Carte jouée avec succès:', {
+          cardId: card.id,
+          fieldIndex,
+          newActionPoints: game.state[playerKey].actionPoints,
+          playerKey,
+          gameId,
+        });
 
         await gameRepository.updateGame(gameId, { state: game.state });
         gameCache.setGame(gameId, game);
@@ -974,6 +995,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             game.state[playerKey].tokenType = tokenType;
             game.state[playerKey].tokenCount = tokenCount;
             game.state[playerKey].mulliganDone = false;
+            game.state[playerKey].actionPoints = 1; // Réinitialiser actionPoints
           }
 
           await gameRepository.updateGame(data.gameId, { state: game.state });
@@ -981,7 +1003,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
           game.players.forEach((playerSocketId: string) => {
             const clientGameState = mapServerToClientGameState(game, playerSocketId);
-            console.log('[WebSocket] Envoi de updateGameState après bothPlayersReady pour playerSocketId:', playerSocketId, 'isMyTurn:', clientGameState.game.isMyTurn, 'timestamp:', new Date().toISOString());
+            console.log('[WebSocket] Envoi de updateGameState après bothPlayersReady pour playerSocketId:', playerSocketId, 'isMyTurn:', clientGameState.game.isMyTurn, 'actionPoints:', clientGameState.player.actionPoints, 'timestamp:', new Date().toISOString());
             io.to(playerSocketId).emit('updateGameState', clientGameState);
           });
 
@@ -1009,6 +1031,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             field: z.array(z.any()).optional(),
             graveyard: z.array(z.any()).optional(),
             deckSelection: z.object({ mulliganDone: z.boolean() }).optional(),
+            actionPoints: z.number().optional(), // Ajouter actionPoints au schéma
           }),
         }).parse(data);
 
@@ -1022,6 +1045,13 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
         const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
         const opponentKey = playerInfo.playerId === 1 ? 'player2' : 'player1';
+
+        console.log('[WebSocket] État avant mise à jour:', {
+          playerActionPoints: game.state[playerKey].actionPoints,
+          clientActionPoints: clientState.actionPoints,
+          playerKey,
+          gameId,
+        });
 
         if (clientState.deckSelection?.mulliganDone && !game.state[playerKey].mulliganDone) {
           game.state[playerKey].mulliganDone = clientState.deckSelection.mulliganDone;
@@ -1050,9 +1080,22 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         if (clientState.graveyard) {
           game.state[playerKey].graveyard = clientState.graveyard;
         }
+        // Protéger actionPoints contre les mises à jour non autorisées
+        if (clientState.actionPoints !== undefined) {
+          console.warn('[WebSocket] Tentative de mise à jour de actionPoints via updateGameState ignorée:', {
+            clientActionPoints: clientState.actionPoints,
+            serverActionPoints: game.state[playerKey].actionPoints,
+          });
+        }
 
         await gameRepository.updateGame(gameId, { state: game.state });
         gameCache.setGame(gameId, game);
+
+        console.log('[WebSocket] État après mise à jour:', {
+          playerActionPoints: game.state[playerKey].actionPoints,
+          playerKey,
+          gameId,
+        });
 
         game.players.forEach((playerSocketId: string) => {
           const clientGameState = mapServerToClientGameState(game, playerSocketId);
