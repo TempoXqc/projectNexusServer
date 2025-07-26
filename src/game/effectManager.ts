@@ -11,12 +11,16 @@ import {
     HiddenCard,
 } from "@tempoxqc/project-nexus-types";
 
-interface GameContext {
+export interface GameContext {
     gameState: GameState;
     io: Server;
     socket: Socket;
     playerId: string;
     opponentId: string;
+}
+
+function isTargetArray(target: Target | Target[] | undefined): target is Target[] {
+    return Array.isArray(target);
 }
 
 class EffectManager {
@@ -321,18 +325,34 @@ class EffectManager {
             const card = player.deck.shift();
             if (card) {
                 if ('hand' in player && Array.isArray(player.hand) && player.hand.every((item): item is Card => 'faction' in item)) {
-                    player.hand.push({ ...card, exhausted: false }); // S'assurer que exhausted est défini
+                    player.hand.push({ ...card, exhausted: false });
+                    if (player.id === gameState.player.id) {
+                        gameState.opponent.opponentHand = Array(player.hand.length).fill({
+                            id: 'hidden',
+                            name: 'Hidden Card',
+                            image: 'unknown',
+                            exhausted: false,
+                        });
+                    } else {
+                        gameState.player.opponentHand = Array(player.hand.length).fill({
+                            id: 'hidden',
+                            name: 'Hidden Card',
+                            image: 'unknown',
+                            exhausted: false,
+                        });
+                    }
                     await this.executeEffects(card, 'on_draw');
                 }
             }
         }
+        console.log('[EffectManager] Pioche effectuée:', { amount, newHandLength: player.hand.length });
     }
 
     // private async handleDamage(action: Effect): Promise<void> {
     //     const { gameState, playerId, opponentId } = this.gameContext;
     //     if (!action.target) return;
     //
-    //     const targetPlayerId = Array.isArray(action.target)
+    //     const targetPlayerId = isTargetArray(action.target)
     //         ? action.target[0]?.owner?.includes('self')
     //             ? playerId
     //             : opponentId
@@ -341,27 +361,27 @@ class EffectManager {
     //             : opponentId;
     //     const targetPlayer = this.getPlayerState(targetPlayerId);
     //
-    //     const amount =
-    //         action.amount === 'max_graveyard_unit_value'
-    //             ? Math.max(
-    //                 ...targetPlayer.graveyard
-    //                     .filter((card: Card) => card.types.some((t: Card['types'][number]) => t.type === 'unit'))
-    //                     .map((card: Card) => card.types[0]?.value || 0),
-    //                 0
-    //             )
-    //             : typeof action.amount === 'number'
-    //                 ? action.amount
-    //                 : 1;
+    //     const amount = action.amount === 'max_graveyard_unit_value'
+    //         ? Math.max(
+    //             ...targetPlayer.graveyard
+    //                 .filter((card: Card) => card.types.some((t: Card['types'][number]) => t.type === 'unit'))
+    //                 .map((card: Card) => card.types[0]?.value || 0),
+    //             0
+    //         )
+    //         : typeof action.amount === 'number' ? action.amount : 1;
     //
-    //     if (Array.isArray(action.target)) {
-    //         const hasNexus = action.target.some((t: Target) => t.type?.includes('nexus'));
-    //         const hasUnit = action.target.some((t: Target) => t.type?.includes('unit'));
+    //     if (isTargetArray(action.target)) {
+    //         const hasNexus = action.target.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('nexus') : t.type === 'nexus'));
+    //         const hasUnit = action.target.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('unit') : t.type === 'unit'));
     //         if (hasNexus) {
     //             targetPlayer.nexus.health -= amount;
+    //             if (gameState.currentCard) {
+    //                 await this.executeEffects(gameState.currentCard, 'on_hit_nexus');
+    //             }
     //         } else if (hasUnit) {
     //             const units = targetPlayer.field.filter(
     //                 (card: Card) =>
-    //                     action.target.some((t: Target) => t.type?.includes('unit')) &&
+    //                     action.target.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('unit') : t.type === 'unit')) &&
     //                     (action.target[0]?.filter?.max_value !== undefined
     //                         ? card.types[0].value <= action.target[0].filter.max_value
     //                         : true)
@@ -379,14 +399,16 @@ class EffectManager {
     //         }
     //     } else {
     //         const target = action.target;
-    //         if (target.type?.includes('nexus')) {
+    //         const targetType = target.type;
+    //         if (targetType && (Array.isArray(targetType) ? targetType.includes('nexus') : targetType === 'nexus')) {
     //             targetPlayer.nexus.health -= amount;
-    //         } else if (target.type?.includes('unit')) {
+    //             if (gameState.currentCard) {
+    //                 await this.executeEffects(gameState.currentCard, 'on_hit_nexus');
+    //             }
+    //         } else if (targetType && (Array.isArray(targetType) ? targetType.includes('unit') : targetType === 'unit')) {
     //             const units = targetPlayer.field.filter(
     //                 (card: Card) =>
-    //                     (Array.isArray(target.type)
-    //                         ? target.type.includes('unit')
-    //                         : target.type === 'unit') &&
+    //                     (Array.isArray(targetType) ? targetType.includes('unit') : targetType === 'unit') &&
     //                     (target.filter?.max_value !== undefined
     //                         ? card.types[0].value <= target.filter.max_value
     //                         : true)
@@ -403,6 +425,7 @@ class EffectManager {
     //             }
     //         }
     //     }
+    //     console.log('[EffectManager] Dégâts appliqués:', { amount, targetPlayerId });
     // }
 
     private async handlePayHealth(action: Effect): Promise<void> {

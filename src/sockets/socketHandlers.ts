@@ -5,10 +5,11 @@ import {CardManager} from '../game/cardManager.js';
 import {PlayerManager} from '../game/playerManager.js';
 import {JoinGameSchema, PlayCardSchema} from './socketSchemas.js';
 import {Db, ObjectId} from 'mongodb';
-import {Card, CardSchema, GameState, HiddenCard, ServerGameState} from "@tempoxqc/project-nexus-types";
+import {Card, CardSchema, GameState, HiddenCard, ServerGameState } from "@tempoxqc/project-nexus-types";
 import {z} from "zod";
 import jwt from "jsonwebtoken";
 import {User} from "../routes/authRoutes.js";
+import EffectManager, {GameContext} from "../game/effectManager.js";
 
 function generateGameId(): string {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -72,15 +73,16 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
       ...serverGame.state[playerKey],
       hand: serverGame.state[playerKey].hand,
       opponentField: serverGame.state[opponentKey].field,
-      opponentHand: opponentHand,  // Now correct: opponent's actual hand length (hidden)
-      nexus: serverGame.state[playerKey].nexus || { health: 30 },
+      opponentHand: opponentHand,
+      nexus: serverGame.state[playerKey].nexus || { health: serverGame.state[playerKey].lifePoints || 30 },
     },
     opponent: {
       ...serverGame.state[opponentKey],
-      hand: opponentHand,  // Hidden opponent's hand (but using correct length)
+      hand: opponentHand,
       opponentField: serverGame.state[playerKey].field,
-      opponentHand: playerHiddenHand,  // Hidden view of player's own hand (for symmetry)
-      nexus: serverGame.state[opponentKey].nexus || { health: 30 },
+      opponentHand: playerHiddenHand,
+      nexus: serverGame.state[playerKey].nexus || { health: serverGame.state[playerKey].lifePoints || 30 },
+
     },
     revealedCards: serverGame.state.revealedCards,
     lastCardPlayed: serverGame.state.lastCardPlayed,
@@ -154,6 +156,7 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
 
   return gameState;
 }
+
 export async function registerSocketHandlers(io: Server, db: Db) {
   const gameRepository = new GameRepository(db);
   const cardManager = new CardManager(db);
@@ -297,7 +300,6 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.removeAllListeners('joinLobby');
     socket.removeAllListeners('leaveLobby');
     socket.removeAllListeners('refreshLobby');
-
 
     if (!socket.rooms.has('lobby')) {
       socket.join('lobby');
@@ -784,6 +786,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           return;
         }
 
+        // Place the card on the field
         game.state[playerKey].field[fieldIndex] = CardSchema.parse({
           ...card,
           exhausted: false,
@@ -813,6 +816,71 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           gameId,
         });
 
+        // Trigger 'on_play' effects using EffectManager
+        const opponentSocketId = game.players.find(id => id !== socket.id);
+        if (!opponentSocketId) {
+          console.error('[WebSocket] Opponent socket ID not found');
+          return;
+        }
+
+        // Map to client GameState for the current player (EffectManager expects GameState)
+        const clientGameState = mapServerToClientGameState(game, socket.id);
+
+        // Create GameContext
+        const gameContext: GameContext = {
+          gameState: clientGameState,
+          io,
+          socket,
+          playerId: socket.id,
+          opponentId: opponentSocketId,
+        };
+
+        // Set currentCard for effects that need it
+        clientGameState.currentCard = card;
+
+        // Execute effects
+        const effectManager = new EffectManager(gameContext);
+        await effectManager.executeEffects(card, 'on_play');
+
+        // Map back modified state to server (copy relevant properties that effects might have changed)
+        // Assuming effects can modify hand, field, graveyard, nexus, turnState, etc.
+        game.state[playerKey].hand = clientGameState.player.hand;
+        game.state[playerKey].field = clientGameState.player.field;
+        game.state[playerKey].graveyard = clientGameState.player.graveyard;
+        game.state[playerKey].nexus = clientGameState.player.nexus;
+        game.state[playerKey].tokenPool = clientGameState.player.tokenPool;
+        game.state[playerKey].tokenCount = clientGameState.player.tokenCount;
+
+        // Pour l'opposant : copier seulement les propriétés potentiellement modifiées (ex: field, nexus, tokenPool), PAS la main (qui est cachée et non modifiée)
+        game.state[opponentKey].field = clientGameState.opponent.field;
+        game.state[opponentKey].graveyard = clientGameState.opponent.graveyard;
+        game.state[opponentKey].nexus = clientGameState.opponent.nexus;
+        game.state[opponentKey].tokenPool = clientGameState.opponent.tokenPool;
+        game.state[opponentKey].tokenCount = clientGameState.opponent.tokenCount;
+
+        game.state.turnState = clientGameState.turnState;
+        game.state.revealedCards = clientGameState.revealedCards;
+        game.state.lastCardPlayed = clientGameState.lastCardPlayed;
+        game.state.lastDestroyedUnit = clientGameState.lastDestroyedUnit;
+        game.state.targetType = clientGameState.targetType;
+        game.state.detected = clientGameState.detected;
+        game.state.currentCard = clientGameState.currentCard;
+
+        // Update opponent views (hidden hands)
+        game.state[playerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({
+          id: 'hidden',
+          name: 'Hidden Card',
+          image: 'unknown',
+          exhausted: false,
+        });
+        game.state[opponentKey].opponentHand = Array(game.state[playerKey].hand.length).fill({
+          id: 'hidden',
+          name: 'Hidden Card',
+          image: 'unknown',
+          exhausted: false,
+        });
+
+        // Save and emit
         await gameRepository.updateGame(gameId, { state: game.state });
         gameCache.setGame(gameId, game);
 
@@ -1167,6 +1235,61 @@ export async function registerSocketHandlers(io: Server, db: Db) {
       }
     });
 
+    socket.on('attackCard', async (data) => {
+      console.log('[WebSocket] Événement attackCard reçu:', data, 'socket.id:', socket.id);
+      try {
+        const { gameId, cardId } = z.object({ gameId: z.string(), cardId: z.string() }).parse(data);
+        const game = await gameRepository.findGameById(gameId);
+        const playerInfo = playerManager.getPlayer(socket.id);
+        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.game.activePlayerId !== socket.id) {
+          console.log('[WebSocket] Erreur: Non autorisé pour attackCard, gameId:', gameId, 'playerInfo:', playerInfo);
+          socket.emit('error', 'Non autorisé');
+          return;
+        }
+
+        const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
+        const opponentKey = playerInfo.playerId === 1 ? 'player2' : 'player1';
+        if (game.state.game.currentPhase !== 'Battle') {
+          socket.emit('error', 'Impossible d’attaquer en dehors de la phase Battle');
+          return;
+        }
+
+        const cardIndex = game.state[playerKey].field.findIndex((c: Card) => c?.id === cardId);
+        if (cardIndex === -1) {
+          socket.emit('error', 'Carte non trouvée sur le terrain');
+          return;
+        }
+
+        const attackingCard = game.state[playerKey].field[cardIndex];
+        const dmg = attackingCard.types[0].value;  // Assumer value = atk power
+        game.state[opponentKey].nexus.health -= dmg;
+        game.state[opponentKey].lifePoints = game.state[opponentKey].nexus.health;  // Lier
+
+        const effectManager = new EffectManager({
+          gameState: mapServerToClientGameState(game, socket.id),
+          io,
+          socket,
+          playerId: socket.id,
+          opponentId: game.players.find(id => id !== socket.id)!,
+        });
+        await effectManager.executeEffects(attackingCard, 'on_hit_nexus');
+
+        game.state[playerKey].field[cardIndex] = null;
+        game.state[playerKey].graveyard.push(attackingCard);
+
+        await gameRepository.updateGame(gameId, { state: game.state });
+        gameCache.setGame(gameId, game);
+
+        game.players.forEach((playerSocketId: string) => {
+          const clientGameState = mapServerToClientGameState(game, playerSocketId);
+          io.to(playerSocketId).emit('updateGameState', clientGameState);
+        });
+      } catch (error) {
+        console.error('[WebSocket] Erreur lors de attackCard:', error);
+        socket.emit('error', 'Erreur lors de l’attaque');
+      }
+    });
+
     socket.on('updatePhase', async (data) => {
       console.log('[WebSocket] Événement updatePhase reçu:', data, 'socket.id:', socket.id);
       try {
@@ -1257,6 +1380,63 @@ export async function registerSocketHandlers(io: Server, db: Db) {
       } catch (error) {
         console.error('[WebSocket] Erreur lors de l\'action updatePhase:', error);
         socket.emit('error', 'Erreur lors du changement de phase');
+      }
+    });
+
+    socket.on('updateLifePoints', async (data) => {
+      console.log('[WebSocket] Événement updateLifePoints reçu:', data, 'socket.id:', socket.id);
+      try {
+        const { gameId, lifePoints } = z.object({ gameId: z.string(), lifePoints: z.number() }).parse(data);
+        const game = await gameRepository.findGameById(gameId);
+        const playerInfo = playerManager.getPlayer(socket.id);
+        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.game.activePlayerId !== socket.id) {
+          console.log('[WebSocket] Erreur: Non autorisé pour updateLifePoints, gameId:', gameId, 'playerInfo:', playerInfo);
+          socket.emit('error', 'Non autorisé');
+          return;
+        }
+
+        const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
+        game.state[playerKey].lifePoints = lifePoints;
+        game.state[playerKey].nexus.health = lifePoints;  // Lier les deux
+
+        await gameRepository.updateGame(gameId, { state: game.state });
+        gameCache.setGame(gameId, game);
+
+        game.players.forEach((playerSocketId: string) => {
+          const clientGameState = mapServerToClientGameState(game, playerSocketId);
+          io.to(playerSocketId).emit('updateGameState', clientGameState);
+        });
+      } catch (error) {
+        console.error('[WebSocket] Erreur lors de updateLifePoints:', error);
+        socket.emit('error', 'Erreur lors de la mise à jour des points de vie');
+      }
+    });
+
+    socket.on('updateTokenCount', async (data) => {
+      console.log('[WebSocket] Événement updateTokenCount reçu:', data, 'socket.id:', socket.id);
+      try {
+        const { gameId, tokenCount } = z.object({ gameId: z.string(), tokenCount: z.number() }).parse(data);
+        const game = await gameRepository.findGameById(gameId);
+        const playerInfo = playerManager.getPlayer(socket.id);
+        if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.game.activePlayerId !== socket.id) {
+          console.log('[WebSocket] Erreur: Non autorisé pour updateTokenCount, gameId:', gameId, 'playerInfo:', playerInfo);
+          socket.emit('error', 'Non autorisé');
+          return;
+        }
+
+        const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
+        game.state[playerKey].tokenCount = tokenCount;
+
+        await gameRepository.updateGame(gameId, { state: game.state });
+        gameCache.setGame(gameId, game);
+
+        game.players.forEach((playerSocketId: string) => {
+          const clientGameState = mapServerToClientGameState(game, playerSocketId);
+          io.to(playerSocketId).emit('updateGameState', clientGameState);
+        });
+      } catch (error) {
+        console.error('[WebSocket] Erreur lors de updateTokenCount:', error);
+        socket.emit('error', 'Erreur lors de la mise à jour du nombre de tokens');
       }
     });
 
