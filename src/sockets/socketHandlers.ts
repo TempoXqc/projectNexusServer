@@ -51,7 +51,16 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
     isMyTurn: serverGame.state.game.activePlayerId === playerSocketId,
   });
 
-  const opponentHand: HiddenCard[] = Array(serverGame.state[playerKey].hand.length).fill({
+  // FIX: Use opponentKey for the opponent's hand length (was playerKey before)
+  const opponentHand: HiddenCard[] = Array(serverGame.state[opponentKey].hand.length).fill({
+    id: 'hidden',
+    name: 'Hidden Card',
+    image: 'unknown',
+    exhausted: false,
+  });
+
+  // For symmetry, opponent's opponentHand (hidden view of player's hand)
+  const playerHiddenHand: HiddenCard[] = Array(serverGame.state[playerKey].hand.length).fill({
     id: 'hidden',
     name: 'Hidden Card',
     image: 'unknown',
@@ -63,19 +72,14 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
       ...serverGame.state[playerKey],
       hand: serverGame.state[playerKey].hand,
       opponentField: serverGame.state[opponentKey].field,
-      opponentHand: opponentHand,
+      opponentHand: opponentHand,  // Now correct: opponent's actual hand length (hidden)
       nexus: serverGame.state[playerKey].nexus || { health: 30 },
     },
     opponent: {
       ...serverGame.state[opponentKey],
-      hand: opponentHand,
+      hand: opponentHand,  // Hidden opponent's hand (but using correct length)
       opponentField: serverGame.state[playerKey].field,
-      opponentHand: Array(serverGame.state[playerKey].hand.length).fill({
-        id: 'hidden',
-        name: 'Hidden Card',
-        image: 'unknown',
-        exhausted: false,
-      }),
+      opponentHand: playerHiddenHand,  // Hidden view of player's own hand (for symmetry)
       nexus: serverGame.state[opponentKey].nexus || { health: 30 },
     },
     revealedCards: serverGame.state.revealedCards,
@@ -138,6 +142,7 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
       playerId,
       isConnected: true,
       canInitializeDraw: false,
+      gameId: serverGame.gameId,
     },
   };
 
@@ -149,7 +154,6 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
 
   return gameState;
 }
-
 export async function registerSocketHandlers(io: Server, db: Db) {
   const gameRepository = new GameRepository(db);
   const cardManager = new CardManager(db);
@@ -508,6 +512,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           createdAt: new Date(),
           status: 'waiting',
           playersReady: new Set<number>(),
+          usernames: [data.username || 'anonymous'],
         };
 
         await gameRepository.insertGame(newGame);
@@ -582,6 +587,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         }
 
         game.players.push(socket.id);
+        game.usernames.push(data.username || 'anonymous');
         socket.join(gameId);
         const newPlayerId = game.players.length;
         playerManager.addPlayer(socket.id, { gameId, playerId: newPlayerId });
@@ -595,23 +601,26 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           lifeToken: game.lifeToken,
         };
 
-        // Envoyer playerJoined directement au joueur qui rejoint
         socket.emit('playerJoined', joinResponse);
         console.log('[WebSocket] Émission de playerJoined à:', socket.id, 'avec:', joinResponse);
 
-        // Envoyer l'ACK
         ack(joinResponse);
 
         if (game.players.length === 2) {
-          const [player1SocketId, player2SocketId] = game.players;
-          playerManager.addPlayer(player1SocketId, {
-            gameId,
-            playerId: playerManager.getPlayer(player1SocketId)?.playerId || 1
-          });
-          playerManager.addPlayer(player2SocketId, {
-            gameId,
-            playerId: playerManager.getPlayer(player2SocketId)?.playerId || 2
-          });
+          // Randomize who is Player 1 (50% chance to swap)
+          if (Math.random() > 0.5) {
+            // Swap players and usernames to randomize initiative
+            [game.players[0], game.players[1]] = [game.players[1], game.players[0]];
+            [game.usernames[0], game.usernames[1]] = [game.usernames[1], game.usernames[0]];
+            console.log('[WebSocket] Randomized: Swapped Player 1 and Player 2');
+          } else {
+            console.log('[WebSocket] Randomized: Kept original Player 1 and Player 2');
+          }
+
+          const player1SocketId = game.players[0];
+          const player2SocketId = game.players[1];
+          playerManager.addPlayer(player1SocketId, { gameId, playerId: 1 });
+          playerManager.addPlayer(player2SocketId, { gameId, playerId: 2 });
           game.state.game.activePlayerId = player1SocketId;
           console.log('[WebSocket] activePlayer défini:', game.state.game.activePlayerId, 'pour gameId:', gameId, 'timestamp:', new Date().toISOString());
           console.log('[DEBUG] joinGame - Joueurs attribués:', {
@@ -623,6 +632,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
 
           await gameRepository.updateGame(gameId, {
             players: [player1SocketId, player2SocketId],
+            usernames: game.usernames, // Updated if swapped
             state: {
               ...game.state,
               game: { ...game.state.game, activePlayerId: player1SocketId, updateTimestamp: Date.now() }
@@ -676,13 +686,21 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('checkPlayerGame', async (data, callback) => {
       console.log('[WebSocket] Événement checkPlayerGame reçu:', data, 'socket.id:', socket.id);
       try {
-        const { playerId } = z.object({ playerId: z.string() }).parse(data);
+        const { username } = z.object({ username: z.string() }).parse(data);
         const games = await gameRepository.findActiveGames();
-        const playerGame = games.find((game) => game.players.some((p: string) => playerManager.getPlayer(p)?.playerId === parseInt(playerId, 10)));
+        const playerGame = games.find((game) => game.usernames.includes(username));
         if (playerGame) {
           const fullGame = await gameRepository.findGameById(playerGame.gameId);
           if (fullGame) {
-            callback({ exists: true, gameId: fullGame.gameId, availableDecks: fullGame.availableDecks });
+            const playerIndex = fullGame.usernames.indexOf(username);
+            const playerId = playerIndex + 1;
+            callback({
+              exists: true,
+              gameId: fullGame.gameId,
+              availableDecks: fullGame.availableDecks,
+              status: fullGame.status,
+              playerId
+            });
           } else {
             callback({ exists: false });
           }
@@ -748,7 +766,6 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           return;
         }
 
-        // Vérifier les points d'action
         const playerActionPoints = game.state[playerKey].actionPoints || 0;
         console.log('[WebSocket] Vérification des points d\'action:', {
           playerActionPoints,
@@ -995,7 +1012,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             game.state[playerKey].tokenType = tokenType;
             game.state[playerKey].tokenCount = tokenCount;
             game.state[playerKey].mulliganDone = false;
-            game.state[playerKey].actionPoints = 1; // Réinitialiser actionPoints
+            game.state[playerKey].actionPoints = 1;
           }
 
           await gameRepository.updateGame(data.gameId, { state: game.state });
@@ -1031,7 +1048,7 @@ export async function registerSocketHandlers(io: Server, db: Db) {
             field: z.array(z.any()).optional(),
             graveyard: z.array(z.any()).optional(),
             deckSelection: z.object({ mulliganDone: z.boolean() }).optional(),
-            actionPoints: z.number().optional(), // Ajouter actionPoints au schéma
+            actionPoints: z.number().optional(),
           }),
         }).parse(data);
 
@@ -1080,7 +1097,6 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         if (clientState.graveyard) {
           game.state[playerKey].graveyard = clientState.graveyard;
         }
-        // Protéger actionPoints contre les mises à jour non autorisées
         if (clientState.actionPoints !== undefined) {
           console.warn('[WebSocket] Tentative de mise à jour de actionPoints via updateGameState ignorée:', {
             clientActionPoints: clientState.actionPoints,

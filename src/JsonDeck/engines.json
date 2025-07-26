@@ -1,0 +1,761 @@
+[
+  {
+    "id": "engine_001",
+    "name": {
+      "fr": "Catapultes Cyclope",
+      "en": "Cyclops Catapults",
+      "es": "Catapultas Cíclope"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992533/engine_001_tn7uox.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992462/engine_001_h3tjww.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992417/engine_001_gp7vu4.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 0,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": ["opponent"], "type": ["any"] }],
+          "priority": 1,
+          "source": { "id": "engine_001", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": ["self"] }],
+          "priority": 2,
+          "source": { "id": "engine_001", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "engine_002",
+    "name": {
+      "fr": "Catapulte Titanesque",
+      "en": "Titan Catapult",
+      "es": "Catapulta Titán"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992536/engine_002_ffjotb.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992461/engine_002_mwjpzf.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992416/engine_002_eajvzx.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 3,
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
+          "priority": 1,
+          "source": { "id": "engine_002", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "engine_003",
+    "name": {
+      "fr": "Catapulte Titanesque",
+      "en": "Titan Catapult",
+      "es": "Catapulta Titán"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992545/engine_003_fwqpcz.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992466/engine_003_sa51t9.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992416/engine_003_qjt0xt.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 3,
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
+          "priority": 1,
+          "source": { "id": "engine_003", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "engine_004",
+    "name": {
+      "fr": "Dard D’Acier",
+      "en": "Iron Sting",
+      "es": "Ballista Gigante"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992535/engine_004_r52b2t.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992466/engine_004_vvhemm.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992412/engine_004_o9szsw.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "field": {
+              "owner": ["opponent"],
+              "amount": 1,
+              "target": {
+                "type": ["attack", "defence", "support"]
+              }
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["opponent"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": { "id": "engine_004", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "engine_005",
+    "name": {
+      "fr": "Broyeur D’Os",
+      "en": "Bone Crusher",
+      "es": "Rompe Huesos"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992546/engine_005_hcqoqw.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992462/engine_005_aieaud.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992415/engine_005_xykdit.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 3,
+          "target": [{ "owner": "any", "type": ["unit"] }],
+          "trample": true,
+          "priority": 1,
+          "source": { "id": "engine_005", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3,
+        "trample": true
+      }
+    ]
+  },
+  {
+    "id": "engine_006",
+    "name": {
+      "fr": "Broyeur D’Os",
+      "en": "Bone Crusher",
+      "es": "Rompe Huesos"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992534/engine_006_hs6lr5.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992465/engine_006_ic6yfk.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992413/engine_006_ssvbv3.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 3,
+          "target": [{ "owner": "any", "type": ["unit"] }],
+          "trample": true,
+          "priority": 1,
+          "source": { "id": "engine_006", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3,
+        "trample": true
+      }
+    ]
+  },
+  {
+    "id": "engine_007",
+    "name": {
+      "fr": "Tour de Siège",
+      "en": "Siege Tower",
+      "es": "Torre De Asedio"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992532/engine_007_zbig1n.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992467/engine_007_mjyq6k.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992416/engine_007_oir1eu.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 0,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": ["self"] }],
+          "priority": 1,
+          "source": { "id": "engine_007", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "engine_008",
+    "name": {
+      "fr": "Tour de Siège",
+      "en": "Siege Tower",
+      "es": "Torre De Asedio"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992545/engine_008_jf30l8.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992461/engine_008_td71vt.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992414/engine_008_e1xkvv.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 0,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": ["self"] }],
+          "priority": 1,
+          "source": { "id": "engine_008", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "engine_009",
+    "name": {
+      "fr": "Baliste Scorpion",
+      "en": "Scorpion Ballistas",
+      "es": "Ballistas Escorpión"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992536/engine_009_xaeqak.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992465/engine_009_kz3gcq.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992412/engine_009_uykplm.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": ["opponent"], "type": ["unit"] }],
+          "ignore_defence": true,
+          "priority": 1,
+          "source": { "id": "engine_009", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 1,
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
+          "priority": 1,
+          "source": { "id": "engine_009", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "engine_010",
+    "name": {
+      "fr": "Bélier",
+      "en": "Battering Ram",
+      "es": "Ariete"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992534/engine_010_iglo9p.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992464/engine_010_vqj0z9.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992415/engine_010_pl10ub.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": ["self"] }],
+          "priority": 1,
+          "source": { "id": "engine_010", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
+          "priority": 1,
+          "source": { "id": "engine_010", "zone": "field" }
+        },
+        {
+          "trigger": "on_exhaust",
+          "action": "disable_battle_phase",
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
+          "duration": "this_turn",
+          "priority": 2,
+          "source": { "id": "engine_010", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "engine_011",
+    "name": {
+      "fr": "Bélier",
+      "en": "Battering Ram",
+      "es": "Ariete"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992545/engine_011_yjpi7b.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992464/engine_011_wti0tb.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992413/engine_011_jgzmxb.jpg"
+    },
+    "faction": "engine",
+    "label": ["engine"],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": ["self"] }],
+          "priority": 1,
+          "source": { "id": "engine_011", "zone": "field" }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "damage",
+          "amount": 2,
+          "target": [{ "owner": ["opponent"], "type": ["nexus"] }],
+          "priority": 1,
+          "source": { "id": "engine_011", "zone": "field" }
+        },
+        {
+          "trigger": "on_exhaust",
+          "action": "disable_battle_phase",
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
+          "duration": "this_turn",
+          "priority": 2,
+          "source": { "id": "engine_011", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "engine_012",
+    "name": {
+      "fr": "Commandant de Siège",
+      "en": "Siege Commander",
+      "es": "Comandante De Asedio"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992544/engine_012_wktttm.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992463/engine_012_oerxgq.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992417/engine_012_ulwo04.jpg"
+    },
+    "faction": "engine",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "activate_ability",
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
+          "amount": 1,
+          "priority": 1,
+          "source": { "id": "engine_012", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "gain_token",
+          "token": "gear_token",
+          "where": {
+            "token_pool": "self"
+          },
+          "amount": 1,
+          "priority": 2,
+          "source": { "id": "engine_012", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "engine_013",
+    "name": {
+      "fr": "Commandant de Siège",
+      "en": "Siege Commander",
+      "es": "Comandante De Asedio"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992534/engine_013_thhywt.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992464/engine_013_svtwe0.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992413/engine_013_x6cdjx.jpg"
+    },
+    "faction": "engine",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "activate_ability",
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
+          "amount": 1,
+          "priority": 1,
+          "source": { "id": "engine_013", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "gain_token",
+          "token": "gear_token",
+          "where": {
+            "token_pool": "self"
+          },
+          "amount": 1,
+          "priority": 2,
+          "source": { "id": "engine_013", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "defence",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "engine_014",
+    "name": {
+      "fr": "Assaut",
+      "en": "Onslaught",
+      "es": "Descarga Letal"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992535/engine_014_hhckiz.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992462/engine_014_gxcnfd.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992411/engine_014_lddxim.jpg"
+    },
+    "faction": "engine",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_token_pool",
+            "filter": {
+              "type": ["gear_token"],
+              "owner": ["self"]
+            },
+            "operator": ">=",
+            "value": 3
+          },
+          "action": "move_card",
+          "from": {
+            "token_pool": {
+              "owner": ["self"],
+              "amount": 3,
+              "type": ["gear_token"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": { "id": "engine_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_token_pool",
+            "filter": {
+              "type": ["gear_token"],
+              "owner": ["self"]
+            },
+            "operator": ">=",
+            "value": 3
+          },
+          "action": "set_cost_to_zero",
+          "target": {
+            "owner": ["self"],
+            "id": ["engine_014"]
+          },
+          "priority": 2,
+          "source": { "id": "engine_014", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "activate_onPlay_ability",
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
+          "amount": 3,
+          "priority": 3,
+          "source": { "id": "engine_014", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
+      }
+    ]
+  },
+  {
+    "id": "engine_015",
+    "name": {
+      "fr": "Machinerie de Réparation",
+      "en": "Repair Machinery",
+      "es": "Reparar Maquinaria"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992532/engine_015_zvqjvb.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992464/engine_015_wwt8nx.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992417/engine_015_zu2rfu.jpg"
+    },
+    "faction": "engine",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "activate_onPlay_ability",
+          "target": [{ "owner": ["self"], "type": ["unit"] }],
+          "amount": 1,
+          "priority": 1,
+          "source": { "id": "engine_015", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "label": ["engine"]
+            }
+          },
+          "to": {
+            "hand": {
+              "owner": ["self"]
+            }
+          },
+          "amount": 1,
+          "priority": 2,
+          "source": { "id": "engine_015", "zone": "field" }
+        },
+        {
+          "trigger": "on_play",
+          "action": "gain_token",
+          "token": "gear_token",
+          "where": {
+            "token_pool": "self"
+          },
+          "amount": 1,
+          "priority": 3,
+          "source": { "id": "engine_015", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
+      }
+    ]
+  }
+]

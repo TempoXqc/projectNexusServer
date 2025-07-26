@@ -1,0 +1,1264 @@
+[
+  {
+    "id": "samurai_001",
+    "name": {
+      "fr": "Daimyo",
+      "en": "Daimyo",
+      "es": "Daimyo"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992508/samurai_001_y3x0db.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992486/samurai_001_urstbj.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992401/samurai_001_nkncad.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 1,
+          "target": [{ "owner": ["self"] }],
+          "priority": 1,
+          "source": { "id": "samurai_001", "zone": "field" }
+        }
+      ],
+      "on_attack_resolve": [
+        {
+          "trigger": "on_attack_resolve",
+          "condition": { "type": "card_id_matches", "id": "samurai_001" },
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Défausser une carte samouraï pour renvoyer cette carte dans la main",
+                "en": "Discard a samurai card to return this card to hand",
+                "es": "Descarta una carta samurái para devolver esta carta a la mano"
+              },
+              "actions": [
+                {
+                  "action": "move_card",
+                  "from": { "graveyard": { "owner": ["self"], "id": ["samurai_001"] } },
+                  "to": { "hand": { "owner": ["self"], "where": { "to_position": "top" } } },
+                  "cost": { "type": "discard", "owner": "self", "from": "hand", "filter": { "faction": "samurai" } },
+                  "priority": 1,
+                  "source": { "id": "samurai_001", "zone": "graveyard" }
+                }
+              ]
+            }
+          ],
+          "priority": 1,
+          "source": { "id": "samurai_001", "zone": "graveyard" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "samurai_002",
+    "name": {
+      "fr": "Hatamoto",
+      "en": "Hatamoto",
+      "es": "Hatamoto"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992510/samurai_002_eibiyf.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992484/samurai_002_jg1zv8.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992396/samurai_002_wkbirp.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["samurai_002"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "any"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_002",
+            "zone": "graveyard"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3,
+        "trample": true
+      }
+    ]
+  },
+  {
+    "id": "samurai_003",
+    "name": {
+      "fr": "Hatamoto",
+      "en": "Hatamoto",
+      "es": "Hatamoto"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992507/samurai_003_fxpgiz.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992484/samurai_003_dbpuvp.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992398/samurai_003_cr3ph8.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["samurai_003"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "any"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_003",
+            "zone": "graveyard"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 3,
+        "trample": true
+      }
+    ]
+  },
+  {
+    "id": "samurai_004",
+    "name": {
+      "fr": "Samouraïs",
+      "en": "Samurais",
+      "es": "Samuráis"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992509/samurai_004_o2ztdw.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992484/samurai_004_syny5i.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992401/samurai_004_jhrggt.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "draw",
+          "amount": 1,
+          "target": [{"owner": ["self"]}],
+          "priority": 1,
+          "source": {
+            "id": "samurai_004",
+            "zone": "graveyard"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "discard",
+          "from": {
+            "hand": {
+              "owner": ["self"],
+              "type": ["any"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "effect": {
+            "action": "set_cost_to_zero",
+            "target": {
+              "owner": ["self"],
+              "id": ["samurai_004"]
+            },
+            "priority": 1,
+            "source": {
+              "id": "samurai_004",
+              "zone": "field"
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_004",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_005",
+    "name": {
+      "fr": "Samouraïs",
+      "en": "Samurais",
+      "es": "Samuráis"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992510/samurai_005_enegyo.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992482/samurai_005_h7a3xi.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992397/samurai_005_eh7w3c.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "draw",
+          "amount": 1,
+          "target": [{"owner": ["self"]}],
+          "priority": 1,
+          "source": {
+            "id": "samurai_005",
+            "zone": "graveyard"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "discard",
+          "from": {
+            "hand": {
+              "owner": ["self"],
+              "type": ["any"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "effect": {
+            "action": "set_cost_to_zero",
+            "target": {
+              "owner": ["self"],
+              "id": ["samurai_005"]
+            },
+            "priority": 1,
+            "source": {
+              "id": "samurai_005",
+              "zone": "field"
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_005",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_006",
+    "name": {
+      "fr": "Moines Sohei",
+      "en": "Sohei Monks",
+      "es": "Monjes Sohei"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992507/samurai_006_hcvzkh.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992480/samurai_006_mt8ahi.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992397/samurai_006_zdtqwj.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["samurai_006"]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_006",
+            "zone": "graveyard"
+          }
+        },
+        {
+          "trigger": "on_discard",
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 2,
+          "source": {
+            "id": "samurai_006",
+            "zone": "graveyard"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_hand",
+            "owner": "self",
+            "operator": "<=",
+            "value": 3
+          },
+          "action": "set_cost_to_zero",
+          "target": {
+            "owner": ["self"],
+            "id": ["samurai_006"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_006",
+            "zone": "hand"
+          }
+        },
+        {
+          "trigger": "on_attack_resolve",
+          "condition": {
+            "type": "card_id_matches",
+            "id": "samurai_006"
+          },
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["samurai_006"]
+            }
+          },
+          "to": {
+            "hand": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 2,
+          "source": {
+            "id": "samurai_006",
+            "zone": "graveyard"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_007",
+    "name": {
+      "fr": "Kunoichi",
+      "en": "Kunoichi",
+      "es": "Kunoichi"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992507/samurai_007_fvlc7r.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992482/samurai_007_nbxk9h.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992400/samurai_007_mxcipa.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["samurai_007"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "any"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_007",
+            "zone": "graveyard"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_007",
+            "zone": "field"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "condition": { "type": "card_id_matches", "id": "samurai_007" },
+          "action": "prevent_move",
+          "to": "graveyard",
+          "priority": 1,
+          "source": { "id": "samurai_007", "zone": "field" }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "samurai_008",
+    "name": {
+      "fr": "Ronin",
+      "en": "Ronin",
+      "es": "Ronin"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992512/samurai_008_nlojsf.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992485/samurai_008_udkgln.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992400/samurai_008_kgaywh.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["samurai_008"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "any"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_008",
+            "zone": "graveyard"
+          }
+        }
+      ],
+      "on_attack_resolve": [
+        {
+          "trigger": "on_attack_resolve",
+          "condition": {
+            "type": "card_id_matches",
+            "id": "samurai_008"
+          },
+          "action": "draw",
+          "amount": 1,
+          "target": [{"owner": ["self"]}],
+          "priority": 1,
+          "source": {
+            "id": "samurai_008",
+            "zone": "graveyard"
+          }
+        },
+        {
+          "trigger": "on_attack_resolve",
+          "condition": {
+            "type": "card_id_matches",
+            "id": "samurai_008"
+          },
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["samurai_008"]
+            }
+          },
+          "to": {
+            "deck": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "shuffle"
+              }
+            }
+          },
+          "priority": 2,
+          "source": {
+            "id": "samurai_008",
+            "zone": "graveyard"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "attack",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_009",
+    "name": {
+      "fr": "Shogun",
+      "en": "Shogun",
+      "es": "Shogun"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992506/samurai_009_mg9d6x.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992480/samurai_009_xwshhk.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992398/samurai_009_jamjm6.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "condition": {
+            "type": "card_id_matches",
+            "id": "samurai_009"
+          },
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "id": ["samurai_009"]
+            }
+          },
+          "to": {
+            "field": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "any"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_009",
+            "zone": "graveyard"
+          }
+        }
+      ],
+      "on_attack": [
+        {
+          "trigger": "on_attack",
+          "action": "draw",
+          "amount": 1,
+          "target": [{"owner": ["self"]}],
+          "priority": 1,
+          "source": {
+            "id": "samurai_009",
+            "zone": "field"
+          }
+        }
+      ],
+      "reactions": [
+        {
+          "trigger": "manual",
+          "cost": {
+            "type": "tap",
+            "target": {
+              "owner": "self",
+              "id": "samurai_009"
+            }
+          },
+          "condition": {
+            "type": "count",
+            "property": "cards_discarded_this_turn",
+            "owner": "self",
+            "operator": ">=",
+            "value": 1
+          },
+          "action": "damage",
+          "amount": 2,
+          "target": {
+            "owner": ["opponent"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_009",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_010",
+    "name": {
+      "fr": "Impératrice",
+      "en": "Empress",
+      "es": "Emperatriz"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992508/samurai_010_g8hqcn.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992484/samurai_010_iqgt87.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992401/samurai_010_rhrhyi.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "restore_health",
+          "amount": 2,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_010",
+            "zone": "field"
+          }
+        }
+      ],
+      "on_exhaust": [
+        {
+          "trigger": "on_exhaust",
+          "action": "discard",
+          "from": {
+            "hand": {
+              "owner": ["self"],
+              "type": ["any"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_010",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_exhaust",
+          "action": "draw",
+          "amount": 1,
+          "target": [{"owner": ["self"]}],
+          "priority": 2,
+          "source": {
+            "id": "samurai_010",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_011",
+    "name": {
+      "fr": "Rituel Shinrei",
+      "en": "Shinrei Ritual",
+      "es": "Ritual Shinrei"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992512/samurai_011_kcobnc.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992482/samurai_011_ffer6a.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992399/samurai_011_b3gaka.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "graveyard_has_unit",
+            "owner": "self",
+            "faction": "samurai"
+          },
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "type": ["unit"],
+              "faction": ["samurai"]
+            }
+          },
+          "to": {
+            "hand": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_011",
+            "zone": "field"
+          }
+        }
+      ],
+      "reactions": [
+        {
+          "trigger": "manual",
+          "cost": {
+            "type": "discard",
+            "owner": "self",
+            "from": "hand",
+            "filter": {
+              "type": "any"
+            }
+          },
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_011",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_012",
+    "name": {
+      "fr": "Rituel Shinrei",
+      "en": "Shinrei Ritual",
+      "es": "Ritual Shinrei"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992509/samurai_012_t3rcko.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992481/samurai_012_evqnqz.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992402/samurai_012_jkhi1p.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "condition": {
+            "type": "graveyard_has_unit",
+            "owner": "self",
+            "faction": "samurai"
+          },
+          "action": "move_card",
+          "from": {
+            "graveyard": {
+              "owner": ["self"],
+              "type": ["unit"],
+              "faction": ["samurai"]
+            }
+          },
+          "to": {
+            "hand": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_012",
+            "zone": "field"
+          }
+        }
+      ],
+      "reactions": [
+        {
+          "trigger": "manual",
+          "cost": {
+            "type": "discard",
+            "owner": "self",
+            "from": "hand",
+            "filter": {
+              "type": "any"
+            }
+          },
+          "action": "restore_health",
+          "amount": 1,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_012",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "unit",
+        "subTypes": "support",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "samurai_013",
+    "name": {
+      "fr": "Ashigaru",
+      "en": "Ashigaru",
+      "es": "Refuerzos Ashigaru"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992510/samurai_013_grqqbk.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992480/samurai_013_wz4g1z.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992396/samurai_013_kgd8cx.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "draw",
+          "amount": 1,
+          "target": [{"owner": ["self"]}],
+          "priority": 1,
+          "source": {
+            "id": "samurai_013",
+            "zone": "graveyard"
+          }
+        }
+      ],
+      "aura": [
+        {
+          "trigger": "aura",
+          "condition": {
+            "type": "count",
+            "property": "cards_in_hand",
+            "owner": "self",
+            "operator": "<=",
+            "value": 3
+          },
+          "action": "set_cost_to_zero",
+          "target": {
+            "owner": ["self"],
+            "id": ["samurai_013"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_013",
+            "zone": "hand"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 2,
+          "target": [{"owner": ["self"]}],
+          "priority": 1,
+          "source": {
+            "id": "samurai_013",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
+      }
+    ]
+  },
+  {
+    "id": "samurai_014",
+    "name": {
+      "fr": "Soleil Levant",
+      "en": "Rising Sun",
+      "es": "Sol Naciente"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992511/samurai_014_kiagvw.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992481/samurai_014_wzlofz.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992396/samurai_014_d5jcqn.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_discard": [
+        {
+          "trigger": "on_discard",
+          "action": "restore_health",
+          "amount": 2,
+          "target": {
+            "owner": ["self"],
+            "type": ["nexus"]
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_014",
+            "zone": "graveyard"
+          }
+        }
+      ],
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "discard",
+          "from": {
+            "hand": {
+              "owner": ["self"],
+              "type": ["any"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "priority": 1,
+          "source": {
+            "id": "samurai_014",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "choice",
+          "options": [
+            {
+              "title": {
+                "fr": "Défausser jusqu'à 5 cartes pour restaurer 1 PV par carte",
+                "en": "Discard up to 5 cards to restore 1 health per card",
+                "es": "Descarta hasta 5 cartas para restaurar 1 salud por carta"
+              },
+              "actions": [
+                {
+                  "action": "discard",
+                  "from": {
+                    "hand": {
+                      "owner": ["self"],
+                      "type": ["any"]
+                    }
+                  },
+                  "to": {
+                    "graveyard": {
+                      "owner": ["self"],
+                      "where": {
+                        "to_position": "top"
+                      }
+                    }
+                  },
+                  "amount": 5,
+                  "priority": 1,
+                  "source": {
+                    "id": "samurai_014",
+                    "zone": "field"
+                  }
+                },
+                {
+                  "action": "restore_health",
+                  "amount": "discarded_cards_count",
+                  "target": {
+                    "owner": ["self"],
+                    "type": ["nexus"]
+                  },
+                  "max": 5,
+                  "priority": 2,
+                  "source": {
+                    "id": "samurai_014",
+                    "zone": "field"
+                  }
+                }
+              ]
+            }
+          ],
+          "priority": 2,
+          "source": {
+            "id": "samurai_014",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "draw",
+          "amount": 3,
+          "target": [{"owner": ["self"]}],
+          "priority": 3,
+          "source": {
+            "id": "samurai_014",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
+      }
+    ]
+  },
+  {
+    "id": "samurai_015",
+    "name": {
+      "fr": "Assaut Ninja",
+      "en": "Ninja Assault",
+      "es": "Asalto Ninja"
+    },
+    "image": {
+      "fr": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992511/samurai_015_a8re3w.jpg",
+      "en": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992483/samurai_015_mtudmh.jpg",
+      "es": "https://res.cloudinary.com/dsqxexeam/image/upload/v1750992399/samurai_015_v3lty8.jpg"
+    },
+    "faction": "samurai",
+    "label": [],
+    "cost": 1,
+    "effects": {
+      "on_play": [
+        {
+          "trigger": "on_play",
+          "action": "discard",
+          "from": {
+            "hand": {
+              "owner": ["self"],
+              "type": ["any"]
+            }
+          },
+          "to": {
+            "graveyard": {
+              "owner": ["self"],
+              "where": {
+                "to_position": "top"
+              }
+            }
+          },
+          "amount": 1,
+          "priority": 1,
+          "source": {
+            "id": "samurai_015",
+            "zone": "field"
+          }
+        },
+        {
+          "trigger": "on_play",
+          "action": "split_damage",
+          "amount": 4,
+          "target": [
+            { "owner": "any", "type": ["unit"] },
+            { "owner": "any", "type": ["nexus"] }
+          ],
+          "selection": "split",
+          "priority": 2,
+          "source": {
+            "id": "samurai_015",
+            "zone": "field"
+          }
+        }
+      ]
+    },
+    "types": [
+      {
+        "type": "spell",
+        "target": [
+          { "owner": "any", "type": "unit" },
+          { "owner": "any", "type": "nexus" }
+        ],
+        "value": 0
+      }
+    ]
+  }
+]

@@ -7,6 +7,7 @@ interface ActiveGameProjection {
   createdAt: Date;
   status: 'waiting' | 'started';
   playersReady: number[];
+  usernames: string[];
 }
 
 export class GameRepository {
