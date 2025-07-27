@@ -228,6 +228,9 @@ class EffectManager {
         const chosenOption = effect.options.find((opt) => opt.title.en === selectedOption);
         if (chosenOption) {
             for (const action of chosenOption.actions) {
+                if (action.cost && action.cost.type === 'discard') {
+                    await this.handleDiscard(action);
+                }
                 await this.executeAction(action, card);
             }
         }
@@ -288,9 +291,9 @@ class EffectManager {
             case 'prevent_destruction':
                 await this.handlePreventDestruction(action);
                 break;
-            // case 'discard':
-            //     await this.handleDiscard(action);
-            //     break;
+            case 'discard':
+                await this.handleDiscard(action);
+                break;
             case 'move_remaining_to_bottom':
                 await this.handleMoveRemainingToBottom(action);
                 break;
@@ -447,33 +450,42 @@ class EffectManager {
         }
     }
 
-    // private async handleMoveCard(action: Effect): Promise<void> {
-    //     const { gameState, playerId, opponentId } = this.gameContext;
-    //     if (!action.from || !action.to) return;
-    //
-    //     const sourcePlayerId = typeof action.from !== 'string' && action.from.deck?.owner?.includes('self') ? playerId : opponentId;
-    //     const targetPlayerId = typeof action.to !== 'string' && action.to.deck?.owner?.includes('self') ? playerId : opponentId;
-    //     const sourcePlayer = this.getPlayerState(sourcePlayerId);
-    //     const targetPlayer = this.getPlayerState(targetPlayerId);
-    //
-    //     let sourceZone: Card[] = typeof action.from !== 'string' ? sourcePlayer[(action.from.zone as keyof PlayerState) || 'deck'] as Card[] : sourcePlayer.deck;
-    //     let targetZone: Card[] = typeof action.to !== 'string' ? targetPlayer[(action.to.zone as keyof PlayerState) || 'deck'] as Card[] : targetPlayer.deck;
-    //
-    //     const card = sourceZone.find(
-    //         (c: Card) =>
-    //             (typeof action.from !== 'string' && action.from[action.from.zone as keyof MoveCard]?.id?.[0] ? c.id === action.from[action.from.zone as keyof MoveCard].id![0] : false) ||
-    //             (typeof action.from !== 'string' && action.from[action.from.zone as keyof MoveCard]?.filter?.id?.[0] ? c.id === action.from[action.from.zone as keyof MoveCard].filter.id[0] : false)
-    //     );
-    //     if (card) {
-    //         sourceZone = sourceZone.filter((c: Card) => c.id !== card.id);
-    //         if (typeof action.to !== 'string' && action.to[action.to.zone as keyof MoveCard]?.where?.to_position === 'shuffle') {
-    //             targetZone.push(card);
-    //             targetZone.sort(() => Math.random() - 0.5);
-    //         } else {
-    //             targetZone.unshift(card);
-    //         }
-    //     }
-    // }
+    private async handleMoveCard(action: Effect): Promise<void> {
+        const { gameState, playerId, opponentId } = this.gameContext;
+        if (!action.from || !action.to) return;
+
+        const sourcePlayerId = typeof action.from !== 'string' && action.from.deck?.owner?.includes('self') ? playerId : opponentId;
+        const targetPlayerId = typeof action.to !== 'string' && action.to.deck?.owner?.includes('self') ? playerId : opponentId;
+        const sourcePlayer = this.getPlayerState(sourcePlayerId);
+        const targetPlayer = this.getPlayerState(targetPlayerId);
+
+        // Extraire la clé de zone pour from (assume une seule clé dans MoveCard)
+        const fromZone = Object.keys(action.from)[0] as keyof PlayerState;
+        const fromData = (action.from as MoveCard)[fromZone];
+
+        let sourceZone: Card[] = sourcePlayer[fromZone || 'deck'] as Card[];
+
+        // Extraire la clé de zone pour to
+        const toZone = Object.keys(action.to)[0] as keyof PlayerState;
+        const toData = (action.to as MoveCard)[toZone];
+
+        let targetZone: Card[] = targetPlayer[toZone || 'deck'] as Card[];
+
+        const card = sourceZone.find(
+            (c: Card) =>
+                (fromData?.id?.[0] ? c.id === fromData.id![0] : false) ||
+                (fromData?.filter?.id?.[0] ? c.id === fromData.filter.id[0] : false)
+        );
+        if (card) {
+            sourceZone = sourceZone.filter((c: Card) => c.id !== card.id);
+            if (toData?.where?.to_position === 'shuffle') {
+                targetZone.push(card);
+                targetZone.sort(() => Math.random() - 0.5);
+            } else {
+                targetZone.unshift(card);
+            }
+        }
+    }
 
     private async handleRestoreHealth(action: Effect): Promise<void> {
         const { gameState, playerId, opponentId } = this.gameContext;
@@ -532,26 +544,26 @@ class EffectManager {
         io.to(opponentId).emit('revealCards', revealedCards);
     }
 
-    // private async handleSelectFromRevealed(action: Effect, card: Card): Promise<void> {
-    //     const { gameState, io, playerId } = this.gameContext;
-    //     const revealedCards = gameState.revealedCards;
-    //     const prompt = action.prompt?.en || '';
-    //
-    //     const selectedCardId = await new Promise<string>((resolve) => {
-    //         io.to(playerId).emit('selectFromRevealed', { prompt, cards: revealedCards }, (response: string) => {
-    //             resolve(response);
-    //         });
-    //     });
-    //
-    //     const selectedCard = revealedCards.find((c: Card) => c.id === selectedCardId);
-    //     if (selectedCard && action.from && typeof action.from !== 'string' && action.to && typeof action.to !== 'string') {
-    //         await this.handleMoveCard({
-    //             ...action,
-    //             from: { deck: { owner: action.from.deck?.owner || ['self'], id: [selectedCardId] } },
-    //             to: action.to,
-    //         });
-    //     }
-    // }
+    private async handleSelectFromRevealed(action: Effect, card: Card): Promise<void> {
+        const { gameState, io, playerId } = this.gameContext;
+        const revealedCards = gameState.revealedCards;
+        const prompt = action.prompt?.en || '';
+
+        const selectedCardId = await new Promise<string>((resolve) => {
+            io.to(playerId).emit('selectFromRevealed', { prompt, cards: revealedCards }, (response: string) => {
+                resolve(response);
+            });
+        });
+
+        const selectedCard = revealedCards.find((c: Card) => c.id === selectedCardId);
+        if (selectedCard && action.from && typeof action.from !== 'string' && action.to && typeof action.to !== 'string') {
+            await this.handleMoveCard({
+                ...action,
+                from: { deck: { owner: action.from.deck?.owner || ['self'], id: [selectedCardId] } },
+                to: action.to,
+            });
+        }
+    }
 
     private async handleReorderRevealedCards(action: Effect): Promise<void> {
         const { gameState, io, playerId, opponentId } = this.gameContext;
@@ -571,20 +583,23 @@ class EffectManager {
             .concat(player.deck.filter((c: Card) => !revealedCards.some((rc: Card) => rc.id === c.id)));
     }
 
-    // private async handleTakeControlOfUnit(action: Effect): Promise<void> {
-    //     const { gameState, playerId, opponentId } = this.gameContext;
-    //     const opponent = this.getPlayerState(opponentId);
-    //     const player = this.getPlayerState(playerId);
-    //     if (!action.from || typeof action.from === 'string') return;
-    //
-    //     const unit = action.from.field?.max_value !== undefined
-    //         ? opponent.field.find((card: Card) => card.types[0].value <= action.from.field.max_value)
-    //         : undefined;
-    //     if (unit) {
-    //         opponent.field = opponent.field.filter((c: Card) => c.id !== unit.id);
-    //         player.field.push(unit);
-    //     }
-    // }
+    private async handleTakeControlOfUnit(action: Effect): Promise<void> {
+        const { gameState, playerId, opponentId } = this.gameContext;
+        const opponent = this.getPlayerState(opponentId);
+        const player = this.getPlayerState(playerId);
+        if (!action.from || typeof action.from === 'string') return;
+
+        // Accéder à la clé 'field' dans MoveCard
+        const fromField = (action.from as MoveCard).field;
+
+        const unit = fromField?.max_value !== undefined
+            ? opponent.field.find((card: Card) => card.types[0].value <= fromField.max_value)
+            : undefined;
+        if (unit) {
+            opponent.field = opponent.field.filter((c: Card) => c.id !== unit.id);
+            player.field.push(unit);
+        }
+    }
 
     private async handleExhaustUnit(action: Effect): Promise<void> {
         const { gameState, playerId, opponentId } = this.gameContext;
@@ -711,36 +726,69 @@ class EffectManager {
         });
     }
 
-    // private async handleDiscard(action: Effect): Promise<void> {
-    //     const { gameState, io, playerId } = this.gameContext;
-    //     const player = this.getPlayerState(playerId);
-    //     if ('hand' in player && Array.isArray(player.hand) && player.hand.every((item): item is Card => 'faction' in item)) {
-    //         const cardsToDiscard = player.hand.filter(
-    //             (card: Card) =>
-    //                 action.from &&
-    //                 typeof action.from !== 'string' &&
-    //                 action.from.hand?.filter &&
-    //                 (action.from.hand.filter.faction ? card.faction === action.from.hand.filter.faction : true) &&
-    //                 (action.from.hand.filter.type ? card.types.some((t: Card['types'][number]) => t.type === action.from.hand.filter.type) : true)
-    //         );
-    //
-    //         const selectedCardIds = await new Promise<string[]>((resolve) => {
-    //             io.to(playerId).emit('selectCardsToDiscard', { amount: action.amount || 1, cards: cardsToDiscard }, (response: string[]) => {
-    //                 resolve(response);
-    //             });
-    //         });
-    //
-    //         for (const cardId of selectedCardIds) {
-    //             const card = player.hand.find((c: Card) => c.id === cardId);
-    //             if (card) {
-    //                 player.hand = player.hand.filter((c: Card) => c.id !== cardId);
-    //                 player.graveyard.push(card);
-    //                 gameState.turnState.discardedCardsCount++;
-    //                 await this.executeEffects(card, 'on_discard');
-    //             }
-    //         }
-    //     }
-    // }
+    private async handleDiscard(action: Effect): Promise<void> {
+        const { gameState, io, playerId } = this.gameContext;
+        const player = this.getPlayerState(playerId);
+        if (!action.from || typeof action.from === 'string') {
+            console.log('[EffectManager] action.from est string ou absent, défausse ignorée:', { actionFrom: action.from });
+            return;
+        }
+
+        const from = action.from as MoveCard;
+
+        if (!from.hand) {
+            console.log('[EffectManager] Pas de "hand" dans action.from, défausse ignorée');
+            return;
+        }
+
+        if ('hand' in player && Array.isArray(player.hand) && player.hand.every((item): item is Card => 'faction' in item)) {
+            const cardsToDiscard = player.hand.filter(
+                (card: Card) =>
+                    from.hand.filter &&
+                    (from.hand.filter.faction ? card.faction === from.hand.filter.faction : true) &&
+                    (from.hand.filter.type ? card.types.some((t: Card['types'][number]) => t.type === from.hand.filter.type) : true)
+            );
+
+            if (cardsToDiscard.length === 0) {
+                console.log('[EffectManager] Aucune carte valide à défausser:', { playerId });
+                return;
+            }
+
+            const selectedCardIds = await new Promise<string[]>((resolve) => {
+                io.to(playerId).emit('selectCardsToDiscard', { amount: action.amount || 1, cards: cardsToDiscard }, (response: string[]) => {
+                    resolve(response);
+                });
+            });
+
+            for (const cardId of selectedCardIds) {
+                const card = player.hand.find((c: Card) => c.id === cardId);
+                if (card) {
+                    player.hand = player.hand.filter((c: Card) => c.id !== cardId);
+                    player.graveyard.push(card);
+                    gameState.turnState.discardedCardsCount++;
+                    await this.executeEffects(card, 'on_discard');
+                }
+            }
+
+            if (player.id === gameState.player.id) {
+                gameState.opponent.opponentHand = Array(player.hand.length).fill({
+                    id: 'hidden',
+                    name: 'Hidden Card',
+                    image: 'unknown',
+                    exhausted: false,
+                });
+            } else {
+                gameState.player.opponentHand = Array(player.hand.length).fill({
+                    id: 'hidden',
+                    name: 'Hidden Card',
+                    image: 'unknown',
+                    exhausted: false,
+                });
+            }
+
+            console.log('[EffectManager] Défausse effectuée:', { selectedCardIds, newHandLength: player.hand.length });
+        }
+    }
 
     private async handleMoveRemainingToBottom(action: Effect): Promise<void> {
         const { gameState, playerId, opponentId } = this.gameContext;
@@ -790,7 +838,7 @@ class EffectManager {
         const targetCards = player.field.filter((c: Card) =>
             Array.isArray(action.target)
                 ? action.target.some((t: Target) => t.id && (Array.isArray(t.id) ? t.id.includes(c.id) : t.id === c.id))
-                : action.target.id && (Array.isArray(action.target.id) ? action.target.id.includes(c.id) : action.target.id === c.id)
+                : action.target.id && (Array.isArray(action.target.id) ? action.target.id.includes(c.id) : c.id === action.target.id)
         );
         targetCards.forEach((card: Card) => {
             card.keywords = card.keywords || [];

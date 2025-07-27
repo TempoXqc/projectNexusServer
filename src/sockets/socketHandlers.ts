@@ -52,7 +52,6 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
     isMyTurn: serverGame.state.game.activePlayerId === playerSocketId,
   });
 
-  // FIX: Use opponentKey for the opponent's hand length (was playerKey before)
   const opponentHand: HiddenCard[] = Array(serverGame.state[opponentKey].hand.length).fill({
     id: 'hidden',
     name: 'Hidden Card',
@@ -60,7 +59,6 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
     exhausted: false,
   });
 
-  // For symmetry, opponent's opponentHand (hidden view of player's hand)
   const playerHiddenHand: HiddenCard[] = Array(serverGame.state[playerKey].hand.length).fill({
     id: 'hidden',
     name: 'Hidden Card',
@@ -81,8 +79,7 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
       hand: opponentHand,
       opponentField: serverGame.state[playerKey].field,
       opponentHand: playerHiddenHand,
-      nexus: serverGame.state[playerKey].nexus || { health: serverGame.state[playerKey].lifePoints || 30 },
-
+      nexus: serverGame.state[opponentKey].nexus || { health: serverGame.state[opponentKey].lifePoints || 30 },  // CORRECTION ICI : opponentKey au lieu de playerKey
     },
     revealedCards: serverGame.state.revealedCards,
     lastCardPlayed: serverGame.state.lastCardPlayed,
@@ -114,6 +111,8 @@ function mapServerToClientGameState(serverGame: ServerGameState, playerSocketId:
       isReorderCardsOpen: false,
       isSelectCardOpen: false,
       isChoiceOpen: false,
+      attackingCardId: null,
+      hoveredTarget: null,
     },
     chat: {
       messages: serverGame.chatHistory,
@@ -831,8 +830,8 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           gameState: clientGameState,
           io,
           socket,
-          playerId: socket.id,
-          opponentId: opponentSocketId,
+          playerId: playerKey,
+          opponentId: opponentKey,
         };
 
         // Set currentCard for effects that need it
@@ -1261,22 +1260,45 @@ export async function registerSocketHandlers(io: Server, db: Db) {
         }
 
         const attackingCard = game.state[playerKey].field[cardIndex];
-        const dmg = attackingCard.types[0].value;  // Assumer value = atk power
-        game.state[opponentKey].nexus.health -= dmg;
-        game.state[opponentKey].lifePoints = game.state[opponentKey].nexus.health;  // Lier
+        const dmg = attackingCard.types[0].value; // Assumer value = atk power
 
+        // Mettre à jour lastCardPlayed pour card_id_matches
+        game.state.lastCardPlayed = attackingCard;
+
+        // Appliquer les dégâts au nexus adverse
+        game.state[opponentKey].nexus.health -= dmg;
+        game.state[opponentKey].lifePoints = game.state[opponentKey].nexus.health; // Synchroniser
+
+        // Créer le GameContext avec playerKey
+        const opponentSocketId = game.players.find(id => id !== socket.id)!;
+        const clientGameState = mapServerToClientGameState(game, socket.id);
         const effectManager = new EffectManager({
-          gameState: mapServerToClientGameState(game, socket.id),
+          gameState: clientGameState,
           io,
           socket,
-          playerId: socket.id,
-          opponentId: game.players.find(id => id !== socket.id)!,
+          playerId: playerKey, // Utiliser playerKey ('player1' ou 'player2')
+          opponentId: opponentKey,
         });
+
+        // Exécuter les effets on_hit_nexus
         await effectManager.executeEffects(attackingCard, 'on_hit_nexus');
 
-        game.state[playerKey].field[cardIndex] = null;
-        game.state[playerKey].graveyard.push(attackingCard);
+        // Exécuter les effets on_attack_resolve (pour samurai_001)
+        await effectManager.executeEffects(attackingCard, 'on_attack_resolve');
 
+        // Vérifier si la carte est toujours sur le terrain après les effets
+        // (par ex., si move_card dans on_attack_resolve l’a déplacée à la main)
+        const stillOnField = game.state[playerKey].field[cardIndex]?.id === cardId;
+        if (stillOnField) {
+          game.state[playerKey].field[cardIndex] = null;
+          game.state[playerKey].graveyard.push(attackingCard);
+        }
+
+        // Mettre à jour opponentField pour la synchronisation
+        game.state[playerKey].opponentField = [...game.state[opponentKey].field];
+        game.state[opponentKey].opponentField = [...game.state[playerKey].field];
+
+        // Sauvegarder et émettre l’état
         await gameRepository.updateGame(gameId, { state: game.state });
         gameCache.setGame(gameId, game);
 
@@ -1284,6 +1306,9 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           const clientGameState = mapServerToClientGameState(game, playerSocketId);
           io.to(playerSocketId).emit('updateGameState', clientGameState);
         });
+
+        // Vérifier la condition de victoire
+        await checkWinCondition(gameId, game, gameRepository, gameCache, io);
       } catch (error) {
         console.error('[WebSocket] Erreur lors de attackCard:', error);
         socket.emit('error', 'Erreur lors de l’attaque');
