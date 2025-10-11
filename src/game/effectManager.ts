@@ -10,6 +10,7 @@ import {
     MoveCard,
     HiddenCard,
 } from "@tempoxqc/project-nexus-types";
+import { Target as TargetType } from "@tempoxqc/project-nexus-types";
 
 export interface GameContext {
     gameState: GameState;
@@ -239,16 +240,25 @@ class EffectManager {
     private async executeAction(action: Effect, card: Card): Promise<void> {
         const { gameState, io, playerId, opponentId } = this.gameContext;
 
+        let selectedTarget: Target | null = null;
+        if (action.target && isTargetArray(action.target) && action.target.length > 1) {
+            selectedTarget = await this.handleTargetSelection(action, card);
+            if (!selectedTarget) {
+                console.warn('[EffectManager] Aucune cible sélectionnée, action annulée:', action.action);
+                return;
+            }
+        }
+
         switch (action.action) {
             case 'draw':
                 await this.handleDraw(action, playerId);
                 break;
-            // case 'damage':
-            //     await this.handleDamage(action);
-            //     break;
-            // case 'move_card':
-            //     await this.handleMoveCard(action);
-            //     break;
+            case 'damage':
+                await this.handleDamage(action, card, selectedTarget);
+                break;
+            case 'move_card':
+                await this.handleMoveCard(action);
+                break;
             case 'restore_health':
                 await this.handleRestoreHealth(action);
                 break;
@@ -261,21 +271,15 @@ class EffectManager {
             case 'reveal':
                 await this.handleReveal(action);
                 break;
-            // case 'select_from_revealed':
-            //     await this.handleSelectFromRevealed(action, card);
-            //     break;
             case 'reorder_revealed_cards':
                 await this.handleReorderRevealedCards(action);
                 break;
-            // case 'take_control_of_unit':
-            //     await this.handleTakeControlOfUnit(action);
-            //     break;
             case 'exhaust_unit':
                 await this.handleExhaustUnit(action);
                 break;
-            case 'split_damage':
-                await this.handleSplitDamage(action);
-                break;
+            // case 'split_damage':
+            //     await this.handleSplitDamage(action);
+            //     break;
             case 'gain_token':
                 await this.handleGainToken(action);
                 break;
@@ -351,85 +355,117 @@ class EffectManager {
         console.log('[EffectManager] Pioche effectuée:', { amount, newHandLength: player.hand.length });
     }
 
-    // private async handleDamage(action: Effect): Promise<void> {
-    //     const { gameState, playerId, opponentId } = this.gameContext;
-    //     if (!action.target) return;
-    //
-    //     const targetPlayerId = isTargetArray(action.target)
-    //         ? action.target[0]?.owner?.includes('self')
-    //             ? playerId
-    //             : opponentId
-    //         : action.target.owner?.includes('self')
-    //             ? playerId
-    //             : opponentId;
-    //     const targetPlayer = this.getPlayerState(targetPlayerId);
-    //
-    //     const amount = action.amount === 'max_graveyard_unit_value'
-    //         ? Math.max(
-    //             ...targetPlayer.graveyard
-    //                 .filter((card: Card) => card.types.some((t: Card['types'][number]) => t.type === 'unit'))
-    //                 .map((card: Card) => card.types[0]?.value || 0),
-    //             0
-    //         )
-    //         : typeof action.amount === 'number' ? action.amount : 1;
-    //
-    //     if (isTargetArray(action.target)) {
-    //         const hasNexus = action.target.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('nexus') : t.type === 'nexus'));
-    //         const hasUnit = action.target.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('unit') : t.type === 'unit'));
-    //         if (hasNexus) {
-    //             targetPlayer.nexus.health -= amount;
-    //             if (gameState.currentCard) {
-    //                 await this.executeEffects(gameState.currentCard, 'on_hit_nexus');
-    //             }
-    //         } else if (hasUnit) {
-    //             const units = targetPlayer.field.filter(
-    //                 (card: Card) =>
-    //                     action.target.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('unit') : t.type === 'unit')) &&
-    //                     (action.target[0]?.filter?.max_value !== undefined
-    //                         ? card.types[0].value <= action.target[0].filter.max_value
-    //                         : true)
-    //             );
-    //             if (units.length > 0) {
-    //                 const unit = units[0];
-    //                 unit.types[0].value -= amount;
-    //                 if (unit.types[0].value <= 0) {
-    //                     targetPlayer.field = targetPlayer.field.filter((c: Card) => c.id !== unit.id);
-    //                     targetPlayer.graveyard.push(unit);
-    //                     gameState.lastDestroyedUnit = unit;
-    //                     await this.executeEffects(unit, 'on_destroyed');
-    //                 }
-    //             }
-    //         }
-    //     } else {
-    //         const target = action.target;
-    //         const targetType = target.type;
-    //         if (targetType && (Array.isArray(targetType) ? targetType.includes('nexus') : targetType === 'nexus')) {
-    //             targetPlayer.nexus.health -= amount;
-    //             if (gameState.currentCard) {
-    //                 await this.executeEffects(gameState.currentCard, 'on_hit_nexus');
-    //             }
-    //         } else if (targetType && (Array.isArray(targetType) ? targetType.includes('unit') : targetType === 'unit')) {
-    //             const units = targetPlayer.field.filter(
-    //                 (card: Card) =>
-    //                     (Array.isArray(targetType) ? targetType.includes('unit') : targetType === 'unit') &&
-    //                     (target.filter?.max_value !== undefined
-    //                         ? card.types[0].value <= target.filter.max_value
-    //                         : true)
-    //             );
-    //             if (units.length > 0) {
-    //                 const unit = units[0];
-    //                 unit.types[0].value -= amount;
-    //                 if (unit.types[0].value <= 0) {
-    //                     targetPlayer.field = targetPlayer.field.filter((c: Card) => c.id !== unit.id);
-    //                     targetPlayer.graveyard.push(unit);
-    //                     gameState.lastDestroyedUnit = unit;
-    //                     await this.executeEffects(unit, 'on_destroyed');
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     console.log('[EffectManager] Dégâts appliqués:', { amount, targetPlayerId });
-    // }
+    private async handleDamage(action: Effect, card: Card, selectedTarget?: Target | null): Promise<void> {
+        const { gameState, playerId, opponentId } = this.gameContext;
+        if (!action.target && !selectedTarget) {
+            console.warn('[EffectManager] Aucune cible définie pour action damage');
+            return;
+        }
+
+        const amount = action.amount === 'max_graveyard_unit_value'
+            ? Math.max(
+                ...this.getPlayerState(playerId).graveyard
+                    .filter((card: Card) => card.types.some((t: Card['types'][number]) => t.type === 'unit'))
+                    .map((card: Card) => card.types[0]?.value || 0),
+                0
+            )
+            : typeof action.amount === 'number' ? action.amount : 1;
+
+        if (selectedTarget) {
+            // Appliquer damage à la cible sélectionnée
+            const targetPlayerId = selectedTarget.owner.includes('self') ? playerId : opponentId;
+            const targetPlayer = this.getPlayerState(targetPlayerId);
+
+            if (selectedTarget.type === 'nexus') {
+                targetPlayer.nexus.health -= amount;
+                console.log(`[EffectManager] Applique ${amount} dégâts au nexus de ${targetPlayerId}`);
+                if (gameState.currentCard) {
+                    await this.executeEffects(gameState.currentCard, 'on_hit_nexus');
+                }
+            } else if (selectedTarget.type === 'unit' && selectedTarget.index !== undefined && selectedTarget.id) {
+                const unit = targetPlayer.field.find((c: Card) => c.id === selectedTarget.id[0]);
+                if (unit) {
+                    unit.types[0].value -= amount;
+                    console.log(`[EffectManager] Applique ${amount} dégâts à l'unité ${unit.id} de ${targetPlayerId}`);
+                    if (unit.types[0].value <= 0 && !unit.preventDestruction) {
+                        targetPlayer.field = targetPlayer.field.filter((c: Card) => c.id !== unit.id);
+                        targetPlayer.graveyard.push(unit);
+                        gameState.lastDestroyedUnit = unit;
+                        await this.executeEffects(unit, 'on_destroyed');
+                    }
+                }
+            }
+        } else if (action.target) {
+            // Code existant pour gérer les cibles non-sélectionnées
+            const targetPlayerId = isTargetArray(action.target)
+                ? action.target[0]?.owner?.includes('self')
+                    ? playerId
+                    : opponentId
+                : action.target.owner?.includes('self')
+                    ? playerId
+                    : opponentId;
+            const targetPlayer = this.getPlayerState(targetPlayerId);
+
+            if (isTargetArray(action.target)) {
+                const targets = action.target as Target[];
+                const hasNexus = targets.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('nexus') : t.type === 'nexus'));
+                const hasUnit = targets.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('unit') : t.type === 'unit'));
+                if (hasNexus) {
+                    targetPlayer.nexus.health -= amount;
+                    if (gameState.currentCard) {
+                        await this.executeEffects(gameState.currentCard, 'on_hit_nexus');
+                    }
+                } else if (hasUnit) {
+                    const units = targetPlayer.field.filter(
+                        (card: Card) =>
+                            targets.some((t: Target) => t.type && (Array.isArray(t.type) ? t.type.includes('unit') : t.type === 'unit')) &&
+                            (targets[0]?.filter?.max_value !== undefined
+                                ? card.types[0].value <= targets[0].filter.max_value
+                                : true)
+                    );
+                    if (units.length > 0) {
+                        const unit = units[0];
+                        unit.types[0].value -= amount;
+                        if (unit.types[0].value <= 0 && !unit.preventDestruction) {
+                            targetPlayer.field = targetPlayer.field.filter((c: Card) => c.id !== unit.id);
+                            targetPlayer.graveyard.push(unit);
+                            gameState.lastDestroyedUnit = unit;
+                            await this.executeEffects(unit, 'on_destroyed');
+                        }
+                    }
+                }
+            } else {
+                const target = action.target as Target;
+                const targetType = target.type;
+                if (targetType && (Array.isArray(targetType) ? targetType.includes('nexus') : targetType === 'nexus')) {
+                    targetPlayer.nexus.health -= amount;
+                    if (gameState.currentCard) {
+                        await this.executeEffects(gameState.currentCard, 'on_hit_nexus');
+                    }
+                } else if (targetType && (Array.isArray(targetType) ? targetType.includes('unit') : targetType === 'unit')) {
+                    const units = targetPlayer.field.filter(
+                        (card: Card) =>
+                            (Array.isArray(targetType) ? targetType.includes('unit') : targetType === 'unit') &&
+                            (target.filter?.max_value !== undefined
+                                ? card.types[0].value <= target.filter.max_value
+                                : true)
+                    );
+                    if (units.length > 0) {
+                        const unit = units[0];
+                        unit.types[0].value -= amount;
+                        if (unit.types[0].value <= 0 && !unit.preventDestruction) {
+                            targetPlayer.field = targetPlayer.field.filter((c: Card) => c.id !== unit.id);
+                            targetPlayer.graveyard.push(unit);
+                            gameState.lastDestroyedUnit = unit;
+                            await this.executeEffects(unit, 'on_destroyed');
+                        }
+                    }
+                }
+            }
+        }
+
+        console.log('[EffectManager] Dégâts appliqués:', { amount, target: selectedTarget || action.target, targetPlayerId: selectedTarget ? (selectedTarget.owner.includes('self') ? playerId : opponentId) : undefined });
+    }
 
     private async handlePayHealth(action: Effect): Promise<void> {
         const { gameState, playerId, opponentId } = this.gameContext;
@@ -602,60 +638,100 @@ class EffectManager {
     }
 
     private async handleExhaustUnit(action: Effect): Promise<void> {
-        const { gameState, playerId, opponentId } = this.gameContext;
+        const { gameState, playerId } = this.gameContext;
         const targetPlayerId = Array.isArray(action.target)
             ? action.target[0]?.owner?.includes('self')
                 ? playerId
-                : opponentId
+                : this.gameContext.opponentId
             : action.target?.owner?.includes('self')
                 ? playerId
-                : opponentId;
+                : this.gameContext.opponentId;
         const player = this.getPlayerState(targetPlayerId);
-        const unit = player.field.find((card: Card) => card.types.some((t: Card['types'][number]) => t.type === 'unit'));
-        if (unit) {
-            unit.exhausted = true;
-            await this.executeEffects(unit, 'on_exhaust');
+        const unit = player.field.find((card: Card) => card && card.types.some((t: Card['types'][number]) => t.type === 'unit'));
+        if (!unit) {
+            console.warn('[EffectManager] No unit to exhaust');
+            return;
         }
+        unit.exhausted = true;
+        await this.executeEffects(unit, 'on_exhaust');
     }
 
-    private async handleSplitDamage(action: Effect): Promise<void> {
-        const { gameState, io, playerId, opponentId } = this.gameContext;
-        const targetPlayerId = Array.isArray(action.target)
-            ? action.target[0]?.owner?.includes('self')
-                ? playerId
-                : opponentId
-            : action.target?.owner?.includes('self')
-                ? playerId
-                : opponentId;
-        const player = this.getPlayerState(targetPlayerId);
-        const targets = [
-            ...player.field.filter((card: Card) => card.types.some((t: Card['types'][number]) => t.type === 'unit')),
-            player.nexus,
-        ];
-
-        const selectedTargets = await new Promise<any[]>((resolve) => {
-            io.to(playerId).emit('selectSplitDamageTargets', { amount: action.amount || 1, targets }, (response: any[]) => {
-                resolve(response);
-            });
-        });
-
-        for (const target of selectedTargets) {
-            if (target.type === 'nexus') {
-                player.nexus.health -= 1;
-            } else {
-                const unit = player.field.find((c: Card) => c.id === target.id);
-                if (unit) {
-                    unit.types[0].value -= 1;
-                    if (unit.types[0].value <= 0) {
-                        player.field = player.field.filter((c: Card) => c.id !== unit.id);
-                        player.graveyard.push(unit);
-                        gameState.lastDestroyedUnit = unit;
-                        await this.executeEffects(unit, 'on_destroyed');
-                    }
-                }
-            }
-        }
-    }
+    // private async handleSplitDamage(action: Effect): Promise<void> {
+    //     const { gameState, io, playerId, opponentId } = this.gameContext;
+    //     const targetPlayerId = Array.isArray(action.target)
+    //         ? action.target[0]?.owner?.includes('self')
+    //             ? playerId
+    //             : opponentId
+    //         : action.target?.owner?.includes('self')
+    //             ? playerId
+    //             : opponentId;
+    //     const player = this.getPlayerState(targetPlayerId);
+    //     const targets: Target[] = player.field
+    //         .filter((card: Card) => card.types.some((t: Card['types'][number]) => t.type === 'unit'))
+    //         .map((card: Card) => ({
+    //             id: card.id,
+    //             type: 'unit',
+    //             name: card.name.fr, // Add name for UI display
+    //             value: card.types[0].value, // Add value for UI display
+    //         }))
+    //         .concat([
+    //             {
+    //                 type: 'nexus',
+    //                 name: 'Opponent Nexus', // Add name for UI display
+    //             },
+    //         ]);
+    //
+    //     const selectedTargets = await new Promise<Target[]>((resolve) => {
+    //         io.to(playerId).emit('selectSplitDamageTargets', { amount: action.amount || 1, targets }, (response: Target[]) => {
+    //             if (response.length !== (action.amount || 1)) {
+    //                 console.warn('[EffectManager] Invalid damage allocation: total selected != amount', {
+    //                     selectedLength: response.length,
+    //                     amount: action.amount,
+    //                 });
+    //                 io.to(playerId).emit('error', 'Vous devez allouer exactement la quantité de dégâts requise.');
+    //                 resolve([]);
+    //                 return;
+    //             }
+    //             // Validate response format
+    //             const isValid = response.every((target) =>
+    //                 target.type === 'nexus'
+    //                     ? targets.some((t) => t.type === 'nexus')
+    //                     : target.id && target.type === 'unit' && targets.some((t) => t.id === target.id && t.type === 'unit'),
+    //             );
+    //             if (!isValid) {
+    //                 console.warn('[EffectManager] Invalid target selection', { response });
+    //                 io.to(playerId).emit('error', 'Sélection de cibles invalide.');
+    //                 resolve([]);
+    //                 return;
+    //             }
+    //             resolve(response);
+    //         });
+    //     });
+    //
+    //     if (selectedTargets.length === 0) return;
+    //
+    //     for (const target of selectedTargets) {
+    //         if (target.type === 'nexus') {
+    //             player.nexus.health -= 1;
+    //             console.log(`[EffectManager] Applied 1 damage to nexus of player ${targetPlayerId}`);
+    //         } else if (target.type === 'unit' && target.id) {
+    //             const unit = player.field.find((c: Card) => c.id === target.id);
+    //             if (unit) {
+    //                 unit.types[0].value -= 1;
+    //                 console.log(`[EffectManager] Applied 1 damage to unit ${unit.id} of player ${targetPlayerId}`);
+    //                 if (unit.types[0].value <= 0) {
+    //                     player.field = player.field.filter((c: Card) => c.id !== unit.id);
+    //                     player.graveyard.push(unit);
+    //                     gameState.lastDestroyedUnit = unit;
+    //                     await this.executeEffects(unit, 'on_destroyed');
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     io.to(playerId).emit('updateGameState', gameState);
+    //     io.to(opponentId).emit('updateGameState', gameState);
+    // }
 
     private async handleGainToken(action: Effect): Promise<void> {
         const { gameState, playerId } = this.gameContext;
@@ -844,6 +920,84 @@ class EffectManager {
             card.keywords = card.keywords || [];
             card.keywords.push('ignore_defence');
         });
+    }
+
+    private async handleTargetSelection(effect: Effect, card: Card): Promise<Target | null> {
+        const { gameState, io, playerId } = this.gameContext;
+
+        if (!effect.target || !isTargetArray(effect.target) || effect.target.length <= 1) {
+            return effect.target ? (effect.target as Target) : null; // Pas de sélection si unique ou absent
+        }
+
+        // Calculer les cibles possibles en fonction de target (owner, type)
+        const possibleTargets: Target[] = [];
+        const targets = effect.target as Target[];
+
+        targets.forEach((t: Target) => {
+            if (t.type?.includes('nexus')) {
+                if (t.owner?.includes('self') || t.owner?.includes('any')) {
+                    possibleTargets.push({ type: 'nexus', owner: ['self'] });
+                }
+                if (t.owner?.includes('opponent') || t.owner?.includes('any')) {
+                    possibleTargets.push({ type: 'nexus', owner: ['opponent'] });
+                }
+            }
+            if (t.type?.includes('unit')) {
+                // Filtrer unités self
+                if (t.owner?.includes('self') || t.owner?.includes('any')) {
+                    gameState.player.field.forEach((unit: Card | null, index: number) => {
+                        if (unit && unit.types.some((ty) => ty.type === 'unit')) {
+                            possibleTargets.push({ type: 'unit', owner: ['self'], id: [unit.id], index });
+                        }
+                    });
+                }
+                // Filtrer unités opponent
+                if (t.owner?.includes('opponent') || t.owner?.includes('any')) {
+                    gameState.opponent.field.forEach((unit: Card | null, index: number) => {
+                        if (unit && unit.types.some((ty) => ty.type === 'unit')) {
+                            possibleTargets.push({ type: 'unit', owner: ['opponent'], id: [unit.id], index });
+                        }
+                    });
+                }
+            }
+            // Appliquer filters supplémentaires si présent (ex. max_value)
+            if (t.filter?.max_value !== undefined) {
+                possibleTargets.filter((pt) => {
+                    if (pt.type !== 'unit' || pt.index === undefined) return false;
+                    const field = pt.owner.includes('self') ? gameState.player.field : gameState.opponent.field;
+                    return field[pt.index]?.types[0].value <= t.filter!.max_value;
+                });
+            }
+        });
+
+        if (possibleTargets.length === 0) {
+            console.warn('[EffectManager] Aucune cible valide pour l\'effet:', effect);
+            return null;
+        }
+
+        // Demander au client de choisir
+        const selectedTarget = await new Promise<Target>((resolve) => {
+            io.to(playerId).emit('requestTargetSelection', { cardId: card.id, possibleTargets }, (response: Target) => {
+                // Valider la réponse
+                const isValid = possibleTargets.some(
+                    (t) =>
+                        t.type === response.type &&
+                        (t.type === 'nexus'
+                            ? t.owner[0] === response.owner[0]
+                            : t.id && response.id && t.id[0] === response.id[0] && t.index === response.index)
+                );
+                if (!isValid) {
+                    console.warn('[EffectManager] Cible sélectionnée invalide:', response);
+                    io.to(playerId).emit('error', 'Cible sélectionnée invalide.');
+                    resolve(null);
+                    return;
+                }
+                resolve(response);
+            });
+        });
+
+        console.log('[EffectManager] Cible sélectionnée:', selectedTarget);
+        return selectedTarget;
     }
 }
 

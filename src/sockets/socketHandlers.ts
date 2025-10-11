@@ -5,7 +5,7 @@ import {CardManager} from '../game/cardManager.js';
 import {PlayerManager} from '../game/playerManager.js';
 import {JoinGameSchema, PlayCardSchema} from './socketSchemas.js';
 import {Db, ObjectId} from 'mongodb';
-import {Card, CardSchema, GameState, HiddenCard, ServerGameState } from "@tempoxqc/project-nexus-types";
+import {Card, CardSchema, GameState, HiddenCard, ServerGameState, Target} from "@tempoxqc/project-nexus-types";
 import {z} from "zod";
 import jwt from "jsonwebtoken";
 import {User} from "../routes/authRoutes.js";
@@ -1193,12 +1193,14 @@ export async function registerSocketHandlers(io: Server, db: Db) {
     socket.on('exhaustCard', async (data) => {
       console.log('[WebSocket] Événement exhaustCard reçu:', data, 'socket.id:', socket.id);
       try {
+        // Validate incoming data
         const { gameId, cardId, fieldIndex } = z.object({
           gameId: z.string(),
           cardId: z.string(),
-          fieldIndex: z.number(),
+          fieldIndex: z.number().min(0), // Ensure non-negative fieldIndex for units
         }).parse(data);
 
+        // Retrieve game and player info
         const game = await gameRepository.findGameById(gameId);
         const playerInfo = playerManager.getPlayer(socket.id);
         if (!game || !playerInfo || playerInfo.gameId !== gameId || game.state.game.activePlayerId !== socket.id) {
@@ -1207,27 +1209,110 @@ export async function registerSocketHandlers(io: Server, db: Db) {
           return;
         }
 
+        // Check phase (only allow exhaust in Main or Battle phase, depending on game rules)
         const playerKey = playerInfo.playerId === 1 ? 'player1' : 'player2';
-        if (game.state.game.currentPhase !== 'Main') {
-          socket.emit('error', 'Épuisement de carte non autorisé en dehors de la phase Main');
+        const opponentKey = playerInfo.playerId === 1 ? 'player2' : 'player1';
+        if (game.state.game.currentPhase !== 'Main' && game.state.game.currentPhase !== 'Battle') {
+          console.log('[WebSocket] Erreur: Épuisement non autorisé, phase actuelle:', game.state.game.currentPhase);
+          socket.emit('error', 'Épuisement de carte non autorisé en dehors des phases Main ou Battle');
           return;
         }
 
+        // Validate card
         const card = game.state[playerKey].field[fieldIndex];
         if (!card || card.id !== cardId) {
-          console.log('[WebSocket] Erreur: Carte non trouvée à l\'index', fieldIndex);
+          console.log('[WebSocket] Erreur: Carte non trouvée à l\'index:', fieldIndex, 'cardId:', cardId);
           socket.emit('error', 'Carte non trouvée');
           return;
         }
+        if (card.exhausted) {
+          console.log('[WebSocket] Erreur: Carte déjà épuisée:', cardId);
+          socket.emit('error', 'Carte déjà épuisée');
+          return;
+        }
 
-        game.state[playerKey].field[fieldIndex] = { ...card, exhausted: !card.exhausted };
+        // Exhaust the card
+        console.log(`[WebSocket] Épuisement de la carte: ${cardId} à fieldIndex: ${fieldIndex} pour joueur: ${playerKey}`);
+        game.state[playerKey].field[fieldIndex] = { ...card, exhausted: true };
+
+        // Create GameContext for EffectManager
+        const opponentSocketId = game.players.find(id => id !== socket.id);
+        if (!opponentSocketId) {
+          console.error('[WebSocket] Erreur: Socket ID de l\'opposant non trouvé');
+          socket.emit('error', 'Opposant non trouvé');
+          return;
+        }
+        const clientGameState = mapServerToClientGameState(game, socket.id);
+        const gameContext: GameContext = {
+          gameState: clientGameState,
+          io,
+          socket,
+          playerId: playerKey,
+          opponentId: opponentKey,
+        };
+
+        // Set currentCard for effects that need it
+        clientGameState.currentCard = card;
+
+        // Execute on_exhaust effects
+        const effectManager = new EffectManager(gameContext);
+        try {
+          await effectManager.executeEffects(card, 'on_exhaust');
+          console.log(`[WebSocket] Effets on_exhaust exécutés avec succès pour la carte: ${cardId}`);
+        } catch (effectError) {
+          console.error(`[WebSocket] Erreur lors de l'exécution des effets on_exhaust pour ${cardId}:`, effectError);
+          socket.emit('error', 'Erreur lors de l\'exécution des effets on_exhaust');
+          return;
+        }
+
+        // Map back modified state to server (copy properties that effects might have changed)
+        game.state[playerKey].hand = clientGameState.player.hand;
+        game.state[playerKey].field = clientGameState.player.field;
+        game.state[playerKey].graveyard = clientGameState.player.graveyard;
+        game.state[playerKey].nexus = clientGameState.player.nexus;
+        game.state[playerKey].tokenPool = clientGameState.player.tokenPool;
+        game.state[playerKey].tokenCount = clientGameState.player.tokenCount;
+
+        game.state[opponentKey].field = clientGameState.opponent.field;
+        game.state[opponentKey].graveyard = clientGameState.opponent.graveyard;
+        game.state[opponentKey].nexus = clientGameState.opponent.nexus;
+        game.state[opponentKey].tokenPool = clientGameState.opponent.tokenPool;
+        game.state[opponentKey].tokenCount = clientGameState.opponent.tokenCount;
+
+        game.state.turnState = clientGameState.turnState;
+        game.state.revealedCards = clientGameState.revealedCards;
+        game.state.lastCardPlayed = clientGameState.lastCardPlayed;
+        game.state.lastDestroyedUnit = clientGameState.lastDestroyedUnit;
+        game.state.targetType = clientGameState.targetType;
+        game.state.detected = clientGameState.detected;
+        game.state.currentCard = clientGameState.currentCard;
+
+        // Update opponent views (hidden hands)
+        game.state[playerKey].opponentHand = Array(game.state[opponentKey].hand.length).fill({
+          id: 'hidden',
+          name: 'Hidden Card',
+          image: 'unknown',
+          exhausted: false,
+        });
+        game.state[opponentKey].opponentHand = Array(game.state[playerKey].hand.length).fill({
+          id: 'hidden',
+          name: 'Hidden Card',
+          image: 'unknown',
+          exhausted: false,
+        });
+
+        // Save and emit updated game state
         await gameRepository.updateGame(gameId, { state: game.state });
         gameCache.setGame(gameId, game);
 
         game.players.forEach((playerSocketId: string) => {
           const clientGameState = mapServerToClientGameState(game, playerSocketId);
+          console.log('[WebSocket] Envoi de updateGameState pour playerSocketId:', playerSocketId, 'avec isMyTurn:', game.state.game.activePlayerId === playerSocketId, 'timestamp:', new Date().toISOString());
           io.to(playerSocketId).emit('updateGameState', clientGameState);
         });
+
+        // Check win condition
+        await checkWinCondition(gameId, game, gameRepository, gameCache, io);
       } catch (error) {
         console.error('[WebSocket] Erreur lors de l\'action exhaustCard:', error);
         socket.emit('error', 'Erreur lors de l\'épuisement de la carte');
